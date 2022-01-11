@@ -30,12 +30,6 @@
 #include <config.h>
 #endif
 
-#ifdef HAVE_ACE
-#include <ComUnidraw/comterp-acehandler.h>
-#include <OverlayUnidraw/aceimport.h>
-#include <AceDispatch/ace_dispatcher.h>
-#endif
-
 #include <OverlayUnidraw/ovcatalog.h>
 #include <OverlayUnidraw/ovcreator.h>
 #include <ComUnidraw/comeditor.h>
@@ -49,6 +43,14 @@
 #include <Unidraw/iterator.h>
 
 #include <InterViews/world.h>
+#include <InterViews/display.h>
+#include <IV-X11/xdisplay.h>
+
+#ifdef HAVE_ACE
+#include <ComUnidraw/comterp-acehandler.h>
+#include <OverlayUnidraw/aceimport.h>
+#include <AceDispatch/ace_dispatcher.h>
+#endif
 
 #include <stream.h>
 #include <string.h>
@@ -340,6 +342,7 @@ int main (int argc, char** argv) {
 	fprintf(stderr,
 		"ivtools-%s comdraw: see \"man comdraw\" or type help here for command info\n",
 		PACKAGE_VERSION);
+	XSync(unidraw->GetWorld()->display()->rep()->display_,false);
 	unidraw->Run();
     }
 
