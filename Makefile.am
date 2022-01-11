@@ -254,11 +254,13 @@ libComUnidraw_la_LIBADD += $(libComUnidraw_parts)
 EXTRA_LTLIBRARIES += $(libComUnidraw_parts)
 
 libComUnidraw_la_SOURCES = src/ComUnidraw/comeditor.cc			\
+src/ComUnidraw/comkit.cc						\
 src/ComUnidraw/comterp-iohandler.cc src/ComUnidraw/dialogfunc.cc	\
 src/ComUnidraw/grdotfunc.cc src/ComUnidraw/grfunc.cc			\
 src/ComUnidraw/grlistfunc.cc src/ComUnidraw/groupfunc.cc		\
 src/ComUnidraw/grstatfunc.cc src/ComUnidraw/grstrmfunc.cc		\
 src/ComUnidraw/highlightfunc.cc src/ComUnidraw/nfunc.cc			\
+src/ComUnidraw/pixelcmds.cc						\
 src/ComUnidraw/pixelfunc.cc src/ComUnidraw/plotfunc.cc			\
 src/ComUnidraw/unifunc.cc
 
@@ -661,6 +663,8 @@ InterViews: src/IV/InterViews.defaults
 ### binaries
 
 bin_SCRIPTS = pnmtopgm comterp_run src/scripts/csvfilt
+## This is in Imakefile but the binary was removed.
+# bin_SCRIPTS += src/scripts/csvplot
 
 pnmtopgm: src/scripts/pnmtopgm.sh
 	cp $< $@

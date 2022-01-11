@@ -16,12 +16,12 @@ ComTerp/listfunc.h ComTerp/mathfunc.h ComTerp/numfunc.h			\
 ComTerp/parsefunc.h							\
 ComTerp/parser.h ComTerp/postfunc.h ComTerp/randfunc.h			\
 ComTerp/scanner.h ComTerp/statfunc.h ComTerp/strmfunc.h			\
-ComTerp/symbolfunc.h ComTerp/timefunc.h ComTerp/typefunc.h ComTerp/xformfunc.h		\
-ComUnidraw/comeditor.h ComUnidraw/comterp-acehandler.h			\
+ComTerp/symbolfunc.h ComTerp/timefunc.h ComTerp/typefunc.h ComTerp/xformfunc.h	\
+ComUnidraw/comclasses.h ComUnidraw/comeditor.h ComUnidraw/comkit.h ComUnidraw/comterp-acehandler.h	\
 ComUnidraw/comterp-iohandler.h ComUnidraw/dialogfunc.h			\
 ComUnidraw/grdotfunc.h ComUnidraw/grfunc.h ComUnidraw/grlistfunc.h	\
 ComUnidraw/groupfunc.h ComUnidraw/grstatfunc.h				\
-ComUnidraw/highlightfunc.h ComUnidraw/nfunc.h ComUnidraw/pixelfunc.h	\
+ComUnidraw/highlightfunc.h ComUnidraw/nfunc.h ComUnidraw/pixelcmds.h ComUnidraw/pixelfunc.h	\
 ComUnidraw/plotfunc.h ComUnidraw/unifunc.h ComUtil/comterp.arg		\
 ComUtil/comterp.h ComUtil/comutil.arg ComUtil/comutil.ci		\
 ComUtil/comutil.h ComUtil/util.h DrawServ/ackback-handler.h		\
