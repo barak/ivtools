@@ -117,7 +117,7 @@ TIFFPrintDirectory(tif, fd, flags)
 	FILE *fd;
 	long flags;
 {
-	register TIFFDirectory *td;
+	TIFFDirectory *td;
 	char *sep;
 	int i, j;
 	long n;

@@ -30,7 +30,7 @@
 #include "tiffioP.h"
 
 TIFFInitJPEG(tif)
-	register TIFF *tif;
+	TIFF *tif;
 {
 	return (1);
 }

@@ -758,7 +758,7 @@ TIFFWriteData(tif, dir, cp)
  */
 static
 TIFFLinkDirectory(tif)
-	register TIFF *tif;
+	TIFF *tif;
 {
 	static char module[] = "TIFFLinkDirectory";
 	u_short dircount;

@@ -298,9 +298,9 @@ DECLARE4(LZWCheckPredictor,
 
 static void
 DECLARE3(horizontalAccumulate8,
-	register char*, cp,
-	register int, cc,
-	register int, stride
+	char*, cp,
+	int, cc,
+	int, stride
 )
 {
 	if (cc > stride) {
@@ -343,11 +343,11 @@ static void
 DECLARE3(horizontalAccumulate16,
 	char*, cp,
 	int, cc,
-	register int, stride
+	int, stride
 )
 {
-	register short* wp = (short *)cp;
-	register int wc = cc / 2;
+	short* wp = (short *)cp;
+	int wc = cc / 2;
 
 	if (wc > stride) {
 		wc -= stride;
@@ -365,7 +365,7 @@ static
 LZWPreDecode(tif)
 	TIFF *tif;
 {
-	register LZWDecodeState *sp = (LZWDecodeState *)tif->tif_data;
+	LZWDecodeState *sp = (LZWDecodeState *)tif->tif_data;
 
 	if (sp == NULL) {
 		tif->tif_data = malloc(sizeof (LZWDecodeState));
@@ -840,9 +840,9 @@ LZWDecodePredTile(tif, op0, occ0, s)
 
 static void
 DECLARE3(horizontalDifference8,
-	register char*, cp,
-	register int, cc,
-	register int, stride
+	char*, cp,
+	int, cc,
+	int, stride
 )
 {
 	if (cc > stride) {
@@ -887,11 +887,11 @@ static void
 DECLARE3(horizontalDifference16,
 	char*, cp,
 	int, cc,
-	register int, stride
+	int, stride
 )
 {
-	register short *wp = (short *)cp;
-	register int wc = cc/2;
+	short *wp = (short *)cp;
+	int wc = cc/2;
 
 	if (wc > stride) {
 		wc -= stride;
@@ -910,7 +910,7 @@ static
 LZWPreEncode(tif)
 	TIFF *tif;
 {
-	register LZWEncodeState *sp = (LZWEncodeState *)tif->tif_data;
+	LZWEncodeState *sp = (LZWEncodeState *)tif->tif_data;
 
 	if (sp == NULL) {
 		tif->tif_data = malloc(sizeof (LZWEncodeState));
@@ -989,10 +989,10 @@ LZWEncode(tif, bp, cc, s)
 	u_int s;
 {
 	static char module[] = "LZWEncode";
-	register LZWEncodeState *sp = (LZWEncodeState *)tif->tif_data;
-	register long fcode;
-	register hash_t *hp;
-	register int h, c, ent, disp;
+	LZWEncodeState *sp = (LZWEncodeState *)tif->tif_data;
+	long fcode;
+	hash_t *hp;
+	int h, c, ent, disp;
 	long incount, outcount, checkpoint;
 	long nextdata, nextbits;
 	int free_ent, maxcode, nbits;
@@ -1178,7 +1178,7 @@ static
 LZWPostEncode(tif)
 	TIFF *tif;
 {
-	register LZWEncodeState *sp = (LZWEncodeState *)tif->tif_data;
+	LZWEncodeState *sp = (LZWEncodeState *)tif->tif_data;
 	char *op = tif->tif_rawcp;
 	long nextbits = sp->lzw_nextbits;
 	long nextdata = sp->lzw_nextdata;
@@ -1208,8 +1208,8 @@ static void
 cl_hash(sp)
 	LZWEncodeState *sp;
 {
-	register hash_t *hp = &sp->enc_hashtab[HSIZE-1];
-	register long i = HSIZE-8;
+	hash_t *hp = &sp->enc_hashtab[HSIZE-1];
+	long i = HSIZE-8;
 
  	do {
 		i -= 8;
