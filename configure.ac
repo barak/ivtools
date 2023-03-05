@@ -152,7 +152,9 @@ AS_IF([test x"${with_PSFontDir}" = xcheck],
 	     [PSFontDir=/Library/Fonts],
 	     [AC_CHECK_FILE([/System/Library/Fonts/],
 	       [PSFontDir=/System/Library/Fonts],
-	       [AC_MSG_ERROR([cannot find PS Font Directory])])])])])])])])
+	       [AC_CHECK_FILE([/usr/share/fonts/X11/Type1/],
+		 [PSFontDir=/usr/share/fonts/X11/Type1],
+		 [AC_MSG_ERROR([cannot find PS Font Directory])])])])])])])])])
   AC_MSG_NOTICE([Using PSFontDir ${PSFontDir}])],
  [PSFontDir="${with_PSFontDir}"])
 AC_SUBST(PSFontDir)
