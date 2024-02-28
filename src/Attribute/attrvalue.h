@@ -261,10 +261,8 @@ public:
 
     const boolean object_compview() { return is_object() && _object_compview; }
     // true if object is wrapped with a ComponentView
-#if 0
-    void object_compview(boolean flag);
+    const boolean is_compview() { return object_compview(); }
     // true if object is wrapped with a ComponentView
-#endif
 
     int stream_mode();
     // 0 = disabled, negative = internal, positive = external
@@ -386,6 +384,8 @@ public:
 
     friend ostream& operator << (ostream& s, const AttributeValue&);
     // output AttributeValue to ostream.
+    virtual const char* String();
+    // generate string using << operator
 
     void* value_ptr() { return &_v; }
     // returns void* pointer to value struct.

@@ -4,7 +4,7 @@
 # Header
 AC_PREREQ([2.69])
 
-AC_INIT([InterViews Application Framework and Drawing Tools],[2.0.4],[johnston@vectaport.com],[ivtools],[http://www.ivtools.org])
+AC_INIT([InterViews Application Framework and Drawing Tools],[2.1.0],[johnston@vectaport.com],[ivtools],[http://www.ivtools.org])
 
 dnl The foreign option allows the follow files to not exist: NEWS AUTHORS ChangeLog
 AM_INIT_AUTOMAKE([subdir-objects foreign -Wall])
@@ -42,6 +42,8 @@ AC_LANG([C++])
 AC_PROG_CXX
 AC_PROG_CC
 AM_PROG_CC_C_O
+dnl ask for -std=c++14
+AX_CXX_COMPILE_STDCXX(14)
 AM_PROG_AR
 AC_PROG_INSTALL
 ACLTX_PROG_PS2PDF([AC_MSG_WARN([Cannot find ps2pdf])])
@@ -152,7 +154,9 @@ AS_IF([test x"${with_PSFontDir}" = xcheck],
 	     [PSFontDir=/Library/Fonts],
 	     [AC_CHECK_FILE([/System/Library/Fonts/],
 	       [PSFontDir=/System/Library/Fonts],
-	       [AC_MSG_ERROR([cannot find PS Font Directory])])])])])])])])
+	       [AC_CHECK_FILE([/usr/share/fonts/X11/Type1/],
+		 [PSFontDir=/usr/share/fonts/X11/Type1],
+		 [AC_MSG_ERROR([cannot find PS Font Directory])])])])])])])])])
   AC_MSG_NOTICE([Using PSFontDir ${PSFontDir}])],
  [PSFontDir="${with_PSFontDir}"])
 AC_SUBST(PSFontDir)

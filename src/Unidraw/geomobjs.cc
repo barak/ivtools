@@ -43,9 +43,6 @@
 
 static const int NUMPOINTS = 200;	// must be > 1
 static const double SMOOTHNESS = 1.0;
-static int mlsize = 0;
-static int mlcount = 0;
-static Coord* mlx, *mly;
 
 /*****************************************************************************/
 
@@ -199,7 +196,7 @@ MultiLineObj::MultiLineObj (Coord* x, Coord* y, int count) {
     if(!_leakchecker) _leakchecker = new LeakChecker("MultiLineObj");
     _leakchecker->create();
 #endif
-    _x = x; _y = y; _count = count;
+    _x = x; _y = y; _count = count; _size = count;
     _ulist = nil;
     _pts_made = 0;
 }
@@ -224,21 +221,21 @@ void MultiLineObj::GrowBuf () {
     Coord* newx, *newy;
     int newsize;
 
-    if (mlsize == 0) {
-        mlsize = NUMPOINTS;
-	mlx = new Coord[NUMPOINTS];
-	mly = new Coord[NUMPOINTS];
+    if (_size == 0) {
+        _size = NUMPOINTS;
+	_x = new Coord[NUMPOINTS];
+	_y = new Coord[NUMPOINTS];
     } else {
-	newsize = mlsize * 2;
+	newsize = _size * 2;
 	newx = new Coord[newsize];
 	newy = new Coord[newsize];
-	Memory::copy(mlx, newx, newsize * sizeof(Coord));
-	Memory::copy(mly, newy, newsize * sizeof(Coord));
-	delete mlx;
-	delete mly;
-	mlx = newx;
-	mly = newy;
-	mlsize = newsize;
+	Memory::copy(_x, newx, newsize * sizeof(Coord));
+	Memory::copy(_y, newy, newsize * sizeof(Coord));
+	delete _x;
+	delete _y;
+	_x = newx;
+	_y = newy;
+	_size = newsize;
     }
 }
 
@@ -256,17 +253,17 @@ boolean MultiLineObj::CanApproxWithLine (
 }
 
 void MultiLineObj::AddLine (double x0, double y0, double x1, double y1) {
-    if (mlcount >= mlsize) {
+    if (_count >= _size) {
 	GrowBuf();
     } 
-    if (mlcount == 0) {
-	mlx[mlcount] = Math::round(x0);
-	mly[mlcount] = Math::round(y0);
-	++mlcount;
+    if (_count == 0) {
+	_x[_count] = Math::round(x0);
+	_y[_count] = Math::round(y0);
+	++_count;
     }
-    mlx[mlcount] = Math::round(x1);
-    mly[mlcount] = Math::round(y1);
-    ++mlcount;
+    _x[_count] = Math::round(x1);
+    _y[_count] = Math::round(y1);
+    ++_count;
 }
 
 void MultiLineObj::AddBezierArc (
@@ -329,14 +326,14 @@ void MultiLineObj::CalcSection (
 }
 
 void MultiLineObj::SplineToMultiLine (Coord* cpx, Coord* cpy, int cpcount) {
-    register int cpi;
+    int cpi;
 
     if (cpcount < 3) {
         _x = cpx;
 	_y = cpy;
 	_count = cpcount;
     } else {
-        mlcount = 0;
+        _count = 0;
 
         CalcSection(
             cpx[0], cpy[0], cpx[0], cpy[0], cpx[0], cpy[0], cpx[1], cpy[1]
@@ -360,21 +357,18 @@ void MultiLineObj::SplineToMultiLine (Coord* cpx, Coord* cpy, int cpcount) {
             cpx[cpi], cpy[cpi], cpx[cpi + 1], cpy[cpi + 1],
             cpx[cpi + 1], cpy[cpi + 1], cpx[cpi + 1], cpy[cpi + 1]
         );
-        _x = mlx;
-        _y = mly;
-        _count = mlcount;
     }
 }
 
 void MultiLineObj::ClosedSplineToPolygon (Coord* cpx, Coord* cpy, int cpcount){
-    register int cpi;
+    int cpi;
 
     if (cpcount < 3) {
         _x = cpx;
 	_y = cpy;
 	_count = cpcount;
     } else {
-        mlcount = 0;
+        _count = 0;
         CalcSection(
 	    cpx[cpcount - 1], cpy[cpcount - 1], cpx[0], cpy[0], 
 	    cpx[1], cpy[1], cpx[2], cpy[2]
@@ -395,9 +389,6 @@ void MultiLineObj::ClosedSplineToPolygon (Coord* cpx, Coord* cpy, int cpcount){
 	    cpx[cpi], cpy[cpi], cpx[cpi + 1], cpy[cpi + 1],
 	    cpx[0], cpy[0], cpx[1], cpy[1]
         );
-        _x = mlx;
-        _y = mly;
-        _count = mlcount;
     }
 }
 
@@ -415,7 +406,7 @@ void MultiLineObj::GetBox (BoxObj& b) {
 
 
 boolean MultiLineObj::Contains (PointObj& p) {
-    register int i;
+    int i;
     BoxObj b;
     
     GetBox(b);
@@ -431,7 +422,7 @@ boolean MultiLineObj::Contains (PointObj& p) {
 }
 
 boolean MultiLineObj::Intersects (LineObj& l) {
-    register int i;
+    int i;
     BoxObj b;
     
     GetBox(b);
@@ -448,7 +439,7 @@ boolean MultiLineObj::Intersects (LineObj& l) {
 }
 
 boolean MultiLineObj::Intersects (BoxObj& userb) {
-    register int i;
+    int i;
     BoxObj b;
     
     GetBox(b);
@@ -545,7 +536,7 @@ FillPolygonObj::~FillPolygonObj () {
 }
 
 static int LowestLeft (Coord* x, Coord* y, int count) {
-    register int i;
+    int i;
     int lowestLeft = 0;
     Coord lx = *x;
     Coord ly = *y;
@@ -562,7 +553,7 @@ static int LowestLeft (Coord* x, Coord* y, int count) {
 
 void FillPolygonObj::Normalize () {
     if (_count != 0) {
-        register int i, newcount = 1;
+        int i, newcount = 1;
         int lowestLeft, limit = _count;
 
 	if (*_x == _x[_count - 1] && *_y == _y[_count - 1]) {

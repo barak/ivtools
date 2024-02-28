@@ -45,7 +45,7 @@ static	int DumpModeEncode(), DumpModeDecode(), DumpModeSeek();
  * Initialize dump mode.
  */
 TIFFInitDumpMode(tif)
-	register TIFF *tif;
+	TIFF *tif;
 {
 	tif->tif_decoderow = DumpModeDecode;
 	tif->tif_decodestrip = DumpModeDecode;
@@ -62,7 +62,7 @@ TIFFInitDumpMode(tif)
  */
 static int
 DumpModeEncode(tif, pp, cc, s)
-	register TIFF *tif;
+	TIFF *tif;
 	u_char *pp;
 	int cc;
 	u_int s;
@@ -110,7 +110,7 @@ DumpModeEncode(tif, pp, cc, s)
  */
 static int
 DumpModeDecode(tif, buf, cc, s)
-	register TIFF *tif;
+	TIFF *tif;
 	u_char *buf;
 	int cc;
 	u_int s;
@@ -149,7 +149,7 @@ DumpModeDecode(tif, buf, cc, s)
  */
 static int
 DumpModeSeek(tif, nrows)
-	register TIFF *tif;
+	TIFF *tif;
 	int nrows;
 {
 	tif->tif_rawcp += nrows * tif->tif_scanlinesize;

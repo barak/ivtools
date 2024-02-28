@@ -30,6 +30,7 @@
 #include "tiffioP.h"
 #include <stdio.h>
 #include <assert.h>
+
 ssize_t write(int fildes, const void *buf, size_t nbyte);
 
 #define	STRIPINCR	20		/* expansion factor on strip array */
@@ -48,12 +49,12 @@ static	TIFFAppendToStrip();
 
 /*VARARGS3*/
 TIFFWriteScanline(tif, buf, row, sample)
-	register TIFF *tif;
+	TIFF *tif;
 	u_char *buf;
 	u_int row, sample;
 {
 	static char module[] = "TIFFWriteScanline";
-	register TIFFDirectory *td;
+	TIFFDirectory *td;
 	int strip, status, imagegrew = 0;
 
 	if (!TIFFWriteCheck(tif, 0, module))
@@ -372,7 +373,7 @@ TIFFSetupStrips(tif)
 {
 #define	isUnspecified(td, v) \
     (td->v == 0xffffffff || (td)->td_imagelength == 0)
-	register TIFFDirectory *td = &tif->tif_dir;
+	TIFFDirectory *td = &tif->tif_dir;
 
 	if (!isTiled(tif))
 		td->td_stripsperimage = isUnspecified(td, td_rowsperstrip) ?
@@ -409,7 +410,7 @@ TIFFSetupStrips(tif)
  */
 static
 TIFFWriteCheck(tif, tiles, module)
-	register TIFF *tif;
+	TIFF *tif;
 	int tiles;
 	char module[];
 {
@@ -464,7 +465,7 @@ TIFFWriteCheck(tif, tiles, module)
  */
 static
 TIFFBufferSetup(tif, module)
-	register TIFF *tif;
+	TIFF *tif;
 	char module[];
 {
 	int size;
@@ -566,7 +567,7 @@ TIFFAppendToStrip(tif, strip, data, cc)
  * for infinite recursion.
  */
 TIFFFlushData1(tif)
-	register TIFF *tif;
+	TIFF *tif;
 {
 	if (tif->tif_rawcc > 0) {
 		if (tif->tif_dir.td_fillorder != tif->tif_fillorder &&

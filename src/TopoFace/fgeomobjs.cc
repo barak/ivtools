@@ -40,9 +40,6 @@
 
 static const int NUMPOINTS = 200;	// must be > 1
 static const double SMOOTHNESS = 1.0;
-static int mlsize = 0;
-static int mlcount = 0;
-static float* mlx, *mly;
 
 /*****************************************************************************/
 
@@ -270,21 +267,21 @@ void FMultiLineObj::GrowBuf () {
     float* newx, *newy;
     int newsize;
 
-    if (mlsize == 0) {
-        mlsize = NUMPOINTS;
-	mlx = new float[NUMPOINTS];
-	mly = new float[NUMPOINTS];
+    if (_size == 0) {
+        _size = NUMPOINTS;
+	_x = new float[NUMPOINTS];
+	_y = new float[NUMPOINTS];
     } else {
-	newsize = mlsize * 2;
+	newsize = _size * 2;
 	newx = new float[newsize];
 	newy = new float[newsize];
-	Memory::copy(mlx, newx, newsize * sizeof(float));
-	Memory::copy(mly, newy, newsize * sizeof(float));
-	delete mlx;
-	delete mly;
-	mlx = newx;
-	mly = newy;
-	mlsize = newsize;
+	Memory::copy(_x, newx, newsize * sizeof(float));
+	Memory::copy(_y, newy, newsize * sizeof(float));
+	delete _x;
+	delete _y;
+	_x = newx;
+	_y = newy;
+	_size = newsize;
     }
 }
 
@@ -324,17 +321,17 @@ boolean FMultiLineObj::CanApproxWithLine (
 }
 
 void FMultiLineObj::AddLine (double x0, double y0, double x1, double y1) {
-    if (mlcount >= mlsize) {
+    if (_count >= _size) {
 	GrowBuf();
     } 
-    if (mlcount == 0) {
-	mlx[mlcount] = x0;
-	mly[mlcount] = y0;
-	++mlcount;
+    if (_count == 0) {
+	_x[_count] = x0;
+	_y[_count] = y0;
+	++_count;
     }
-    mlx[mlcount] = x1;
-    mly[mlcount] = y1;
-    ++mlcount;
+    _x[_count] = x1;
+    _y[_count] = y1;
+    ++_count;
     if (_minmax) {
 	if (x0<_xmin) _xmin = x0;
 	if (x0>_xmax) _xmax = x0;
@@ -407,14 +404,14 @@ void FMultiLineObj::CalcSection (
 }
 
 void FMultiLineObj::SplineToMultiLine (float* cpx, float* cpy, int cpcount) {
-    register int cpi;
+    int cpi;
 
     if (cpcount < 3) {
         _x = cpx;
 	_y = cpy;
 	_count = cpcount;
     } else {
-        mlcount = 0;
+        _count = 0;
 
         CalcSection(
             cpx[0], cpy[0], cpx[0], cpy[0], cpx[0], cpy[0], cpx[1], cpy[1]
@@ -438,21 +435,18 @@ void FMultiLineObj::SplineToMultiLine (float* cpx, float* cpy, int cpcount) {
             cpx[cpi], cpy[cpi], cpx[cpi + 1], cpy[cpi + 1],
             cpx[cpi + 1], cpy[cpi + 1], cpx[cpi + 1], cpy[cpi + 1]
         );
-        _x = mlx;
-        _y = mly;
-        _count = mlcount;
     }
 }
 
 void FMultiLineObj::ClosedSplineToPolygon (float* cpx, float* cpy, int cpcount){
-    register int cpi;
+    int cpi;
 
     if (cpcount < 3) {
         _x = cpx;
 	_y = cpy;
 	_count = cpcount;
     } else {
-        mlcount = 0;
+        _count = 0;
         CalcSection(
 	    cpx[cpcount - 1], cpy[cpcount - 1], cpx[0], cpy[0], 
 	    cpx[1], cpy[1], cpx[2], cpy[2]
@@ -473,9 +467,6 @@ void FMultiLineObj::ClosedSplineToPolygon (float* cpx, float* cpy, int cpcount){
 	    cpx[cpi], cpy[cpi], cpx[cpi + 1], cpy[cpi + 1],
 	    cpx[0], cpy[0], cpx[1], cpy[1]
         );
-        _x = mlx;
-        _y = mly;
-        _count = mlcount;
     }
 }
 
@@ -493,7 +484,7 @@ void FMultiLineObj::GetBox (FBoxObj& b) {
 
 
 boolean FMultiLineObj::Contains (FPointObj& p) {
-    register int i;
+    int i;
     FBoxObj b;
     
     GetBox(b);
@@ -509,7 +500,7 @@ boolean FMultiLineObj::Contains (FPointObj& p) {
 }
 
 boolean FMultiLineObj::Intersects (FLineObj& l) {
-    register int i;
+    int i;
     FBoxObj b;
     
     GetBox(b);
@@ -526,7 +517,7 @@ boolean FMultiLineObj::Intersects (FLineObj& l) {
 }
 
 boolean FMultiLineObj::Intersects (FBoxObj& userb) {
-    register int i;
+    int i;
     FBoxObj b;
     
     GetBox(b);
@@ -695,7 +686,7 @@ FFillPolygonObj::~FFillPolygonObj () {
 }
 
 static int LowestLeft (float* x, float* y, int count) {
-    register int i;
+    int i;
     int lowestLeft = 0;
     float lx = *x;
     float ly = *y;
@@ -712,7 +703,7 @@ static int LowestLeft (float* x, float* y, int count) {
 
 void FFillPolygonObj::Normalize () {
     if (_count != 0) {
-        register int i, newcount = 1;
+        int i, newcount = 1;
         int lowestLeft, limit = _count;
 
 	if (*_x == _x[_count - 1] && *_y == _y[_count - 1]) {

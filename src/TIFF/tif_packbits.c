@@ -30,6 +30,7 @@
 #include "tiffioP.h"
 #include <stdio.h>
 #include <assert.h>
+extern	int TIFFFlushData1(TIFF *);
 
 int TIFFFlushData1(TIFF *);
 
@@ -104,11 +105,11 @@ static int
 PackBitsEncode(tif, bp, cc, s)
 	TIFF *tif;
 	u_char *bp;
-	register int cc;
+	int cc;
 	u_int s;
 {
-	register char *op, *lastliteral;
-	register int n, b;
+	char *op, *lastliteral;
+	int n, b;
 	enum { BASE, LITERAL, RUN, LITERAL_RUN } state;
 	char *ep;
 	int slop;
@@ -226,13 +227,13 @@ PackBitsEncode(tif, bp, cc, s)
 static int
 PackBitsDecode(tif, op, occ, s)
 	TIFF *tif;
-	register u_char *op;
-	register int occ;
+	u_char *op;
+	int occ;
 	u_int s;
 {
-	register char *bp;
-	register int n, b;
-	register int cc;
+	char *bp;
+	int n, b;
+	int cc;
 
 	bp = tif->tif_rawcp; cc = tif->tif_rawcc;
 	while (cc > 0 && occ > 0) {

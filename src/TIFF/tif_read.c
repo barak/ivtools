@@ -27,6 +27,7 @@
  * Scanline-oriented Read Support
  */
 #include "tiffioP.h"
+
 ssize_t read(int fildes, void *buf, size_t nbyte);
 
 #if USE_PROTOTYPES
@@ -51,7 +52,7 @@ static	TIFFCheckRead();
 
 /*VARARGS3*/
 TIFFReadScanline(tif, buf, row, sample)
-	register TIFF *tif;
+	TIFF *tif;
 	u_char *buf;
 	u_int row, sample;
 {
@@ -75,10 +76,10 @@ TIFFReadScanline(tif, buf, row, sample)
 static
 /*VARARGS2*/
 TIFFSeek(tif, row, sample)
-	register TIFF *tif;
+	TIFF *tif;
 	u_int row, sample;
 {
-	register TIFFDirectory *td = &tif->tif_dir;
+	TIFFDirectory *td = &tif->tif_dir;
 	int strip;
 
 	if (row >= td->td_imagelength) {	/* out of range */
@@ -537,7 +538,7 @@ TIFFReadBufferSetup(tif, bp, size)
  */
 static
 TIFFStartStrip(tif, strip)
-	register TIFF *tif;
+	TIFF *tif;
 	u_int strip;
 {
 	TIFFDirectory *td = &tif->tif_dir;
@@ -555,7 +556,7 @@ TIFFStartStrip(tif, strip)
  */
 static
 TIFFStartTile(tif, tile)
-	register TIFF *tif;
+	TIFF *tif;
 	u_int tile;
 {
 	TIFFDirectory *td = &tif->tif_dir;
