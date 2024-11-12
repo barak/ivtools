@@ -44,7 +44,7 @@ static	int DumpModeEncode(), DumpModeDecode(), DumpModeSeek();
 /*
  * Initialize dump mode.
  */
-TIFFInitDumpMode(tif)
+int TIFFInitDumpMode(tif)
 	TIFF *tif;
 {
 	tif->tif_decoderow = DumpModeDecode;
