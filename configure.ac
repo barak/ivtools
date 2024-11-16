@@ -4,7 +4,7 @@
 # Header
 AC_PREREQ([2.72])
 
-AC_INIT([InterViews Application Framework and Drawing Tools],[2.1.0],[johnston@vectaport.com],[ivtools],[http://www.ivtools.org])
+AC_INIT([InterViews Application Framework and Drawing Tools],[2.1.1],[johnston@vectaport.com],[ivtools],[http://www.ivtools.org])
 
 dnl The foreign option allows the follow files to not exist: NEWS AUTHORS ChangeLog
 AM_INIT_AUTOMAKE([subdir-objects foreign -Wall])
