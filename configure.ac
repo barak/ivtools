@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 # Header
-AC_PREREQ([2.69])
+AC_PREREQ([2.72])
 
 AC_INIT([InterViews Application Framework and Drawing Tools],[2.1.0],[johnston@vectaport.com],[ivtools],[http://www.ivtools.org])
 
