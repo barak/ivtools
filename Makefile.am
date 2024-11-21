@@ -143,7 +143,7 @@ src/ComTerp/comterpserv.cc src/ComTerp/ctrlfunc.cc
 
 libComTerp_la_CPPFLAGS = \
  $(ACE_INLINE_CPPFLAGS) \
- -Dcplusplus_2_1 $(IVSTD_INCLUDES)
+ $(IVSTD_INCLUDES)
 
 libComTerpPART1_la_SOURCES = src/ComTerp/assignfunc.cc			\
 src/ComTerp/bitfunc.cc src/ComTerp/boolfunc.cc				\
@@ -159,13 +159,13 @@ src/ComTerp/symbolfunc.cc src/ComTerp/timefunc.cc src/ComTerp/typefunc.cc			\
 src/ComTerp/xformfunc.cc
 
 libComTerpPART1_la_CPPFLAGS = \
- $(ACE_CPPFLAGS) -Dcplusplus_2_1 $(IVSTD_INCLUDES)
+ $(ACE_CPPFLAGS) $(IVSTD_INCLUDES)
 
 libComTerpPART2_la_SOURCES = src/ComTerp/comterp.cc
 
 libComTerpPART2_la_CPPFLAGS = \
  -Div2_6_incompatible -I$(srcdir)/src/include \
- $(ACE_CPPFLAGS) -Dcplusplus_2_1 $(IVSTD_INCLUDES)
+ $(ACE_CPPFLAGS) $(IVSTD_INCLUDES)
 
 ### libIV_common
 
@@ -175,7 +175,7 @@ src/OS/string.cc src/IV-2_6/textbuffer.cc src/IV-2_6/tform2_6.cc	\
 src/InterViews/transformer.cc
 
 libIV_common_la_CPPFLAGS = \
- -Dcplusplus_2_1 $(IVSTD_INCLUDES)
+ $(IVSTD_INCLUDES)
 
 ### libTime
 
@@ -183,7 +183,7 @@ libTime_la_SOURCES = src/Time/Date.cc src/Time/obstime.cc	\
 src/Time/Time.cc src/IVGlyph/timeglyph.cc
 
 libTime_la_CPPFLAGS = \
- -Dcplusplus_2_1 $(IVSTD_INCLUDES)
+ $(IVSTD_INCLUDES)
 
 ### libIVGlyph
 
@@ -204,7 +204,7 @@ src/IVGlyph/textview.cc src/IVGlyph/textwindow.cc			\
 src/IVGlyph/toolbutton.cc src/IVGlyph/valuator.cc
 
 libIVGlyph_la_CPPFLAGS = \
- -Dcplusplus_2_1 $(IVSTD_INCLUDES)
+ $(IVSTD_INCLUDES)
 
 ### libDrawServ
 
@@ -217,7 +217,7 @@ src/DrawServ/drawfunc.cc src/DrawServ/drawlink.cc		\
 src/DrawServ/drawserv-handler.cc
 
 libDrawServ_la_CPPFLAGS = \
- -Dcplusplus_2_1 $(ACE_INLINE_CPPFLAGS) $(IV2_6_INCLUDES)
+ $(ACE_INLINE_CPPFLAGS) $(IV2_6_INCLUDES)
 
 libDrawServPART1_la_SOURCES = src/DrawServ/drawcatalog.cc	\
 src/DrawServ/drawcmds.cc src/DrawServ/drawcomps.cc		\
@@ -228,13 +228,13 @@ src/DrawServ/grid.cc src/DrawServ/gridlist.cc			\
 src/DrawServ/linkselection.cc src/DrawServ/sid.cc
 
 libDrawServPART1_la_CPPFLAGS = \
- -Dcplusplus_2_1 $(ACE_CPPFLAGS) $(IV2_6_INCLUDES)
+ $(ACE_CPPFLAGS) $(IV2_6_INCLUDES)
 
 libDrawServPART2_la_SOURCES = src/DrawServ/drawimport.cc	\
 src/DrawServ/drawkit.cc src/DrawServ/rcdialog.cc
 
 libDrawServPART2_la_CPPFLAGS = \
- -Dcplusplus_2_1 -Div2_6_incompatible	\
+ -Div2_6_incompatible	\
  -I$(srcdir)/src/include $(ACE_CPPFLAGS) $(IV2_6_INCLUDES)
 
 ### libUnidraw
@@ -245,7 +245,7 @@ src/Unidraw/iterator.cc src/Unidraw/uarray.cc src/Unidraw/uhash.cc	\
 src/Unidraw/ulist.cc src/Unidraw/umap.cc
 
 libUnidraw_common_la_CPPFLAGS = \
- -Dcplusplus_2_1 -DUnidrawCommon $(IVSTD_INCLUDES)
+ -DUnidrawCommon $(IVSTD_INCLUDES)
 
 ### libComUnidraw
 
@@ -265,12 +265,12 @@ src/ComUnidraw/pixelfunc.cc src/ComUnidraw/plotfunc.cc			\
 src/ComUnidraw/unifunc.cc
 
 libComUnidraw_la_CPPFLAGS = \
- -Dcplusplus_2_1 $(ACE_CPPFLAGS) $(IV2_6_INCLUDES)
+ $(ACE_CPPFLAGS) $(IV2_6_INCLUDES)
 
 libComUnidrawPART1_la_SOURCES = src/ComUnidraw/comterp-acehandler.cc
 
 libComUnidrawPART1_la_CPPFLAGS = \
- -Dcplusplus_2_1 $(ACE_INLINE_CPPFLAGS) \
+ $(ACE_INLINE_CPPFLAGS) \
  -Div2_6_incompatible -I$(srcdir)/src/include $(IV2_6_INCLUDES)
 
 ### libComGlyph
@@ -280,7 +280,7 @@ src/ComGlyph/comtextedit.cc src/ComGlyph/comtextview.cc	\
 src/ComGlyph/terpdialog.cc
 
 libComGlyph_la_CPPFLAGS = \
- -Dcplusplus_2_1 -Div2_6_incompatible -I$(srcdir)/src/include $(IVSTD_INCLUDES)
+ -Div2_6_incompatible -I$(srcdir)/src/include $(IVSTD_INCLUDES)
 
 ### libIV
 
@@ -291,7 +291,7 @@ EXTRA_LTLIBRARIES += $(libIV_parts)
 libIV_la_SOURCES = src/InterViews/session.cc
 
 libIV_la_CPPFLAGS = \
- -Dcplusplus_2_1 \
+ \
  -DABSLIBALLDIR='"$(pkgdatadir)"' \
  -DRELLIBALLDIR='"lib/$(PACKAGE)"' \
  -DX_LIBDIR='"$(libdir)"' \
@@ -300,14 +300,14 @@ libIV_la_CPPFLAGS = \
 libIVPART1_la_SOURCES = src/InterViews/psfont.cc
 
 libIVPART1_la_CPPFLAGS = \
- -Dcplusplus_2_1 \
+ \
  -Dps_metrics_dir='"$(PSFontDir)"' \
  -I$(srcdir)/src/IV $(IVSTD_INCLUDES)
 
 libIVPART2_la_SOURCES = src/InterViews/dialogs.cc src/InterViews/kit.cc
 
 libIVPART2_la_CPPFLAGS = \
- -Dcplusplus_2_1 -Dsgi_motif_kit -Dmotif_kit -Ddefault_kit=SMFKit \
+ -Dsgi_motif_kit -Dmotif_kit -Ddefault_kit=SMFKit \
  -I$(srcdir)/src/IV $(IVSTD_INCLUDES)
 
 libIVPART3_la_SOURCES = src/Dispatch/dispatcher.cc			\
@@ -368,12 +368,12 @@ src/OS/host.cc src/OS/listimpl.cc src/OS/math.cc src/OS/memory.cc	\
 src/OS/string.cc src/OS/ustring.cc
 
 libIVPART3_la_CPPFLAGS = \
- -Dcplusplus_2_1 -I$(srcdir)/src/IV $(IVSTD_INCLUDES)
+ -I$(srcdir)/src/IV $(IVSTD_INCLUDES)
 
 libIVPART4_la_SOURCES = src/InterViews/tiff.cc
 
 libIVPART4_la_CPPFLAGS = \
- -Dcplusplus_2_1 $(TIFF_LOC_CPPFLAG) -I$(srcdir)/src/IV $(IVSTD_INCLUDES)
+ $(TIFF_LOC_CPPFLAG) -I$(srcdir)/src/IV $(IVSTD_INCLUDES)
 
 ### libUnidraw
 
@@ -413,14 +413,14 @@ src/Unidraw/upage.cc src/Unidraw/ustencil.cc src/Unidraw/vertices.cc	\
 src/Unidraw/verts.cc src/Unidraw/viewcmds.cc src/Unidraw/viewer.cc
 
 libUnidraw_la_CPPFLAGS = \
- -Dcplusplus_2_1 $(IVSTD_INCLUDES)
+ $(IVSTD_INCLUDES)
 
 ### libAttrGlyph
 
 libAttrGlyph_la_SOURCES = src/AttrGlyph/attredit.cc
 
 libAttrGlyph_la_CPPFLAGS = \
- -Dcplusplus_2_1 \
+ \
  -DLibStdCPlusPlus2=0 -DLibStdCPlusPlus3=1 \
  $(IVSTD_INCLUDES)
 
@@ -461,7 +461,7 @@ src/TopoFace/topoelt.cc src/TopoFace/topoface.cc	\
 src/TopoFace/toponode.cc
 
 libTopoFace_la_CPPFLAGS = \
- -Dcplusplus_2_1 $(IVSTD_INCLUDES)
+ $(IVSTD_INCLUDES)
 
 ### libUniIdraw
 
@@ -473,7 +473,7 @@ src/UniIdraw/iddialogs.cc src/UniIdraw/ided.cc src/UniIdraw/idkybd.cc	\
 src/UniIdraw/idvars.cc
 
 libUniIdraw_la_CPPFLAGS = \
- -Dcplusplus_2_1 $(IV2_6_INCLUDES)
+ $(IV2_6_INCLUDES)
 
 ### libGraphUnidraw
 
@@ -488,14 +488,14 @@ src/GraphUnidraw/graphdata.cc src/GraphUnidraw/grapheditor.cc	\
 src/GraphUnidraw/graphtools.cc src/GraphUnidraw/nodecomp.cc
 
 libGraphUnidraw_la_CPPFLAGS = \
- -Dcplusplus_2_1 $(IV2_6_INCLUDES)
+ $(IV2_6_INCLUDES)
 
 libGraphUnidrawPART1_la_SOURCES = src/GraphUnidraw/graphdialog.cc	\
 src/GraphUnidraw/graphimport.cc src/GraphUnidraw/graphexport.cc		\
 src/GraphUnidraw/graphkit.cc
 
 libGraphUnidrawPART1_la_CPPFLAGS = \
- -Dcplusplus_2_1 \
+ \
  -Div2_6_incompatible -I$(srcdir)/src/include $(IV2_6_INCLUDES)
 
 # libFrameUnidraw
@@ -512,13 +512,13 @@ src/FrameUnidraw/frameps.cc src/FrameUnidraw/framescripts.cc		\
 src/FrameUnidraw/frameviewer.cc src/FrameUnidraw/frameviews.cc
 
 libFrameUnidraw_la_CPPFLAGS = \
- -Dcplusplus_2_1 $(IV2_6_INCLUDES)
+ $(IV2_6_INCLUDES)
 
 libFrameUnidrawPART1_la_SOURCES = src/FrameUnidraw/frameimport.cc	\
 src/FrameUnidraw/framekit.cc src/FrameUnidraw/framestates.cc
 
 libFrameUnidrawPART1_la_CPPFLAGS = \
- -Dcplusplus_2_1 -Div2_6_incompatible -I$(srcdir)/src/include $(IV2_6_INCLUDES)
+ -Div2_6_incompatible -I$(srcdir)/src/include $(IV2_6_INCLUDES)
 
 ### libOverlayUnidraw
 
@@ -556,7 +556,7 @@ src/OverlayUnidraw/clippoly.cc src/OverlayUnidraw/ovclip.cc
 endif
 
 libOverlayUnidraw_la_CPPFLAGS = \
- -Dcplusplus_2_1 $(ACE_CPPFLAGS) $(IV2_6_INCLUDES)
+ $(ACE_CPPFLAGS) $(IV2_6_INCLUDES)
 
 libOverlayUnidrawPART1_la_SOURCES = src/OverlayUnidraw/grloctool.cc	\
 src/OverlayUnidraw/ovabout.cc src/OverlayUnidraw/ovcamcmds.cc		\
@@ -569,13 +569,13 @@ src/OverlayUnidraw/ovshowhide.cc src/OverlayUnidraw/setattrbyexpr.cc	\
 src/OverlayUnidraw/slctbyattr.cc
 
 libOverlayUnidrawPART1_la_CPPFLAGS = \
- -Dcplusplus_2_1 -Div2_6_incompatible $(ACE_CPPFLAGS) \
+ -Div2_6_incompatible $(ACE_CPPFLAGS) \
  -I$(srcdir)/src/OverlayUnidraw -I$(srcdir)/src/include $(IV2_6_INCLUDES)
 
 libOverlayUnidrawPART2_la_SOURCES = src/OverlayUnidraw/aceimport.cc
 
 libOverlayUnidrawPART2_la_CPPFLAGS = \
- -Dcplusplus_2_1 -Div2_6_incompatible -I$(srcdir)/src/include \
+ -Div2_6_incompatible -I$(srcdir)/src/include \
  $(ACE_INLINE_CPPFLAGS) $(IV2_6_INCLUDES)
 
 if HAVE_LIBCLIPPOLY
@@ -590,7 +590,7 @@ libAceDispatch_la_SOURCES = src/AceDispatch/ace_dispatcher.cc	\
 src/AceDispatch/ace_iohandler.cc
 
 libAceDispatch_la_CPPFLAGS = \
- -Dcplusplus_2_1 $(ACE_CPPFLAGS) $(IVSTD_INCLUDES)
+ $(ACE_CPPFLAGS) $(IVSTD_INCLUDES)
 
 ### libAttribute
 
@@ -601,7 +601,7 @@ src/Attribute/commodule.cc src/Attribute/lexscan.cc	\
 src/Attribute/paramlist.cc
 
 libAttribute_la_CPPFLAGS = \
- -Dcplusplus_2_1 $(IVSTD_INCLUDES)
+ $(IVSTD_INCLUDES)
 
 ### libTIFF
 
@@ -711,20 +711,20 @@ AM_CXXFLAGS = -Wno-write-strings -Wno-deprecated
 ## Giving per-object flags ensures that all the "main.o" files have
 ## different names.  See info: (automake)Top > FAQ > Renamed Objects
 
-comdraw_CPPFLAGS	= -Dcplusplus_2_1 $(ACE_INLINE_CPPFLAGS) $(IV2_6_INCLUDES)
-comterp_CPPFLAGS	= -Dcplusplus_2_1 $(ACE_INLINE_CPPFLAGS) $(IVSTD_INCLUDES)
-comtest_CPPFLAGS	= -Dcplusplus_2_1 $(ACE_CPPFLAGS) $(IVSTD_INCLUDES)
-dclock_CPPFLAGS		= -Dcplusplus_2_1 $(IV2_6_INCLUDES)
-drawserv_CPPFLAGS	= -Dcplusplus_2_1 $(ACE_INLINE_CPPFLAGS) $(IV2_6_INCLUDES)
-drawtool_CPPFLAGS	= -Dcplusplus_2_1 $(ACE_INLINE_CPPFLAGS) $(IV2_6_INCLUDES)
-flipbook_CPPFLAGS	= -Dcplusplus_2_1 $(ACE_CPPFLAGS) $(IV2_6_INCLUDES)
-gclock_CPPFLAGS		= -Dcplusplus_2_1 -I$(srcdir)/src/glyphs $(IVSTD_INCLUDES)
-glyphterp_CPPFLAGS	= -Dcplusplus_2_1 $(ACE_CPPFLAGS) $(IVSTD_INCLUDES)
-graphdraw_CPPFLAGS	= -Dcplusplus_2_1 $(ACE_CPPFLAGS) $(IV2_6_INCLUDES)
-iclass_CPPFLAGS		= -Dcplusplus_2_1 $(IV2_6_INCLUDES)
-idemo_CPPFLAGS		= -Dcplusplus_2_1 $(IVSTD_INCLUDES)
-idraw_CPPFLAGS		= -Dcplusplus_2_1 $(IV2_6_INCLUDES)
-ivtext_CPPFLAGS		= -Dcplusplus_2_1 $(IVSTD_INCLUDES)
+comdraw_CPPFLAGS	= $(ACE_INLINE_CPPFLAGS) $(IV2_6_INCLUDES)
+comterp_CPPFLAGS	= $(ACE_INLINE_CPPFLAGS) $(IVSTD_INCLUDES)
+comtest_CPPFLAGS	= $(ACE_CPPFLAGS) $(IVSTD_INCLUDES)
+dclock_CPPFLAGS		= $(IV2_6_INCLUDES)
+drawserv_CPPFLAGS	= $(ACE_INLINE_CPPFLAGS) $(IV2_6_INCLUDES)
+drawtool_CPPFLAGS	= $(ACE_INLINE_CPPFLAGS) $(IV2_6_INCLUDES)
+flipbook_CPPFLAGS	= $(ACE_CPPFLAGS) $(IV2_6_INCLUDES)
+gclock_CPPFLAGS		= -I$(srcdir)/src/glyphs $(IVSTD_INCLUDES)
+glyphterp_CPPFLAGS	= $(ACE_CPPFLAGS) $(IVSTD_INCLUDES)
+graphdraw_CPPFLAGS	= $(ACE_CPPFLAGS) $(IV2_6_INCLUDES)
+iclass_CPPFLAGS		= $(IV2_6_INCLUDES)
+idemo_CPPFLAGS		= $(IVSTD_INCLUDES)
+idraw_CPPFLAGS		= $(IV2_6_INCLUDES)
+ivtext_CPPFLAGS		= $(IVSTD_INCLUDES)
 stdcmapppm_CPPFLAGS	=
 
 # AM_LDFLAGS =

@@ -528,11 +528,7 @@ int rpcbuf::sync() {
 // position so that the caller can find out how many bytes he read
 // since the get pointer's last position (within the same request).
 
-#ifdef cplusplus_2_1
-streampos rpcbuf::seekoff(streamoff offset, ios::seek_dir dir, int mode) {
-#else
 streampos rpcbuf::seekoff(streamoff offset, seek_dir dir, int mode) {
-#endif
     if (!_opened || !gptr()) {
 	return EOF;
     }

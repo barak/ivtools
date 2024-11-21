@@ -56,11 +56,7 @@ public:
     virtual int overflow(int c = EOF);
     virtual int underflow();
     virtual int sync();
-#ifdef cplusplus_2_1
-    virtual streampos seekoff(streamoff, ios::seek_dir, int);
-#else
     virtual streampos seekoff(streamoff, seek_dir, int);
-#endif
     virtual streambuf* setbuf(char*, int);
 protected:
     virtual int doallocate();
