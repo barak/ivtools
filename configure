@@ -6470,7 +6470,7 @@ fi
 
 #ensure Makefile exists for make CPU (needed on fresh GitHub clones)
 if test ! -f Makefile && test -f Makefile.orig; then
-	echo "copying Makefile.orig to Makefile"
+	echo "Copying Makefile.orig to Makefile"
 	cp Makefile.orig Makefile
 fi
 
