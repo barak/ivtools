@@ -4,7 +4,6 @@
 
 Instructions for building ivtools-2.1.0 from source, the short version:
 
-        cp Makefile.orig Makefile // if cloned from github
 	./configure
 	make
 	su -c "make install"
@@ -17,8 +16,9 @@ Instructions for building ivtools-2.1.0 from source, the short version:
        ./configure
        make
 
-2. The configure script tests for the presence of imake, and builds it from a source copy
-   within ivtools if necessary.
+2. The configure script will automatically copy Makefile.orig to Makefile if no Makefile
+   exists (e.g., on a fresh GitHub clone).  It also tests for the presence of imake, and
+   builds it from a source copy within ivtools if necessary.
 
 3. The usual two problems with the configure script are determining the CPU and XCONFIGDIR
    that it writes into config/config.mk. If this fails they can be manually edited into

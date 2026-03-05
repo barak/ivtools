@@ -293,7 +293,11 @@ AC_ARG_ENABLE(install-subdir,[ --enable-install-subdir[=ARG]	enable installation
 
 # AC_TRY_RUN(int access(); int main() { return access("/bin/bash", 1); },BIN_BASH=1,BIN_BASH=0,BIN_BASH=1)
 
-AC_TYPE_SOCKLEN_T
+AC_CHECK_TYPE([socklen_t],
+    [ac_cv_type_socklen_t=YES],
+    [ac_cv_type_socklen_t=NO],
+    [#include <sys/types.h>
+     #include <sys/socket.h>])
 
 AC_SUBST(prefix)
 #AC_SUBST(OPENGL)
@@ -414,6 +418,12 @@ if test ! -f src/Unidraw-common/umap.c ; then
 	cd ../..;
 fi
 
+#ensure Makefile exists for make CPU (needed on fresh GitHub clones)
+if test ! -f Makefile && test -f Makefile.orig; then
+	echo "copying Makefile.orig to Makefile"
+	cp Makefile.orig Makefile
+fi
+
 #output other stuff to config.mk
 echo
 echo writing constants to be pulled in by each Makefile from config/config.mk:
@@ -421,8 +431,9 @@ echo writing \"XCONFIGDIR = $x_libraries/X11/config\"
 echo XCONFIGDIR = $x_libraries/X11/config >config/config.mk
 echo writing \"ABSTOP = `pwd`\"
 echo ABSTOP = `pwd` >>config/config.mk
-echo writing \"CPU = `make CPU`\"
-echo CPU = `make CPU` >>config/config.mk
+cpu_val=`make CPU XINCDIR=$x_includes 2>/dev/null | tail -1`
+echo writing \"CPU = $cpu_val\"
+echo CPU = $cpu_val >>config/config.mk
 echo writing \"LIBSTDCPLUSPLUS2 = $LIBSTDCPLUSPLUS2\"
 echo LIBSTDCPLUSPLUS2 = $LIBSTDCPLUSPLUS2 >>config/config.mk
 echo writing \"LIBSTDCPLUSPLUS3 = $LIBSTDCPLUSPLUS3\"
