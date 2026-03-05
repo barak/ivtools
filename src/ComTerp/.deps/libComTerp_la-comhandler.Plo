@@ -1,1 +1,3 @@
-# dummy
+src/ComTerp/libComTerp_la-comhandler.lo: src/ComTerp/comhandler.cc \
+ /usr/include/stdc-predef.h
+/usr/include/stdc-predef.h:

@@ -1,1 +1,3 @@
-# dummy
+src/ComUnidraw/libComUnidrawPART1_la-comterp-acehandler.lo: \
+ src/ComUnidraw/comterp-acehandler.cc /usr/include/stdc-predef.h
+/usr/include/stdc-predef.h:

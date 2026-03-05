@@ -1,1 +1,3 @@
-# dummy
+src/AceDispatch/libAceDispatch_la-ace_dispatcher.lo: \
+ src/AceDispatch/ace_dispatcher.cc /usr/include/stdc-predef.h
+/usr/include/stdc-predef.h:

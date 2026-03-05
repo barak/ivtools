@@ -1,1 +1,39 @@
-# dummy
+src/InterViews/libIVPART3_la-telltale.lo: src/InterViews/telltale.cc \
+ /usr/include/stdc-predef.h src/include/IV-look/choice.h \
+ src/include/InterViews/telltale.h src/include/InterViews/monoglyph.h \
+ src/include/InterViews/glyph.h src/include/InterViews/coord.h \
+ src/include/InterViews/enter-scope.h src/include/InterViews/iv.h \
+ src/include/InterViews/_undefs.h src/include/InterViews/_defines.h \
+ src/include/OS/enter-scope.h src/include/OS/os.h \
+ src/include/OS/_defines.h src/include/OS/leave-scope.h \
+ src/include/OS/_undefs.h src/include/InterViews/geometry.h \
+ src/include/InterViews/_enter.h src/include/InterViews/_leave.h \
+ src/include/InterViews/resource.h src/include/ivstd/ignores.h \
+ src/include/InterViews/observe.h src/include/IV-look/telltale.h \
+ src/include/InterViews/deck.h src/include/InterViews/polyglyph.h \
+ src/include/InterViews/target.h
+/usr/include/stdc-predef.h:
+src/include/IV-look/choice.h:
+src/include/InterViews/telltale.h:
+src/include/InterViews/monoglyph.h:
+src/include/InterViews/glyph.h:
+src/include/InterViews/coord.h:
+src/include/InterViews/enter-scope.h:
+src/include/InterViews/iv.h:
+src/include/InterViews/_undefs.h:
+src/include/InterViews/_defines.h:
+src/include/OS/enter-scope.h:
+src/include/OS/os.h:
+src/include/OS/_defines.h:
+src/include/OS/leave-scope.h:
+src/include/OS/_undefs.h:
+src/include/InterViews/geometry.h:
+src/include/InterViews/_enter.h:
+src/include/InterViews/_leave.h:
+src/include/InterViews/resource.h:
+src/include/ivstd/ignores.h:
+src/include/InterViews/observe.h:
+src/include/IV-look/telltale.h:
+src/include/InterViews/deck.h:
+src/include/InterViews/polyglyph.h:
+src/include/InterViews/target.h:

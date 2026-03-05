@@ -1,1 +1,3 @@
-# dummy
+src/AceDispatch/libAceDispatch_la-ace_iohandler.lo: \
+ src/AceDispatch/ace_iohandler.cc /usr/include/stdc-predef.h
+/usr/include/stdc-predef.h:

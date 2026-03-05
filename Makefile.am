@@ -248,12 +248,11 @@ libUnidraw_common_la_CPPFLAGS = \
 
 ### libComUnidraw
 
-libComUnidraw_parts = libComUnidrawPART1.la
+libComUnidraw_parts = libComUnidrawPART1.la libComUnidrawPART2.la
 libComUnidraw_la_LIBADD += $(libComUnidraw_parts)
 EXTRA_LTLIBRARIES += $(libComUnidraw_parts)
 
 libComUnidraw_la_SOURCES = src/ComUnidraw/comeditor.cc			\
-src/ComUnidraw/comkit.cc						\
 src/ComUnidraw/comterp-iohandler.cc src/ComUnidraw/dialogfunc.cc	\
 src/ComUnidraw/grdotfunc.cc src/ComUnidraw/grfunc.cc			\
 src/ComUnidraw/grlistfunc.cc src/ComUnidraw/groupfunc.cc		\
@@ -270,6 +269,12 @@ libComUnidrawPART1_la_SOURCES = src/ComUnidraw/comterp-acehandler.cc
 
 libComUnidrawPART1_la_CPPFLAGS = \
  $(ACE_INLINE_CPPFLAGS) \
+ -Div2_6_incompatible -I$(srcdir)/src/include $(IV2_6_INCLUDES)
+
+# comkit.cc must be compiled with -Div2_6_incompatible (like imake Obj31)
+libComUnidrawPART2_la_SOURCES = src/ComUnidraw/comkit.cc
+
+libComUnidrawPART2_la_CPPFLAGS = \
  -Div2_6_incompatible -I$(srcdir)/src/include $(IV2_6_INCLUDES)
 
 ### libComGlyph
@@ -611,6 +616,7 @@ else
 # build internal tiff library
 lib_LTLIBRARIES += libTIFF.la
 TIFF_LOC_CPPFLAG =
+libIV_la_LIBADD += libTIFF.la
 endif
 
 libTIFF_la_SOURCES = src/TIFF/tif_aux.c src/TIFF/tif_ccittrle.c		\
@@ -628,10 +634,9 @@ src/TIFF/tif_version.c src/TIFF/tif_warning.c src/TIFF/tif_write.c
 #  src/TIFF/mkg3states.c src/TIFF/mkspans.c
 #  src/TIFF/tif_machdep.c
 
-libTIFF_la_CPPFLAGS = -I$(srcdir)/src/TIFF -I$(srcdir)/src/include/TIFF -I$(srcdir)/src/include
+libTIFF_la_CPPFLAGS = -DHAVE_IEEEFP=1 -I$(srcdir)/src/TIFF -I$(srcdir)/src/include/TIFF -I$(srcdir)/src/include
 
-tif_fax3.$(OBJEXT) : g3states.h
-.libs/libTIFF_la-tif_fax3.lo: g3states.h
+BUILT_SOURCES = g3states.h
 
 g3states.h: mkg3states
 	./mkg3states > $@
@@ -728,20 +733,20 @@ stdcmapppm_CPPFLAGS	=
 
 # AM_LDFLAGS =
 
-comdraw_LDADD	= libComUnidraw.la libComTerp.la libOverlayUnidraw.la libUnidraw.la $(ACEDISPATCH_LA) libIV.la $(ACE_LD)
-comterp_LDADD	= libComTerp.la libTopoFace.la libUnidraw.la $(ACE_LD)
+comdraw_LDADD	= libComUnidraw.la libComTerp.la libOverlayUnidraw.la libUnidraw.la $(ACEDISPATCH_LA) libIV.la $(ACE_LD) $(X11_LD) $(XEXT_LD) $(MATH_LD)
+comterp_LDADD	= libComTerp.la libTopoFace.la libUnidraw.la $(ACE_LD) $(MATH_LD)
 comtest_LDADD	= libAttribute.la libComTerp.la libComUtil.la
-dclock_LDADD	= libIV.la
-drawserv_LDADD	= libDrawServ.la libFrameUnidraw.la libGraphUnidraw.la libOverlayUnidraw.la libComUnidraw.la libUnidraw.la libComTerp.la $(ACEDISPATCH_LA) libIV.la $(ACE_LD)
-drawtool_LDADD	= libAceDispatch.la libOverlayUnidraw.la libUnidraw.la libComTerp.la libIV.la $(ACE_LD)
-flipbook_LDADD	= libFrameUnidraw.la libComUnidraw.la libOverlayUnidraw.la libUnidraw.la libComTerp.la $(ACEDISPATCH_LA) libIV.la $(ACE_LD)
-gclock_LDADD	= libTime.la libIV.la
-glyphterp_LDADD= libIVGlyph.la libComGlyph.la libIV.la
-graphdraw_LDADD= libGraphUnidraw.la libComUnidraw.la libAceDispatch.la libComTerp.la libOverlayUnidraw.la libUnidraw.la libIV.la $(ACE_LD)
-iclass_LDADD	= libIV.la
-idemo_LDADD	= libIV.la
-idraw_LDADD	= libUniIdraw.la libUnidraw.la
-ivtext_LDADD	= libIVGlyph.la libIV.la
+dclock_LDADD	= libIV.la $(X11_LD) $(XEXT_LD) $(MATH_LD)
+drawserv_LDADD	= libDrawServ.la libFrameUnidraw.la libGraphUnidraw.la libOverlayUnidraw.la libComUnidraw.la libUnidraw.la libComTerp.la $(ACEDISPATCH_LA) libIV.la $(ACE_LD) $(X11_LD) $(XEXT_LD) $(MATH_LD)
+drawtool_LDADD	= libAceDispatch.la libOverlayUnidraw.la libUnidraw.la libComTerp.la libIV.la $(ACE_LD) $(X11_LD) $(XEXT_LD) $(MATH_LD)
+flipbook_LDADD	= libFrameUnidraw.la libComUnidraw.la libOverlayUnidraw.la libUnidraw.la libComTerp.la $(ACEDISPATCH_LA) libIV.la $(ACE_LD) $(X11_LD) $(XEXT_LD) $(MATH_LD)
+gclock_LDADD	= libTime.la libIV.la $(X11_LD) $(XEXT_LD) $(MATH_LD)
+glyphterp_LDADD= libIVGlyph.la libComGlyph.la libIV.la $(X11_LD) $(XEXT_LD) $(MATH_LD)
+graphdraw_LDADD= libGraphUnidraw.la libComUnidraw.la libAceDispatch.la libComTerp.la libOverlayUnidraw.la libUnidraw.la libIV.la $(ACE_LD) $(X11_LD) $(XEXT_LD) $(MATH_LD)
+iclass_LDADD	= libIV.la $(X11_LD) $(XEXT_LD) $(MATH_LD)
+idemo_LDADD	= libIV.la $(X11_LD) $(XEXT_LD) $(MATH_LD)
+idraw_LDADD	= libUniIdraw.la libUnidraw.la $(X11_LD) $(XEXT_LD) $(MATH_LD)
+ivtext_LDADD	= libIVGlyph.la libIV.la $(X11_LD) $(XEXT_LD) $(MATH_LD)
 stdcmapppm_LDADD=
 
 ### directories to recurse into, for installation of include files

@@ -1,1 +1,3 @@
-# dummy
+src/DrawServ/libDrawServ_la-drawserv-handler.lo: \
+ src/DrawServ/drawserv-handler.cc /usr/include/stdc-predef.h
+/usr/include/stdc-predef.h:

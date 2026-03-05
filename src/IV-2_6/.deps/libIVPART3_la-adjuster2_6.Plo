@@ -1,1 +1,91 @@
-# dummy
+src/IV-2_6/libIVPART3_la-adjuster2_6.lo: src/IV-2_6/adjuster2_6.cc \
+ /usr/include/stdc-predef.h src/include/InterViews/bitmap.h \
+ src/include/InterViews/coord.h src/include/InterViews/enter-scope.h \
+ src/include/InterViews/iv.h src/include/InterViews/_undefs.h \
+ src/include/InterViews/_defines.h src/include/OS/enter-scope.h \
+ src/include/OS/os.h src/include/OS/_defines.h \
+ src/include/OS/leave-scope.h src/include/OS/_undefs.h \
+ src/include/InterViews/resource.h src/include/ivstd/ignores.h \
+ src/include/InterViews/_enter.h src/include/InterViews/_leave.h \
+ src/include/IV-2_6/InterViews/adjuster.h \
+ src/include/IV-2_6/InterViews/interactor.h \
+ src/include/InterViews/boolean.h src/include/InterViews/geometry.h \
+ src/include/InterViews/glyph.h src/include/IV-2_6/InterViews/alignment.h \
+ src/include/IV-2_6/_enter.h src/include/IV-2_6/_names.h \
+ src/include/IV-2_6/_leave.h src/include/InterViews/_names.h \
+ src/include/IV-2_6/InterViews/minmax.h \
+ src/include/IV-2_6/InterViews/textstyle.h \
+ src/include/IV-2_6/InterViews/painter.h \
+ src/include/IV-2_6/InterViews/perspective.h \
+ src/include/IV-2_6/InterViews/sensor.h src/include/InterViews/event.h \
+ src/include/IV-2_6/InterViews/shape.h \
+ src/include/InterViews/Bitmaps/enlargeHit.bm \
+ src/include/InterViews/Bitmaps/enlargeMask.bm \
+ src/include/InterViews/Bitmaps/enlarge.bm \
+ src/include/InterViews/Bitmaps/reducerHit.bm \
+ src/include/InterViews/Bitmaps/reducerMask.bm \
+ src/include/InterViews/Bitmaps/reducer.bm \
+ src/include/InterViews/Bitmaps/lmoverHit.bm \
+ src/include/InterViews/Bitmaps/lmoverMask.bm \
+ src/include/InterViews/Bitmaps/lmover.bm \
+ src/include/InterViews/Bitmaps/rmoverHit.bm \
+ src/include/InterViews/Bitmaps/rmoverMask.bm \
+ src/include/InterViews/Bitmaps/rmover.bm \
+ src/include/InterViews/Bitmaps/umoverHit.bm \
+ src/include/InterViews/Bitmaps/umoverMask.bm \
+ src/include/InterViews/Bitmaps/umover.bm \
+ src/include/InterViews/Bitmaps/dmoverHit.bm \
+ src/include/InterViews/Bitmaps/dmoverMask.bm \
+ src/include/InterViews/Bitmaps/dmover.bm src/include/OS/math.h
+/usr/include/stdc-predef.h:
+src/include/InterViews/bitmap.h:
+src/include/InterViews/coord.h:
+src/include/InterViews/enter-scope.h:
+src/include/InterViews/iv.h:
+src/include/InterViews/_undefs.h:
+src/include/InterViews/_defines.h:
+src/include/OS/enter-scope.h:
+src/include/OS/os.h:
+src/include/OS/_defines.h:
+src/include/OS/leave-scope.h:
+src/include/OS/_undefs.h:
+src/include/InterViews/resource.h:
+src/include/ivstd/ignores.h:
+src/include/InterViews/_enter.h:
+src/include/InterViews/_leave.h:
+src/include/IV-2_6/InterViews/adjuster.h:
+src/include/IV-2_6/InterViews/interactor.h:
+src/include/InterViews/boolean.h:
+src/include/InterViews/geometry.h:
+src/include/InterViews/glyph.h:
+src/include/IV-2_6/InterViews/alignment.h:
+src/include/IV-2_6/_enter.h:
+src/include/IV-2_6/_names.h:
+src/include/IV-2_6/_leave.h:
+src/include/InterViews/_names.h:
+src/include/IV-2_6/InterViews/minmax.h:
+src/include/IV-2_6/InterViews/textstyle.h:
+src/include/IV-2_6/InterViews/painter.h:
+src/include/IV-2_6/InterViews/perspective.h:
+src/include/IV-2_6/InterViews/sensor.h:
+src/include/InterViews/event.h:
+src/include/IV-2_6/InterViews/shape.h:
+src/include/InterViews/Bitmaps/enlargeHit.bm:
+src/include/InterViews/Bitmaps/enlargeMask.bm:
+src/include/InterViews/Bitmaps/enlarge.bm:
+src/include/InterViews/Bitmaps/reducerHit.bm:
+src/include/InterViews/Bitmaps/reducerMask.bm:
+src/include/InterViews/Bitmaps/reducer.bm:
+src/include/InterViews/Bitmaps/lmoverHit.bm:
+src/include/InterViews/Bitmaps/lmoverMask.bm:
+src/include/InterViews/Bitmaps/lmover.bm:
+src/include/InterViews/Bitmaps/rmoverHit.bm:
+src/include/InterViews/Bitmaps/rmoverMask.bm:
+src/include/InterViews/Bitmaps/rmover.bm:
+src/include/InterViews/Bitmaps/umoverHit.bm:
+src/include/InterViews/Bitmaps/umoverMask.bm:
+src/include/InterViews/Bitmaps/umover.bm:
+src/include/InterViews/Bitmaps/dmoverHit.bm:
+src/include/InterViews/Bitmaps/dmoverMask.bm:
+src/include/InterViews/Bitmaps/dmover.bm:
+src/include/OS/math.h:

@@ -1,1 +1,3 @@
-# dummy
+src/DrawServ/libDrawServPART2_la-rcdialog.lo: src/DrawServ/rcdialog.cc \
+ /usr/include/stdc-predef.h
+/usr/include/stdc-predef.h:
