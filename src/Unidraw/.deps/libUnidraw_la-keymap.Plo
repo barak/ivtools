@@ -1,0 +1,100 @@
+src/Unidraw/libUnidraw_la-keymap.lo: src/Unidraw/keymap.cc \
+ /usr/include/stdc-predef.h src/include/Unidraw/ctrlinfo.h \
+ src/include/InterViews/enter-scope.h src/include/InterViews/iv.h \
+ src/include/InterViews/_undefs.h src/include/InterViews/_defines.h \
+ src/include/OS/enter-scope.h src/include/OS/os.h \
+ src/include/OS/_defines.h src/include/OS/leave-scope.h \
+ src/include/OS/_undefs.h src/include/Unidraw/enter-scope.h \
+ src/include/Unidraw/_undefs.h src/include/Unidraw/_defines.h \
+ src/include/IV-2_6/_enter.h src/include/IV-2_6/_names.h \
+ src/include/IV-2_6/_leave.h src/include/InterViews/_names.h \
+ src/include/Unidraw/keymap.h src/include/Unidraw/uctrl.h \
+ src/include/IV-2_6/InterViews/control.h \
+ src/include/InterViews/resource.h src/include/ivstd/ignores.h \
+ src/include/IV-2_6/InterViews/scene.h \
+ src/include/IV-2_6/InterViews/interactor.h \
+ src/include/InterViews/boolean.h src/include/InterViews/coord.h \
+ src/include/InterViews/geometry.h src/include/InterViews/_enter.h \
+ src/include/InterViews/_leave.h src/include/InterViews/glyph.h \
+ src/include/IV-2_6/InterViews/alignment.h \
+ src/include/IV-2_6/InterViews/minmax.h \
+ src/include/IV-2_6/InterViews/textstyle.h \
+ src/include/IV-2_6/InterViews/subject.h src/include/ivstd/string.h \
+ /usr/include/ctype.h /usr/include/features.h \
+ /usr/include/features-time64.h \
+ /usr/include/x86_64-linux-gnu/bits/wordsize.h \
+ /usr/include/x86_64-linux-gnu/bits/timesize.h \
+ /usr/include/x86_64-linux-gnu/sys/cdefs.h \
+ /usr/include/x86_64-linux-gnu/bits/long-double.h \
+ /usr/include/x86_64-linux-gnu/gnu/stubs.h \
+ /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
+ /usr/include/x86_64-linux-gnu/bits/types.h \
+ /usr/include/x86_64-linux-gnu/bits/typesizes.h \
+ /usr/include/x86_64-linux-gnu/bits/time64.h \
+ /usr/include/x86_64-linux-gnu/bits/endian.h \
+ /usr/include/x86_64-linux-gnu/bits/endianness.h \
+ /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
+ /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
+ /usr/include/string.h \
+ /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
+ /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h /usr/include/strings.h \
+ /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
+ /usr/include/x86_64-linux-gnu/bits/string_fortified.h
+/usr/include/stdc-predef.h:
+src/include/Unidraw/ctrlinfo.h:
+src/include/InterViews/enter-scope.h:
+src/include/InterViews/iv.h:
+src/include/InterViews/_undefs.h:
+src/include/InterViews/_defines.h:
+src/include/OS/enter-scope.h:
+src/include/OS/os.h:
+src/include/OS/_defines.h:
+src/include/OS/leave-scope.h:
+src/include/OS/_undefs.h:
+src/include/Unidraw/enter-scope.h:
+src/include/Unidraw/_undefs.h:
+src/include/Unidraw/_defines.h:
+src/include/IV-2_6/_enter.h:
+src/include/IV-2_6/_names.h:
+src/include/IV-2_6/_leave.h:
+src/include/InterViews/_names.h:
+src/include/Unidraw/keymap.h:
+src/include/Unidraw/uctrl.h:
+src/include/IV-2_6/InterViews/control.h:
+src/include/InterViews/resource.h:
+src/include/ivstd/ignores.h:
+src/include/IV-2_6/InterViews/scene.h:
+src/include/IV-2_6/InterViews/interactor.h:
+src/include/InterViews/boolean.h:
+src/include/InterViews/coord.h:
+src/include/InterViews/geometry.h:
+src/include/InterViews/_enter.h:
+src/include/InterViews/_leave.h:
+src/include/InterViews/glyph.h:
+src/include/IV-2_6/InterViews/alignment.h:
+src/include/IV-2_6/InterViews/minmax.h:
+src/include/IV-2_6/InterViews/textstyle.h:
+src/include/IV-2_6/InterViews/subject.h:
+src/include/ivstd/string.h:
+/usr/include/ctype.h:
+/usr/include/features.h:
+/usr/include/features-time64.h:
+/usr/include/x86_64-linux-gnu/bits/wordsize.h:
+/usr/include/x86_64-linux-gnu/bits/timesize.h:
+/usr/include/x86_64-linux-gnu/sys/cdefs.h:
+/usr/include/x86_64-linux-gnu/bits/long-double.h:
+/usr/include/x86_64-linux-gnu/gnu/stubs.h:
+/usr/include/x86_64-linux-gnu/gnu/stubs-64.h:
+/usr/include/x86_64-linux-gnu/bits/types.h:
+/usr/include/x86_64-linux-gnu/bits/typesizes.h:
+/usr/include/x86_64-linux-gnu/bits/time64.h:
+/usr/include/x86_64-linux-gnu/bits/endian.h:
+/usr/include/x86_64-linux-gnu/bits/endianness.h:
+/usr/include/x86_64-linux-gnu/bits/types/locale_t.h:
+/usr/include/x86_64-linux-gnu/bits/types/__locale_t.h:
+/usr/include/string.h:
+/usr/include/x86_64-linux-gnu/bits/libc-header-start.h:
+/usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h:
+/usr/include/strings.h:
+/usr/include/x86_64-linux-gnu/bits/strings_fortified.h:
+/usr/include/x86_64-linux-gnu/bits/string_fortified.h:

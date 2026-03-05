@@ -1,0 +1,28 @@
+src/Unidraw/libUnidraw_la-cglue.lo: src/Unidraw/cglue.cc \
+ /usr/include/stdc-predef.h src/include/IV-2_6/InterViews/shape.h \
+ src/include/InterViews/boolean.h src/include/InterViews/enter-scope.h \
+ src/include/InterViews/iv.h src/include/InterViews/_undefs.h \
+ src/include/InterViews/_defines.h src/include/OS/enter-scope.h \
+ src/include/OS/os.h src/include/OS/_defines.h \
+ src/include/OS/leave-scope.h src/include/OS/_undefs.h \
+ src/include/Unidraw/Components/cglue.h src/include/Unidraw/enter-scope.h \
+ src/include/Unidraw/_undefs.h src/include/Unidraw/_defines.h \
+ src/include/IV-2_6/_enter.h src/include/IV-2_6/_names.h
+/usr/include/stdc-predef.h:
+src/include/IV-2_6/InterViews/shape.h:
+src/include/InterViews/boolean.h:
+src/include/InterViews/enter-scope.h:
+src/include/InterViews/iv.h:
+src/include/InterViews/_undefs.h:
+src/include/InterViews/_defines.h:
+src/include/OS/enter-scope.h:
+src/include/OS/os.h:
+src/include/OS/_defines.h:
+src/include/OS/leave-scope.h:
+src/include/OS/_undefs.h:
+src/include/Unidraw/Components/cglue.h:
+src/include/Unidraw/enter-scope.h:
+src/include/Unidraw/_undefs.h:
+src/include/Unidraw/_defines.h:
+src/include/IV-2_6/_enter.h:
+src/include/IV-2_6/_names.h:

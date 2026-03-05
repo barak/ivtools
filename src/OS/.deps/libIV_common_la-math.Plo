@@ -1,0 +1,8 @@
+src/OS/libIV_common_la-math.lo: src/OS/math.cc /usr/include/stdc-predef.h \
+ src/include/OS/math.h src/include/OS/enter-scope.h src/include/OS/os.h \
+ src/include/OS/_defines.h
+/usr/include/stdc-predef.h:
+src/include/OS/math.h:
+src/include/OS/enter-scope.h:
+src/include/OS/os.h:
+src/include/OS/_defines.h:

@@ -1,0 +1,3 @@
+src/OverlayUnidraw/libOverlayUnidrawPART2_la-aceimport.lo: \
+ src/OverlayUnidraw/aceimport.cc /usr/include/stdc-predef.h
+/usr/include/stdc-predef.h:

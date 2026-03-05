@@ -1,0 +1,37 @@
+src/InterViews/libIVPART3_la-superpose.lo: src/InterViews/superpose.cc \
+ /usr/include/stdc-predef.h src/include/InterViews/superpose.h \
+ src/include/InterViews/layout.h src/include/IV-3_1/InterViews/deck.h \
+ src/include/InterViews/polyglyph.h src/include/InterViews/glyph.h \
+ src/include/InterViews/coord.h src/include/InterViews/enter-scope.h \
+ src/include/InterViews/iv.h src/include/InterViews/_undefs.h \
+ src/include/InterViews/_defines.h src/include/OS/enter-scope.h \
+ src/include/OS/os.h src/include/OS/_defines.h \
+ src/include/OS/leave-scope.h src/include/OS/_undefs.h \
+ src/include/InterViews/geometry.h src/include/InterViews/_enter.h \
+ src/include/InterViews/_leave.h src/include/InterViews/resource.h \
+ src/include/ivstd/ignores.h src/include/InterViews/monoglyph.h \
+ src/include/InterViews/scrbox.h src/include/InterViews/adjust.h
+/usr/include/stdc-predef.h:
+src/include/InterViews/superpose.h:
+src/include/InterViews/layout.h:
+src/include/IV-3_1/InterViews/deck.h:
+src/include/InterViews/polyglyph.h:
+src/include/InterViews/glyph.h:
+src/include/InterViews/coord.h:
+src/include/InterViews/enter-scope.h:
+src/include/InterViews/iv.h:
+src/include/InterViews/_undefs.h:
+src/include/InterViews/_defines.h:
+src/include/OS/enter-scope.h:
+src/include/OS/os.h:
+src/include/OS/_defines.h:
+src/include/OS/leave-scope.h:
+src/include/OS/_undefs.h:
+src/include/InterViews/geometry.h:
+src/include/InterViews/_enter.h:
+src/include/InterViews/_leave.h:
+src/include/InterViews/resource.h:
+src/include/ivstd/ignores.h:
+src/include/InterViews/monoglyph.h:
+src/include/InterViews/scrbox.h:
+src/include/InterViews/adjust.h:

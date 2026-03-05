@@ -1,0 +1,33 @@
+src/InterViews/libIVPART3_la-stencil.lo: src/InterViews/stencil.cc \
+ /usr/include/stdc-predef.h src/include/InterViews/bitmap.h \
+ src/include/InterViews/coord.h src/include/InterViews/enter-scope.h \
+ src/include/InterViews/iv.h src/include/InterViews/_undefs.h \
+ src/include/InterViews/_defines.h src/include/OS/enter-scope.h \
+ src/include/OS/os.h src/include/OS/_defines.h \
+ src/include/OS/leave-scope.h src/include/OS/_undefs.h \
+ src/include/InterViews/resource.h src/include/ivstd/ignores.h \
+ src/include/InterViews/_enter.h src/include/InterViews/_leave.h \
+ src/include/InterViews/canvas.h src/include/InterViews/color.h \
+ src/include/InterViews/stencil.h src/include/InterViews/glyph.h \
+ src/include/InterViews/geometry.h
+/usr/include/stdc-predef.h:
+src/include/InterViews/bitmap.h:
+src/include/InterViews/coord.h:
+src/include/InterViews/enter-scope.h:
+src/include/InterViews/iv.h:
+src/include/InterViews/_undefs.h:
+src/include/InterViews/_defines.h:
+src/include/OS/enter-scope.h:
+src/include/OS/os.h:
+src/include/OS/_defines.h:
+src/include/OS/leave-scope.h:
+src/include/OS/_undefs.h:
+src/include/InterViews/resource.h:
+src/include/ivstd/ignores.h:
+src/include/InterViews/_enter.h:
+src/include/InterViews/_leave.h:
+src/include/InterViews/canvas.h:
+src/include/InterViews/color.h:
+src/include/InterViews/stencil.h:
+src/include/InterViews/glyph.h:
+src/include/InterViews/geometry.h:

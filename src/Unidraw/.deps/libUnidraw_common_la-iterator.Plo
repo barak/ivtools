@@ -1,0 +1,25 @@
+src/Unidraw/libUnidraw_common_la-iterator.lo: src/Unidraw/iterator.cc \
+ /usr/include/stdc-predef.h src/include/Unidraw/iterator.h \
+ src/include/InterViews/enter-scope.h src/include/InterViews/iv.h \
+ src/include/InterViews/_undefs.h src/include/InterViews/_defines.h \
+ src/include/OS/enter-scope.h src/include/OS/os.h \
+ src/include/OS/_defines.h src/include/OS/leave-scope.h \
+ src/include/OS/_undefs.h src/include/Unidraw/enter-scope.h \
+ src/include/Unidraw/_undefs.h src/include/Unidraw/_defines.h \
+ src/include/InterViews/_enter.h src/include/InterViews/_leave.h
+/usr/include/stdc-predef.h:
+src/include/Unidraw/iterator.h:
+src/include/InterViews/enter-scope.h:
+src/include/InterViews/iv.h:
+src/include/InterViews/_undefs.h:
+src/include/InterViews/_defines.h:
+src/include/OS/enter-scope.h:
+src/include/OS/os.h:
+src/include/OS/_defines.h:
+src/include/OS/leave-scope.h:
+src/include/OS/_undefs.h:
+src/include/Unidraw/enter-scope.h:
+src/include/Unidraw/_undefs.h:
+src/include/Unidraw/_defines.h:
+src/include/InterViews/_enter.h:
+src/include/InterViews/_leave.h:

@@ -1,0 +1,54 @@
+src/IVGlyph/libIVGlyph_la-boolform.lo: src/IVGlyph/boolform.cc \
+ /usr/include/stdc-predef.h src/IVGlyph/boolform.h \
+ src/include/InterViews/monoglyph.h src/include/InterViews/glyph.h \
+ src/include/InterViews/coord.h src/include/InterViews/enter-scope.h \
+ src/include/InterViews/iv.h src/include/InterViews/_undefs.h \
+ src/include/InterViews/_defines.h src/include/OS/enter-scope.h \
+ src/include/OS/os.h src/include/OS/_defines.h \
+ src/include/OS/leave-scope.h src/include/OS/_undefs.h \
+ src/include/InterViews/geometry.h src/include/InterViews/_enter.h \
+ src/include/InterViews/_leave.h src/include/InterViews/resource.h \
+ src/include/ivstd/ignores.h src/IVGlyph/observables.h \
+ src/include/InterViews/observe.h src/include/InterViews/action.h \
+ src/include/InterViews/layout.h src/include/IV-3_1/InterViews/deck.h \
+ src/include/InterViews/polyglyph.h src/include/InterViews/scrbox.h \
+ src/include/InterViews/adjust.h src/include/InterViews/patch.h \
+ src/include/InterViews/transformer.h src/include/InterViews/telltale.h \
+ src/include/IV-look/kit.h src/include/IV-look/button.h \
+ src/include/InterViews/input.h src/include/IV-look/menu.h \
+ src/include/IV-look/stepper.h
+/usr/include/stdc-predef.h:
+src/IVGlyph/boolform.h:
+src/include/InterViews/monoglyph.h:
+src/include/InterViews/glyph.h:
+src/include/InterViews/coord.h:
+src/include/InterViews/enter-scope.h:
+src/include/InterViews/iv.h:
+src/include/InterViews/_undefs.h:
+src/include/InterViews/_defines.h:
+src/include/OS/enter-scope.h:
+src/include/OS/os.h:
+src/include/OS/_defines.h:
+src/include/OS/leave-scope.h:
+src/include/OS/_undefs.h:
+src/include/InterViews/geometry.h:
+src/include/InterViews/_enter.h:
+src/include/InterViews/_leave.h:
+src/include/InterViews/resource.h:
+src/include/ivstd/ignores.h:
+src/IVGlyph/observables.h:
+src/include/InterViews/observe.h:
+src/include/InterViews/action.h:
+src/include/InterViews/layout.h:
+src/include/IV-3_1/InterViews/deck.h:
+src/include/InterViews/polyglyph.h:
+src/include/InterViews/scrbox.h:
+src/include/InterViews/adjust.h:
+src/include/InterViews/patch.h:
+src/include/InterViews/transformer.h:
+src/include/InterViews/telltale.h:
+src/include/IV-look/kit.h:
+src/include/IV-look/button.h:
+src/include/InterViews/input.h:
+src/include/IV-look/menu.h:
+src/include/IV-look/stepper.h:

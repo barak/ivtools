@@ -1,0 +1,51 @@
+src/InterViews/libIVPART3_la-menu.lo: src/InterViews/menu.cc \
+ /usr/include/stdc-predef.h src/include/IV-look/menu.h \
+ src/include/InterViews/input.h src/include/InterViews/monoglyph.h \
+ src/include/InterViews/glyph.h src/include/InterViews/coord.h \
+ src/include/InterViews/enter-scope.h src/include/InterViews/iv.h \
+ src/include/InterViews/_undefs.h src/include/InterViews/_defines.h \
+ src/include/OS/enter-scope.h src/include/OS/os.h \
+ src/include/OS/_defines.h src/include/OS/leave-scope.h \
+ src/include/OS/_undefs.h src/include/InterViews/geometry.h \
+ src/include/InterViews/_enter.h src/include/InterViews/_leave.h \
+ src/include/InterViews/resource.h src/include/ivstd/ignores.h \
+ src/include/InterViews/observe.h src/include/IV-look/telltale.h \
+ src/include/InterViews/telltale.h src/include/InterViews/action.h \
+ src/include/InterViews/cursor.h src/include/InterViews/event.h \
+ src/include/InterViews/hit.h src/include/InterViews/patch.h \
+ src/include/InterViews/transformer.h src/include/InterViews/window.h \
+ src/include/InterViews/canvas.h src/include/OS/list.h \
+ /usr/include/X11/cursorfont.h
+/usr/include/stdc-predef.h:
+src/include/IV-look/menu.h:
+src/include/InterViews/input.h:
+src/include/InterViews/monoglyph.h:
+src/include/InterViews/glyph.h:
+src/include/InterViews/coord.h:
+src/include/InterViews/enter-scope.h:
+src/include/InterViews/iv.h:
+src/include/InterViews/_undefs.h:
+src/include/InterViews/_defines.h:
+src/include/OS/enter-scope.h:
+src/include/OS/os.h:
+src/include/OS/_defines.h:
+src/include/OS/leave-scope.h:
+src/include/OS/_undefs.h:
+src/include/InterViews/geometry.h:
+src/include/InterViews/_enter.h:
+src/include/InterViews/_leave.h:
+src/include/InterViews/resource.h:
+src/include/ivstd/ignores.h:
+src/include/InterViews/observe.h:
+src/include/IV-look/telltale.h:
+src/include/InterViews/telltale.h:
+src/include/InterViews/action.h:
+src/include/InterViews/cursor.h:
+src/include/InterViews/event.h:
+src/include/InterViews/hit.h:
+src/include/InterViews/patch.h:
+src/include/InterViews/transformer.h:
+src/include/InterViews/window.h:
+src/include/InterViews/canvas.h:
+src/include/OS/list.h:
+/usr/include/X11/cursorfont.h:

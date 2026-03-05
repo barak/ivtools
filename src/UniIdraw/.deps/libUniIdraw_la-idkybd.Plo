@@ -1,0 +1,4 @@
+src/UniIdraw/libUniIdraw_la-idkybd.lo: src/UniIdraw/idkybd.cc \
+ /usr/include/stdc-predef.h src/UniIdraw/idkybd.h
+/usr/include/stdc-predef.h:
+src/UniIdraw/idkybd.h:

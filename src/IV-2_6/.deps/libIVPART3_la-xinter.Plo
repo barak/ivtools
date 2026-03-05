@@ -1,0 +1,167 @@
+src/IV-2_6/libIVPART3_la-xinter.lo: src/IV-2_6/xinter.cc \
+ /usr/include/stdc-predef.h src/IV-2_6/../IV-X11/wtable.h \
+ src/include/OS/table.h src/include/OS/enter-scope.h src/include/OS/os.h \
+ src/include/OS/_defines.h src/include/InterViews/enter-scope.h \
+ src/include/InterViews/iv.h src/include/InterViews/_undefs.h \
+ src/include/InterViews/_defines.h src/include/IV-X11/Xlib.h \
+ src/include/IV-X11/Xdefs.h /usr/include/X11/Xlib.h \
+ /usr/include/x86_64-linux-gnu/sys/types.h /usr/include/features.h \
+ /usr/include/features-time64.h \
+ /usr/include/x86_64-linux-gnu/bits/wordsize.h \
+ /usr/include/x86_64-linux-gnu/bits/timesize.h \
+ /usr/include/x86_64-linux-gnu/sys/cdefs.h \
+ /usr/include/x86_64-linux-gnu/bits/long-double.h \
+ /usr/include/x86_64-linux-gnu/gnu/stubs.h \
+ /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
+ /usr/include/x86_64-linux-gnu/bits/types.h \
+ /usr/include/x86_64-linux-gnu/bits/typesizes.h \
+ /usr/include/x86_64-linux-gnu/bits/time64.h \
+ /usr/include/x86_64-linux-gnu/bits/types/clock_t.h \
+ /usr/include/x86_64-linux-gnu/bits/types/clockid_t.h \
+ /usr/include/x86_64-linux-gnu/bits/types/time_t.h \
+ /usr/include/x86_64-linux-gnu/bits/types/timer_t.h \
+ /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h \
+ /usr/include/x86_64-linux-gnu/bits/stdint-intn.h /usr/include/endian.h \
+ /usr/include/x86_64-linux-gnu/bits/endian.h \
+ /usr/include/x86_64-linux-gnu/bits/endianness.h \
+ /usr/include/x86_64-linux-gnu/bits/byteswap.h \
+ /usr/include/x86_64-linux-gnu/bits/uintn-identity.h \
+ /usr/include/x86_64-linux-gnu/sys/select.h \
+ /usr/include/x86_64-linux-gnu/bits/select.h \
+ /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h \
+ /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h \
+ /usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h \
+ /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h \
+ /usr/include/x86_64-linux-gnu/bits/select2.h \
+ /usr/include/x86_64-linux-gnu/bits/select-decl.h \
+ /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
+ /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
+ /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
+ /usr/include/x86_64-linux-gnu/bits/atomic_wide_counter.h \
+ /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
+ /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h /usr/include/X11/X.h \
+ /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h \
+ src/include/IV-X11/Xundefs.h src/include/InterViews/canvas.h \
+ src/include/InterViews/coord.h src/include/InterViews/_enter.h \
+ src/include/InterViews/_leave.h src/include/InterViews/cursor.h \
+ src/include/InterViews/display.h src/include/InterViews/event.h \
+ src/include/InterViews/font.h src/include/InterViews/resource.h \
+ src/include/ivstd/ignores.h src/include/InterViews/handler.h \
+ src/include/InterViews/hit.h src/include/InterViews/glyph.h \
+ src/include/InterViews/geometry.h src/include/InterViews/style.h \
+ src/include/IV-2_6/InterViews/ihandler.h \
+ src/include/IV-2_6/InterViews/interactor.h \
+ src/include/InterViews/boolean.h \
+ src/include/IV-2_6/InterViews/alignment.h src/include/IV-2_6/_enter.h \
+ src/include/IV-2_6/_names.h src/include/IV-2_6/_leave.h \
+ src/include/InterViews/_names.h src/include/IV-2_6/InterViews/minmax.h \
+ src/include/IV-2_6/InterViews/textstyle.h \
+ src/include/IV-2_6/InterViews/iwindow.h src/include/InterViews/window.h \
+ src/include/IV-2_6/InterViews/painter.h \
+ src/include/IV-2_6/InterViews/scene.h \
+ src/include/IV-2_6/InterViews/sensor.h \
+ src/include/IV-2_6/InterViews/shape.h \
+ src/include/IV-2_6/InterViews/world.h src/include/InterViews/session.h \
+ src/include/IV-X11/Xutil.h /usr/include/X11/Xutil.h \
+ /usr/include/X11/keysym.h /usr/include/X11/keysymdef.h \
+ src/include/IV-X11/xcanvas.h src/include/IV-X11/xcursor.h \
+ src/include/IV-X11/xdisplay.h src/include/IV-X11/xwindow.h \
+ src/include/OS/list.h src/include/IV-X11/xevent.h src/include/OS/math.h
+/usr/include/stdc-predef.h:
+src/IV-2_6/../IV-X11/wtable.h:
+src/include/OS/table.h:
+src/include/OS/enter-scope.h:
+src/include/OS/os.h:
+src/include/OS/_defines.h:
+src/include/InterViews/enter-scope.h:
+src/include/InterViews/iv.h:
+src/include/InterViews/_undefs.h:
+src/include/InterViews/_defines.h:
+src/include/IV-X11/Xlib.h:
+src/include/IV-X11/Xdefs.h:
+/usr/include/X11/Xlib.h:
+/usr/include/x86_64-linux-gnu/sys/types.h:
+/usr/include/features.h:
+/usr/include/features-time64.h:
+/usr/include/x86_64-linux-gnu/bits/wordsize.h:
+/usr/include/x86_64-linux-gnu/bits/timesize.h:
+/usr/include/x86_64-linux-gnu/sys/cdefs.h:
+/usr/include/x86_64-linux-gnu/bits/long-double.h:
+/usr/include/x86_64-linux-gnu/gnu/stubs.h:
+/usr/include/x86_64-linux-gnu/gnu/stubs-64.h:
+/usr/include/x86_64-linux-gnu/bits/types.h:
+/usr/include/x86_64-linux-gnu/bits/typesizes.h:
+/usr/include/x86_64-linux-gnu/bits/time64.h:
+/usr/include/x86_64-linux-gnu/bits/types/clock_t.h:
+/usr/include/x86_64-linux-gnu/bits/types/clockid_t.h:
+/usr/include/x86_64-linux-gnu/bits/types/time_t.h:
+/usr/include/x86_64-linux-gnu/bits/types/timer_t.h:
+/usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h:
+/usr/include/x86_64-linux-gnu/bits/stdint-intn.h:
+/usr/include/endian.h:
+/usr/include/x86_64-linux-gnu/bits/endian.h:
+/usr/include/x86_64-linux-gnu/bits/endianness.h:
+/usr/include/x86_64-linux-gnu/bits/byteswap.h:
+/usr/include/x86_64-linux-gnu/bits/uintn-identity.h:
+/usr/include/x86_64-linux-gnu/sys/select.h:
+/usr/include/x86_64-linux-gnu/bits/select.h:
+/usr/include/x86_64-linux-gnu/bits/types/sigset_t.h:
+/usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h:
+/usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h:
+/usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h:
+/usr/include/x86_64-linux-gnu/bits/select2.h:
+/usr/include/x86_64-linux-gnu/bits/select-decl.h:
+/usr/include/x86_64-linux-gnu/bits/pthreadtypes.h:
+/usr/include/x86_64-linux-gnu/bits/thread-shared-types.h:
+/usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h:
+/usr/include/x86_64-linux-gnu/bits/atomic_wide_counter.h:
+/usr/include/x86_64-linux-gnu/bits/struct_mutex.h:
+/usr/include/x86_64-linux-gnu/bits/struct_rwlock.h:
+/usr/include/X11/X.h:
+/usr/include/X11/Xfuncproto.h:
+/usr/include/X11/Xosdefs.h:
+src/include/IV-X11/Xundefs.h:
+src/include/InterViews/canvas.h:
+src/include/InterViews/coord.h:
+src/include/InterViews/_enter.h:
+src/include/InterViews/_leave.h:
+src/include/InterViews/cursor.h:
+src/include/InterViews/display.h:
+src/include/InterViews/event.h:
+src/include/InterViews/font.h:
+src/include/InterViews/resource.h:
+src/include/ivstd/ignores.h:
+src/include/InterViews/handler.h:
+src/include/InterViews/hit.h:
+src/include/InterViews/glyph.h:
+src/include/InterViews/geometry.h:
+src/include/InterViews/style.h:
+src/include/IV-2_6/InterViews/ihandler.h:
+src/include/IV-2_6/InterViews/interactor.h:
+src/include/InterViews/boolean.h:
+src/include/IV-2_6/InterViews/alignment.h:
+src/include/IV-2_6/_enter.h:
+src/include/IV-2_6/_names.h:
+src/include/IV-2_6/_leave.h:
+src/include/InterViews/_names.h:
+src/include/IV-2_6/InterViews/minmax.h:
+src/include/IV-2_6/InterViews/textstyle.h:
+src/include/IV-2_6/InterViews/iwindow.h:
+src/include/InterViews/window.h:
+src/include/IV-2_6/InterViews/painter.h:
+src/include/IV-2_6/InterViews/scene.h:
+src/include/IV-2_6/InterViews/sensor.h:
+src/include/IV-2_6/InterViews/shape.h:
+src/include/IV-2_6/InterViews/world.h:
+src/include/InterViews/session.h:
+src/include/IV-X11/Xutil.h:
+/usr/include/X11/Xutil.h:
+/usr/include/X11/keysym.h:
+/usr/include/X11/keysymdef.h:
+src/include/IV-X11/xcanvas.h:
+src/include/IV-X11/xcursor.h:
+src/include/IV-X11/xdisplay.h:
+src/include/IV-X11/xwindow.h:
+src/include/OS/list.h:
+src/include/IV-X11/xevent.h:
+src/include/OS/math.h:

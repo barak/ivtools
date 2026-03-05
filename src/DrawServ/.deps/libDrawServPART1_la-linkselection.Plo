@@ -1,0 +1,3 @@
+src/DrawServ/libDrawServPART1_la-linkselection.lo: \
+ src/DrawServ/linkselection.cc /usr/include/stdc-predef.h
+/usr/include/stdc-predef.h:
