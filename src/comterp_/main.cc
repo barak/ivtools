@@ -82,9 +82,8 @@ void stack_trace_handler(int sig) {
   exit(1);
 }
 
-
 int main(int argc, char *argv[]) {
-
+ 
     signal(SIGSEGV, stack_trace_handler);
     
     boolean server_flag = argc>1 && strcmp(argv[1], "server") == 0;
@@ -238,6 +237,7 @@ int main(int argc, char *argv[]) {
 		PACKAGE_VERSION);
       return terp->run();
     } else {
+
       ComTerpServ* terp = new ComTerpServ();
       terp->add_defaults();
       if (run_flag && argc > 2 ) {
