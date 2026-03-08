@@ -19,11 +19,6 @@ AC_ARG_WITH([ace],
        [with_ace=check])
 AC_MSG_RESULT([${with_ace}])
 
-AC_MSG_CHECKING([with_tiff])
-AC_ARG_WITH([tiff],
-       [AS_HELP_STRING([--with-tiff],[use the TIFF library (default: check)])],,
-       [with_tiff=check])
-AC_MSG_RESULT([${with_tiff}])
 
 AC_MSG_CHECKING([with_clippoly])
 AC_ARG_WITH([clippoly],
@@ -69,29 +64,20 @@ AS_IF([test ${with_ace} != no],
      AC_MSG_WARN([Cannot find ACE library])],
     [AC_MSG_ERROR([Cannot find ACE library])])])])
 
-AS_IF([test ${with_tiff} != no],
- [AC_CHECK_LIB([tiff], [TIFFOpen],
-   [with_tiff=yes
-    TIFF_LD=-ltiff],
-   [AC_CHECK_LIB([TIFF], [TIFFOpen],
-     [with_tiff=yes
-      TIFF_LD=-lTIFF],
-     [AS_IF([test ${with_tiff} = check],
-       [with_tiff=no
-        AC_MSG_WARN([Cannot find tiff or TIFF library])],
-       [AC_MSG_ERROR([Cannot find tiff or TIFF library])])])])])
+AC_CHECK_LIB([tiff], [TIFFOpen],
+  [TIFF_LD=-ltiff],
+  [AC_MSG_ERROR([Cannot find tiff library])])
 
 AS_IF([test ${with_clippoly} != no],
  [AC_CHECK_LIB([clippoly], [clippoly_version],
    [with_clippoly=yes
     CLIPPOLY_LD=-lclippoly],
-   [AS_IF([test ${with_ace} = check],
+   [AS_IF([test ${with_clippoly} = check],
      [with_clippoly=no
       AC_MSG_WARN([Cannot find clippoly library])],
      [AC_MSG_ERROR([Cannot find clippoly library])])])])
 
 AM_CONDITIONAL([HAVE_LIBACE], [test ${with_ace} = yes])
-AM_CONDITIONAL([HAVE_LIBTIFF], [test ${with_tiff} = yes])
 AM_CONDITIONAL([HAVE_LIBCLIPPOLY], [test ${with_clippoly} = yes])
 
 AC_SUBST(X11_LD)
@@ -156,7 +142,9 @@ AS_IF([test x"${with_PSFontDir}" = xcheck],
 	       [PSFontDir=/System/Library/Fonts],
 	       [AC_CHECK_FILE([/usr/share/fonts/X11/Type1/],
 		 [PSFontDir=/usr/share/fonts/X11/Type1],
-		 [AC_MSG_ERROR([cannot find PS Font Directory])])])])])])])])])
+		 [AC_CHECK_FILE([/usr/share/fonts/type1/urw-base35/NimbusRoman-Bold.afm],
+		   [PSFontDir=/usr/share/fonts/type1/urw-base35],
+		   [AC_MSG_ERROR([cannot find PS Font Directory])])])])])])])])])])
   AC_MSG_NOTICE([Using PSFontDir ${PSFontDir}])],
  [PSFontDir="${with_PSFontDir}"])
 AC_SUBST(PSFontDir)

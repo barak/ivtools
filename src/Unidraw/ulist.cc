@@ -60,7 +60,7 @@ void UList::Remove (UList* e) {
 }
 
 void UList::Delete (void* p) {
-    UList* e;
+    register UList* e;
 
     e = Find(p);
     if (e != nil) {
@@ -70,7 +70,7 @@ void UList::Delete (void* p) {
 }
 
 UList* UList::Find (void* p) {
-    UList* e;
+    register UList* e;
 
     for (e = _next; e != this; e = e->_next) {
 	if (e->_object == p) {

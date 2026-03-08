@@ -66,8 +66,8 @@ Perspective::Perspective(Perspective& p) {
 }
 
 Perspective::~Perspective() {
-    ViewList* e;
-    ViewList* next;
+    register ViewList* e;
+    register ViewList* next;
 
     for (e = views; e != nil; e = next) {
 	next = e->next;
@@ -84,7 +84,7 @@ void Perspective::Init(
 }
 
 void Perspective::Attach(Interactor* i) {
-    ViewList* e;
+    register ViewList* e;
 
     e = new ViewList(i);
     e->next = views;
@@ -93,8 +93,8 @@ void Perspective::Attach(Interactor* i) {
 }
 
 void Perspective::Detach(Interactor* i) {
-    ViewList* e;
-    ViewList* prev;
+    register ViewList* e;
+    register ViewList* prev;
 
     prev = nil;
     for (e = views; e != nil; e = e->next) {
@@ -115,7 +115,7 @@ void Perspective::Detach(Interactor* i) {
 }
 
 void Perspective::Update() {
-    ViewList* e;
+    register ViewList* e;
 
     for (e = views; e != nil; e = e->next) {
 	e->view->Update();

@@ -437,7 +437,7 @@ void Picture::uncacheExtent () {
 }
 
 void Picture::uncacheChildren () {
-    UList* i;
+    register UList* i;
     Graphic* subgr;
 
     for (i = _kids->First(); i != _kids->End(); i = i->Next()) {

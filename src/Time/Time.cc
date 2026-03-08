@@ -38,6 +38,8 @@ using namespace std;
 using std::setfill;
 using std::setw;
 
+const unsigned VERSION =2;
+
 #define	THIS	Time
 #define	BASE	Object
 
@@ -279,7 +281,7 @@ Time Time::min(const Time& t) const
 
 void Time::printOn(ostream& strm) const
 {
-	unsigned hh = hour();
+	register unsigned hh = hour();
 	this->date().printOn(strm);
  	strm << ' ' << ((hh <= 12) ? hh : hh-12) << ':';
  	strm << setfill('0') << setw(2) << minute() << ':';

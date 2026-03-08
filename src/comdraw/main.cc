@@ -26,10 +26,6 @@
  * comdraw main program.
  */
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <OverlayUnidraw/ovcatalog.h>
 #include <OverlayUnidraw/ovcreator.h>
 #include <ComUnidraw/comeditor.h>
@@ -55,6 +51,7 @@
 #include <stream.h>
 #include <string.h>
 #include <math.h>
+#include <version.h>
 #include <iostream>
 
 using std::cerr;
@@ -339,9 +336,7 @@ int main (int argc, char** argv) {
 	}
 #endif
 
-	fprintf(stderr,
-		"ivtools-%s comdraw: see \"man comdraw\" or type help here for command info\n",
-		PACKAGE_VERSION);
+	fprintf(stderr, "ivtools-%s comdraw: see \"man comdraw\" or type help here for command info\n", VersionString);
 	XSync(unidraw->GetWorld()->display()->rep()->display_,false);
 	unidraw->Run();
     }

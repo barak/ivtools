@@ -70,7 +70,7 @@ Segment::Segment (Seg s, float Xoff, float Yoff) {
 }
 
 void Segment::Reconfig (Painter* output) {
-    int i;
+    register int i;
 
     for (i = 0; i <= fullFade; i++) {
 	Painter* p = new Painter(output);

@@ -21,9 +21,6 @@
  * WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 #include <cstdio>
 
 #ifdef HAVE_ACE
@@ -43,6 +40,8 @@ static const char *const SERVER_HOST = ACE_DEFAULT_SERVER_HOST;
 
 #include <sys/stat.h>
 #include <unistd.h>
+
+#include <version.h>
 
 #include <ComTerp/comterpserv.h>
 #include <ComTerp/comvalue.h>
@@ -232,9 +231,7 @@ int main(int argc, char *argv[]) {
       if (S_ISREG(buf.st_mode) || S_ISFIFO(buf.st_mode))
 	terp->disable_prompt();
       else
-	fprintf(stderr,
-		"ivtools-%s comterp: type help for more info\n",
-		PACKAGE_VERSION);
+	fprintf(stderr, "ivtools-%s comterp: type help for more info\n", VersionString);
       return terp->run();
     } else {
 
@@ -276,9 +273,7 @@ int main(int argc, char *argv[]) {
         if (S_ISREG(buf.st_mode) || S_ISFIFO(buf.st_mode))
 	  terp->disable_prompt();
 	else
-	  fprintf(stderr,
-		  "ivtools-%s comterp:  type help for more info\n",
-		  PACKAGE_VERSION);
+	  fprintf(stderr, "ivtools-%s comterp:  type help for more info\n", VersionString);
 	return terp->run();
       }
     }

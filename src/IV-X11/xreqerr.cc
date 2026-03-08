@@ -47,7 +47,7 @@ void ReqErr::Error() {
 }
 
 static int DoXError(XDisplay* errdisplay, XErrorEvent* e) {
-    ReqErr* r = errhandler;
+    register ReqErr* r = errhandler;
     if (r != nil) {
 	r->msgid = e->serial;
 	r->code = e->error_code;

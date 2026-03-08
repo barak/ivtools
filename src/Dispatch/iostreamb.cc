@@ -266,7 +266,7 @@ ostreamb::~ostreamb() {}
 // character that all the inserters insert after a formatted value.
 
 inline void ostreamb::fixwidth() {
-    int w = width();
+    register int w = width();
     if (w) {
 	width(w - 1);
     }

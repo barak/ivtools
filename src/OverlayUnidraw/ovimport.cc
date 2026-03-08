@@ -81,7 +81,7 @@
 #include <InterViews/transformer.h>
 #include <InterViews/regexp.h>
 
-#include <TIFF/format.h>
+#include <Unidraw/img-format.h>
 #include <OS/string.h>
 #include <OS/list.h>
 

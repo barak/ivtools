@@ -72,7 +72,7 @@ GraphicBlock::GraphicBlock (Graphic* gr, Coord pad, Alignment a, Zooming z) {
 }
 
 void GraphicBlock::Init () {
-    Perspective* p = perspective;
+    register Perspective* p = perspective;
     Coord left, bottom, right, top;
 
     _mag = 1;
@@ -97,7 +97,7 @@ void GraphicBlock::Init () {
 }
 
 void GraphicBlock::Align () {
-    Perspective* p = perspective;
+    register Perspective* p = perspective;
     Coord l, b, dummy1, dummy2;
 
     if (_graphic == nil) {
@@ -147,7 +147,7 @@ void GraphicBlock::Align () {
 }
 
 void GraphicBlock::Fix () {
-    Perspective* p = perspective;
+    register Perspective* p = perspective;
     Coord l, b, dummy1, dummy2;
 
     if (_graphic == nil) {
@@ -204,7 +204,7 @@ float GraphicBlock::LimitMagnification (float desired) {
 }
 
 void GraphicBlock::Resize () {
-    Perspective* p = perspective;
+    register Perspective* p = perspective;
     
     Fix();
     p->curwidth = xmax + 1;
@@ -217,7 +217,7 @@ void GraphicBlock::Resize () {
 }
 
 void GraphicBlock::UpdatePerspective () {
-    Perspective* p = perspective;
+    register Perspective* p = perspective;
     Coord left, bottom, right, top;
 
     if (_graphic != nil) {
@@ -260,7 +260,7 @@ void GraphicBlock::Redraw (Coord l, Coord b, Coord r, Coord t) {
 }
 
 void GraphicBlock::Normalize (Perspective& np) {
-    Perspective* p = perspective;
+    register Perspective* p = perspective;
     float hfactor, vfactor;
 
     if (p->width != np.width) {
@@ -293,7 +293,7 @@ float GraphicBlock::NearestPow2 (float factor) {
 }
 
 float GraphicBlock::ScaleFactor (Perspective& np) {
-    Perspective* p = perspective;
+    register Perspective* p = perspective;
     float factor = 1;
     Coord dx, dy;
 
@@ -315,7 +315,7 @@ void GraphicBlock::GetGraphicBox (Coord& l, Coord& b, Coord& r, Coord& t) {
 }
 
 void GraphicBlock::Zoom (Perspective& np) {
-    Perspective* p = perspective;
+    register Perspective* p = perspective;
     Coord cx, cy, halfw, halfh, dx, dy;
     float factor = ScaleFactor(np);
 
@@ -341,7 +341,7 @@ void GraphicBlock::Zoom (Perspective& np) {
 }
 
 void GraphicBlock::Scroll (Perspective& np) {
-    Perspective* p = perspective;
+    register Perspective* p = perspective;
     Coord dx, dy;
 
     if (_graphic != nil) {
@@ -356,7 +356,7 @@ void GraphicBlock::Scroll (Perspective& np) {
 }
 
 void GraphicBlock::Adjust (Perspective& np) {
-    Perspective* p = perspective;
+    register Perspective* p = perspective;
     Perspective ptmp;
     
     if (canvas == nil) {
@@ -404,7 +404,7 @@ void GraphicBlock::SetGraphic (Graphic* g) {
 }
 
 void GraphicBlock::SetMagnification (float m) {
-    Perspective* p = perspective;
+    register Perspective* p = perspective;
     float factor;
     Coord cx, cy, halfw, halfh;
 

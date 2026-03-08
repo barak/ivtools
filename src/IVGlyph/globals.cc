@@ -270,7 +270,7 @@ void MultiLineObj::CalcSection (
 }
 
 void MultiLineObj::SplineToMultiLine (Coord* cpx, Coord* cpy, int cpcount) {
-    int cpi;
+    register int cpi;
 
     if (cpcount < 3) {
         _x = cpx;
@@ -308,7 +308,7 @@ void MultiLineObj::SplineToMultiLine (Coord* cpx, Coord* cpy, int cpcount) {
 }
 
 void MultiLineObj::ClosedSplineToPolygon (Coord* cpx, Coord* cpy, int cpcount){
-    int cpi;
+    register int cpi;
 
     if (cpcount < 3) {
         _x = cpx;
@@ -356,7 +356,7 @@ void MultiLineObj::GetBox (BoxObj& b) {
 
 
 boolean MultiLineObj::Contains (PointObj& p) {
-    int i;
+    register int i;
     BoxObj b;
     
     GetBox(b);
@@ -372,7 +372,7 @@ boolean MultiLineObj::Contains (PointObj& p) {
 }
 
 boolean MultiLineObj::Intersects (LineObj& l) {
-    int i;
+    register int i;
     BoxObj b;
     
     GetBox(b);
@@ -389,7 +389,7 @@ boolean MultiLineObj::Intersects (LineObj& l) {
 }
 
 boolean MultiLineObj::Intersects (BoxObj& userb) {
-    int i;
+    register int i;
     BoxObj b;
     
     GetBox(b);
@@ -427,7 +427,7 @@ FillPolygonObj::~FillPolygonObj () {
 }
 
 static int LowestLeft (Coord* x, Coord* y, int count) {
-    int i;
+    register int i;
     int lowestLeft = 0;
     Coord lx = *x;
     Coord ly = *y;
@@ -444,7 +444,7 @@ static int LowestLeft (Coord* x, Coord* y, int count) {
 
 void FillPolygonObj::Normalize () {
     if (_count != 0) {
-        int i, newcount = 1;
+        register int i, newcount = 1;
         int lowestLeft, limit = _count;
 
 	if (*_x == _x[_count - 1] && *_y == _y[_count - 1]) {

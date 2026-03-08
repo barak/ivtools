@@ -24,10 +24,6 @@
  * Idraw editor main program.
  */
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <UniIdraw/idcatalog.h>
 #include <UniIdraw/idcreator.h>
 #include <UniIdraw/ided.h>
@@ -37,6 +33,8 @@
 #include <InterViews/world.h>
 
 #include <stream.h>
+
+#include <version.h>
 
 #include <iostream>
 #include <fstream>
@@ -155,7 +153,7 @@ int main (int argc, char** argv) {
 	IdrawEditor* ed = new IdrawEditor(initial_file);
 
 	unidraw->Open(ed);
-	cerr << "ivtools-" << PACKAGE_VERSION
+	cerr << "ivtools-" << VersionString 
 	     << " idraw: see \"man idraw\" for more info\n"; 
 	unidraw->Run();
     }
