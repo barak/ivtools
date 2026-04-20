@@ -35,10 +35,21 @@ AC_MSG_RESULT([${with_PSFontDir}])
 # Checks for programs.
 AC_LANG([C++])
 AC_PROG_CXX
+### Work around autoconf 2.72 bug; remove for autoconf 2.73+
+# autoconf 2.72 AC_PROG_CXX's C++11 detection test uses u8"..." string
+# literals, which changed from const char* to const char8_t* in C++20,
+# causing the test to fail with a C++20-defaulting compiler like
+# GCC-16 and making autoconf fall back to -std=gnu++11. Strip whatever
+# -std= flag it may have added and explicitly require C++17 or later
+# instead.
+CXX=`echo "$CXX" | sed 's/ -std=[[^ ]]*//g'`
+CXXCPP=`echo "$CXXCPP" | sed 's/ -std=[[^ ]]*//g'`
+###
+dnl ask for -std=c++17
+# Uses features introduced in C++17:
+AX_CXX_COMPILE_STDCXX([17], [], [mandatory])
 AC_PROG_CC
 AM_PROG_CC_C_O
-dnl ask for -std=c++17
-AX_CXX_COMPILE_STDCXX(17)
 AM_PROG_AR
 AC_PROG_INSTALL
 ACLTX_PROG_PS2PDF([AC_MSG_WARN([Cannot find ps2pdf])])
