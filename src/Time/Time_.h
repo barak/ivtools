@@ -131,7 +131,7 @@ public:
 	boolean operator<=(const Time& t) const	{ return sec <= t.sec; }
 	boolean operator>(const Time& t) const	{ return sec > t.sec; }
 	boolean operator>=(const Time& t) const	{ return sec >= t.sec; }
-	boolean operator==(const Time& t) const	{ return sec == t.sec; }
+	bool operator==(const Time& t) const	{ return sec == t.sec; }
 	boolean operator!=(const Time& t) const	{ return sec != t.sec; }
 	friend Time operator+(const Time& t, long s)	{ return Time(t.sec+s); }
 	friend Time operator+(long s, const Time& t)	{ return Time(t.sec+s); }

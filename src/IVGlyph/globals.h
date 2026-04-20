@@ -64,7 +64,7 @@ public:
     BoxObj(Coord = 0, Coord = 0, Coord = 0, Coord = 0);
     BoxObj(BoxObj*);
 
-    boolean operator==(BoxObj&);
+    bool operator==(BoxObj&);
     boolean Contains(PointObj&);
     boolean Intersects(BoxObj&);
     boolean Intersects(LineObj&);

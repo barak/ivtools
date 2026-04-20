@@ -1,10 +1,6 @@
 #undef boolean
-#undef true
-#undef false
 
 #define boolean _lib_os(boolean)
-#define true _lib_os(true)
-#define false _lib_os(false)
 #define u_char _lib_os(u_char)
 #define CopyString _lib_os(CopyString)
 #define Directory _lib_os(Directory)

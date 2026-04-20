@@ -80,7 +80,7 @@ BoxObj::BoxObj (BoxObj* b) {
     _left = b->_left; _bottom = b->_bottom; _right = b->_right; _top = b->_top;
 }
 
-boolean BoxObj::operator== (BoxObj& box) {
+bool BoxObj::operator== (BoxObj& box) {
     float tol = 0.0001;
     return ( 
         Math::equal(_left, box._left, tol) && 
