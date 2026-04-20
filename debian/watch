@@ -1,3 +1,5 @@
-version=4
+Version: 5
 
-https://github.com/vectaport/@PACKAGE@/tags .*/@PACKAGE@-@ANY_VERSION@@ARCHIVE_EXT@
+Template: Github
+Owner: vectaport
+Project: @PACKAGE@

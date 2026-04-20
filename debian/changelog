@@ -1,3 +1,17 @@
+ivtools (2.1.1+git.2025.07.26.a1-1) unstable; urgency=medium
+
+  * New upstream release 2.1.1
+  * Track post-release upstream changes
+    - Minor fixes
+    - Recombobulate autotools
+    - Add .pc files
+    - GCC-16 fixes
+  * debian/copyright → DEP-5
+  * debian/watch → v5
+  * debian/control Standards Version → 4.7.4
+
+ -- Barak A. Pearlmutter <bap@debian.org>  Mon, 20 Apr 2026 21:43:48 +0100
+
 ivtools (2.0.11d.a1-3) unstable; urgency=medium
 
   * Ooops, wrong branch, fix!!!

@@ -1,5 +1,4 @@
 Source: ivtools
-Priority: optional
 Section: libs
 Build-Depends: dpkg-dev (>= 1.22.5), debhelper-compat (= 13),
 	autoconf-archive,
@@ -10,8 +9,7 @@ Build-Depends: dpkg-dev (>= 1.22.5), debhelper-compat (= 13),
 	ghostscript
 Build-Conflicts: autoconf2.13, automake1.4
 Maintainer: Barak A. Pearlmutter <bap@debian.org>
-Standards-Version: 4.6.2
-Rules-Requires-Root: no
+Standards-Version: 4.7.4
 Homepage: http://www.ivtools.org
 Vcs-Git: https://salsa.debian.org/debian/ivtools.git
 Vcs-Browser: https://salsa.debian.org/debian/ivtools
@@ -37,7 +35,7 @@ Architecture: any
 Depends: libiv2t64 (= ${binary:Version}),
 	 libiv-unidraw2t64 (= ${binary:Version}),
 	 libc6-dev, libtiff-dev, zlib1g-dev, libace-dev,
-	 ${shlibs:Depends}, ${misc:Depends}
+	 ${misc:Depends}
 Description: Development files for the InterViews library
  InterViews is written in C++ and portable to several different Unix
  platforms.
