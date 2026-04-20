@@ -160,6 +160,25 @@ AX_CHECK_COMPILE_FLAG([-Wno-sign-compare], [CXXFLAGS="${CXXFLAGS} -Wno-sign-comp
 
 
 # Trailer
-AC_CONFIG_FILES([Makefile src/Makefile src/include/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile src/include/Makefile
+                 pkgconfig/IV.pc
+                 pkgconfig/Unidraw.pc
+                 pkgconfig/ComUtil.pc
+                 pkgconfig/IVGlyph.pc
+                 pkgconfig/Attribute.pc
+                 pkgconfig/Time.pc
+                 pkgconfig/ComTerp.pc
+                 pkgconfig/AttrGlyph.pc
+                 pkgconfig/ComGlyph.pc
+                 pkgconfig/TopoFace.pc
+                 pkgconfig/UniIdraw.pc
+                 pkgconfig/OverlayUnidraw.pc
+                 pkgconfig/ComUnidraw.pc
+                 pkgconfig/FrameUnidraw.pc
+                 pkgconfig/GraphUnidraw.pc
+                 pkgconfig/Unidraw-common.pc
+                 pkgconfig/IV-common.pc
+                 pkgconfig/DrawServ.pc
+                 pkgconfig/AceDispatch.pc])
 
 AC_OUTPUT

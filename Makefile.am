@@ -33,6 +33,31 @@
 
 ACLOCAL_AMFLAGS = -I m4
 
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = \
+ pkgconfig/IV.pc \
+ pkgconfig/Unidraw.pc \
+ pkgconfig/ComUtil.pc \
+ pkgconfig/IVGlyph.pc \
+ pkgconfig/Attribute.pc \
+ pkgconfig/Time.pc \
+ pkgconfig/ComTerp.pc \
+ pkgconfig/AttrGlyph.pc \
+ pkgconfig/ComGlyph.pc \
+ pkgconfig/TopoFace.pc \
+ pkgconfig/UniIdraw.pc \
+ pkgconfig/OverlayUnidraw.pc \
+ pkgconfig/ComUnidraw.pc \
+ pkgconfig/FrameUnidraw.pc \
+ pkgconfig/GraphUnidraw.pc \
+ pkgconfig/Unidraw-common.pc \
+ pkgconfig/IV-common.pc \
+ pkgconfig/DrawServ.pc
+
+if HAVE_LIBACE
+pkgconfig_DATA += pkgconfig/AceDispatch.pc
+endif
+
 ### Non-architecture-specific support file location
 pkgdatadir = $(datadir)/$(PACKAGE)
 

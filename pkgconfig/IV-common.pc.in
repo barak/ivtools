@@ -1,0 +1,10 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: IV-common
+Description: ivtools InterViews common utilities
+Version: @VERSION@
+Libs: -L${libdir} -lIV-common
+Cflags: -I${includedir}

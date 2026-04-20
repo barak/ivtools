@@ -261,3 +261,4 @@ src/include/Makefile.in
 /pnmtopgm
 /refman.pdf
 /stdcmapppm
+/pkgconfig/*.pc

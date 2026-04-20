@@ -1,0 +1,12 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: OverlayUnidraw
+Description: ivtools overlay Unidraw library
+Version: @VERSION@
+Requires: AttrGlyph Attribute ComGlyph ComTerp IVGlyph TopoFace UniIdraw Unidraw IV ComUtil
+Libs: -L${libdir} -lOverlayUnidraw
+Libs.private: @ACE_LD@ @CLIPPOLY_LD@ @X11_LD@ -lm
+Cflags: -I${includedir}

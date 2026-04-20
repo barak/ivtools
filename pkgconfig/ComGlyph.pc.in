@@ -1,0 +1,11 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: ComGlyph
+Description: ivtools ComTerp glyph library
+Version: @VERSION@
+Requires: Attribute ComTerp IVGlyph IV ComUtil
+Libs: -L${libdir} -lComGlyph
+Cflags: -I${includedir}
