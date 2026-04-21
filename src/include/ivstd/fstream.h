@@ -1,7 +1,16 @@
 #ifndef _iv_fstream_
 #define _iv_fstream_
+#include <iostream>
 #include <fstream>
 #include <cstdio>
+using std::ifstream;
+using std::ofstream;
+using std::fstream;
+using std::cerr;
+using std::cout;
+using std::cin;
+using std::endl;
+using std::ends;
 #define input std::ios::in
 #define output std::ios::out
 #if !defined(__APPLE_CC__) || __APPLE_CC__==1

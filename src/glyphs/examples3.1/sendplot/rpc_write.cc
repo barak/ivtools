@@ -11,7 +11,7 @@ void Writer::flush() {
     server().flush();
 }
 
-void Writer::send(char* string) {
+void Writer::send(const char* string) {
     RpcHdr header(this, STRING);
     server() << header << string;
 }

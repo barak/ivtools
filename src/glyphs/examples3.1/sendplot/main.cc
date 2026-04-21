@@ -8,7 +8,7 @@
 
 Writer writer(8001);
 
-main()
+int main(int argc, char **argv)
 {
     char string[81];
     float x = 0.0;

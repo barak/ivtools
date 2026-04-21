@@ -53,8 +53,8 @@ static ostream& perror(ostream& s) {
 #if defined(sun)
     s << ": " << strerror(errno);
 #else
-    if (errno > 0 && errno < sys_nerr) {
-	s << ": " << sys_errlist[errno];
+    if (errno > 0) {
+	s << ": " << strerror(errno);
     }
 #endif
     s << '\n';

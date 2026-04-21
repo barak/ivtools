@@ -5,6 +5,13 @@
 #include_next <iostream>
 
 #if __GNUC__>=3
+using std::cin;
+using std::cout;
+using std::cerr;
+using std::endl;
+using std::ends;
+using std::flush;
+#if 0
 #if 0
 #include <unistd.h>
 
@@ -43,6 +50,7 @@ public:
   ofdstream(int fd) : std::ostream(&M_fdbuf), M_fdbuf(fd) { }
   fdbuf* rdbuf(void) const { return &M_fdbuf; }
 };
+#endif
 #endif
 #endif
 
