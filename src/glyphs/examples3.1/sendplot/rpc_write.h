@@ -7,7 +7,7 @@ class Writer : public RpcWriter {
 public:
     enum { STRING, INT, NFCNS };
     Writer(int port);
-    void send(char* string);
+    void send(const char* string);
     void send(int i);
     void flush();
 protected:

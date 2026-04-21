@@ -56,11 +56,7 @@ public:
     virtual int overflow(int c = EOF);
     virtual int underflow();
     virtual int sync();
-#ifdef cplusplus_2_1
-    virtual streampos seekoff(streamoff, ios::seek_dir, int);
-#else
-    virtual streampos seekoff(streamoff, seek_dir, int);
-#endif
+    virtual streampos seekoff(streamoff, std::ios::seekdir, int);
     virtual streambuf* setbuf(char*, int);
 protected:
     virtual int doallocate();
@@ -73,9 +69,14 @@ protected:
     char* rptr();
     void setr(char*);
     void rbump(int);
+    // Compatibility wrappers for removed streambuf API
+    char* ebuf() { return _ebuf; }
+    int out_waiting() { return pptr() - pbase(); }
+    void setb(char* b, char* eb, bool) { _ebuf = eb; }
 protected:
     iostreamb* _mystream;	// reference to the stream that uses me
     char* _rptr;		// beginning of outgoing RPC request
+    char* _ebuf;		// end of get buffer (replaces removed streambuf::ebuf())
     int _actualWidth;		// width of outgoing RPC request's length field
     const char* _host;		// name of my peer's host or nil if no peer
     int _port;			// my peer's port or my port if I'm a listener

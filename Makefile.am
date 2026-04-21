@@ -335,7 +335,13 @@ libIVPART2_la_CPPFLAGS = \
  -I$(srcdir)/src/IV $(IVSTD_INCLUDES)
 
 libIVPART3_la_SOURCES = src/Dispatch/dispatcher.cc			\
-src/Dispatch/iohandler.cc src/IV-2_6/adjuster2_6.cc			\
+src/Dispatch/iohandler.cc					\
+src/Dispatch/iostreamb.cc src/Dispatch/rpcbuf.cc		\
+src/Dispatch/rpchdr.cc src/Dispatch/rpcpeer.cc			\
+src/Dispatch/rpcreader.cc src/Dispatch/rpcregistry.cc		\
+src/Dispatch/rpcservice.cc src/Dispatch/rpcstream.cc		\
+src/Dispatch/rpcwriter.cc					\
+src/IV-2_6/adjuster2_6.cc					\
 src/IV-2_6/banner.cc src/IV-2_6/border2_6.cc src/IV-2_6/box2_6.cc	\
 src/IV-2_6/button2_6.cc src/IV-2_6/compeditor.cc src/IV-2_6/control.cc	\
 src/IV-2_6/deck2_6.cc src/IV-2_6/dialog2_6.cc				\

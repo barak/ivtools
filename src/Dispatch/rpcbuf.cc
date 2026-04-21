@@ -56,7 +56,9 @@ extern "C" {
 #endif
 
 #if !defined(SOCKLEN_T_DEFINED) || !SOCKLEN_T_DEFINED
+#ifndef _SS_SIZE
 typedef int socklen_t;
+#endif
 #endif
 
 // I need a pointer to an iostreamb so I can insert and extract values
@@ -353,7 +355,7 @@ int zapeof(int c) {
 const int FIELDWIDTH = 11;	// large enough to hold "2147483647 "
 
 int rpcbuf::start_request() {
-    if (!_mystream || !_opened || allocate() == EOF) {
+    if (!_mystream || !_opened || doallocate() == EOF) {
 	return EOF;
     }
 
@@ -443,7 +445,7 @@ int rpcbuf::read_request() {
 // area to make room for more data.  Append the overflow char if any.
 
 int rpcbuf::overflow(int c) {
-    if (!_opened || allocate() == EOF) {
+    if (!_opened || doallocate() == EOF) {
 	return EOF;
     }
 
@@ -488,7 +490,7 @@ int rpcbuf::overflow(int c) {
 // to the end of the new data.  Return the first unread character.
 
 int rpcbuf::underflow() {
-    if (!_opened || allocate() == EOF) {
+    if (!_opened || doallocate() == EOF) {
 	return EOF;
     }
 
@@ -528,11 +530,7 @@ int rpcbuf::sync() {
 // position so that the caller can find out how many bytes he read
 // since the get pointer's last position (within the same request).
 
-#ifdef cplusplus_2_1
-streampos rpcbuf::seekoff(streamoff offset, ios::seek_dir dir, int mode) {
-#else
-streampos rpcbuf::seekoff(streamoff offset, seek_dir dir, int mode) {
-#endif
+streampos rpcbuf::seekoff(streamoff offset, std::ios::seekdir dir, int mode) {
     if (!_opened || !gptr()) {
 	return EOF;
     }
@@ -541,7 +539,7 @@ streampos rpcbuf::seekoff(streamoff offset, seek_dir dir, int mode) {
 	return EOF;
     }
 
-    return (streampos)gptr();
+    return streampos(gptr() - eback());
 }
 
 // Refuse any attempt to set the buffers for storing incoming and

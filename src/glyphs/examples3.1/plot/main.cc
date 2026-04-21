@@ -45,7 +45,7 @@ void Callback(char* msg) {
 }
 
 int main(int argc, char** argv) {
-    char* symbol = "FOO";
+    const char* symbol = "FOO";
     Session* session = new Session("plot", argc, argv, options, props);
     WidgetKit& kit = *WidgetKit::instance();
     graph = new Graph(

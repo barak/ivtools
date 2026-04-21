@@ -100,7 +100,9 @@ istreamb& istreamb::operator>>(char& c) {
 }
 
 istreamb& istreamb::operator>>(unsigned char& uc) {
-    get(uc);			// assume uc is 8 bits long on all machines
+    char c;
+    get(c);
+    uc = (unsigned char)c;
     return *this;
 }
 
@@ -231,7 +233,7 @@ istreamb& istreamb::operator>>(char* p) {
 istreamb& istreamb::operator>>(unsigned char* up) {
     const int MAXINT = (int)(((unsigned)-1) >> 1);
     const int w = width(0);
-    getline(up, w ? w : MAXINT, '\0');
+    getline((char*)up, w ? w : MAXINT, '\0');
     if (w && gcount() == w - 1) {
 	setstate(ios::failbit);
     }
