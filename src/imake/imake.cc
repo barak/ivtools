@@ -479,7 +479,7 @@ catch(int sig)
 void
 init(void)
 {
-	register char	*p;
+	char	*p;
 
 	make_argindex=0;
 	while (make_argv[ make_argindex ] != NULL)
@@ -1952,7 +1952,7 @@ ReadLine(FILE *tmpfd, const char *tmpfname)
 {
 	static boolean	initialized = FALSE;
 	static char	*buf, *pline, *end;
-	register char	*p1, *p2;
+	char	*p1, *p2;
 
 	if (! initialized) {
 #ifdef WIN32

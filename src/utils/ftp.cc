@@ -121,7 +121,7 @@ void CFtp::DoRetrieve() {
   // IPAddress(comma separated segments),
   // Portnumber/256,
   // remainder of previous divide.
-  register unsigned char *p, *a;
+  unsigned char *p, *a;
   a = (unsigned char *)&my_addr.sin_addr;
   p = (unsigned char *)&my_addr.sin_port;
 
