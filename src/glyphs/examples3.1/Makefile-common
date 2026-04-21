@@ -1,0 +1,10 @@
+override CXXFLAGS += $(shell pkg-config --cflags IV)
+override LDLIBS += $(shell pkg-config --libs IV)
+
+OBJS = $(SRCS:.cc=.o)
+
+$(target): $(OBJS)
+	$(CXX) -o $@ $(OBJS) $(LDLIBS)
+
+clean:
+	rm -f $(OBJS) $(target)
