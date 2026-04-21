@@ -115,3 +115,31 @@ ivstd/iosfwd ivstd/signal.h ivstd/string.h ivstd/leakchecker.h		\
 ivstd/malloc.h ivstd/stdio.h ivstd/math.h ivstd/nan.h			\
 ivstd/iostream.h ivstd/fstream.h ivstd/osfcn.h ivstd/stdlib.h		\
 ivstd/stream.h ivstd/fstream ivstd/ignores.h
+
+nobase_include_HEADERS += \
+InterViews/Bitmaps/big_checkmark.bm InterViews/Bitmaps/checkmark.bm	\
+InterViews/Bitmaps/chkbox.bm InterViews/Bitmaps/chkboxBoth.bm		\
+InterViews/Bitmaps/chkboxChosen.bm InterViews/Bitmaps/chkboxHit.bm	\
+InterViews/Bitmaps/dfast.bm InterViews/Bitmaps/dfastMask.bm		\
+InterViews/Bitmaps/dmover.bm InterViews/Bitmaps/dmoverHit.bm		\
+InterViews/Bitmaps/dmoverMask.bm InterViews/Bitmaps/enlarge.bm		\
+InterViews/Bitmaps/enlargeHit.bm InterViews/Bitmaps/enlargeMask.bm	\
+InterViews/Bitmaps/hand.bm InterViews/Bitmaps/handMask.bm		\
+InterViews/Bitmaps/ldfast.bm InterViews/Bitmaps/ldfastMask.bm		\
+InterViews/Bitmaps/lfast.bm InterViews/Bitmaps/lfastMask.bm		\
+InterViews/Bitmaps/lmover.bm InterViews/Bitmaps/lmoverHit.bm		\
+InterViews/Bitmaps/lmoverMask.bm InterViews/Bitmaps/lufast.bm		\
+InterViews/Bitmaps/lufastMask.bm InterViews/Bitmaps/page.bm		\
+InterViews/Bitmaps/pageBoth.bm InterViews/Bitmaps/pageChosen.bm	\
+InterViews/Bitmaps/pageHit.bm InterViews/Bitmaps/radio.bm		\
+InterViews/Bitmaps/radioBoth.bm InterViews/Bitmaps/radioChosen.bm	\
+InterViews/Bitmaps/radioHit.bm InterViews/Bitmaps/radioMask.bm		\
+InterViews/Bitmaps/rdfast.bm InterViews/Bitmaps/rdfastMask.bm		\
+InterViews/Bitmaps/reducer.bm InterViews/Bitmaps/reducerHit.bm		\
+InterViews/Bitmaps/reducerMask.bm InterViews/Bitmaps/rfast.bm		\
+InterViews/Bitmaps/rfastMask.bm InterViews/Bitmaps/rmover.bm		\
+InterViews/Bitmaps/rmoverHit.bm InterViews/Bitmaps/rmoverMask.bm	\
+InterViews/Bitmaps/rufast.bm InterViews/Bitmaps/rufastMask.bm		\
+InterViews/Bitmaps/ufast.bm InterViews/Bitmaps/ufastMask.bm		\
+InterViews/Bitmaps/umover.bm InterViews/Bitmaps/umoverHit.bm		\
+InterViews/Bitmaps/umoverMask.bm
