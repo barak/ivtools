@@ -1,6 +1,4 @@
 #undef boolean
-#undef true
-#undef false
 #undef u_char
 #undef CopyString
 #undef Directory

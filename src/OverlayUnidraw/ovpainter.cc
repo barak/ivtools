@@ -715,7 +715,7 @@ public:
    RasterKey();
    RasterKey(const Transformer&, float width, float height);
    operator long() const; // hash
-   boolean operator ==(const RasterKey&) const;
+   bool operator ==(const RasterKey&) const;
 
 protected:
     Transformer _tx;
@@ -745,7 +745,7 @@ static inline boolean eq_tol(float a, float b) {
     return ((diff >= -tol) && (diff <= tol));
 }
 
-boolean RasterKey::operator ==(const RasterKey& r) const {
+bool RasterKey::operator ==(const RasterKey& r) const {
     float m00, m01, m10, m11, m20, m21;
     _tx.GetEntries(m00, m01, m10, m11, m20, m21);
 

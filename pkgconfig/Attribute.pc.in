@@ -1,0 +1,11 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: Attribute
+Description: ivtools attribute system
+Version: @VERSION@
+Requires: Unidraw IV ComUtil
+Libs: -L${libdir} -lAttribute
+Cflags: -I${includedir}

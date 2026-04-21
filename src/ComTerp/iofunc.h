@@ -35,14 +35,14 @@ class ComTerp;
 class ComValue;
 
 //: value printing command for ComTerp.
-// [str]=print([fmtstr] [val [val1 [... valn]]] :string|:str :symbol|:sym :out :err :file fileobj|pipeobj :prefix str) -- print value(s) with optional format string
+// [str]=print([fmtstr] [val [val1 [... valn]]] :string|:str :symbol|:sym :out :err :file fileobj|pipeobj :prefix str :flush) -- print value(s) with optional format string
 class PrintFunc : public ComFunc {
 public:
     PrintFunc(ComTerp*);
 
     virtual void execute();
     virtual const char* docstring() { 
-      return "[str]=%s([fmtstr] [val [val1 [... valn]]] :string|:str :symbol|:sym :out :err :file fileobj|pipeobj :prefix str) -- print value with optional format string"; }
+      return "[str]=%s([fmtstr] [val [val1 [... valn]]] :string|:str :symbol|:sym :out :err :file fileobj|pipeobj :prefix str :flush) -- print value with optional format string"; }
     virtual const char** dockeys() {
       static const char* keys[] = {
 	":string|:str           print to string",
@@ -51,6 +51,7 @@ public:
 	":err                   print to stderr",
 	":file fileobj|pipeobj  print to fileobj or pipeobj",
 	":prefix str            insert str before and new-line after",
+	"flush                  flush output file",
 	nil
       };
       return keys;
@@ -81,14 +82,14 @@ public:
 };
 
 //: close file command
-// close(fileobj|pipeobj) -- close file command
+// close(fileobj|pipeobj|sockobj) -- close file command
 class CloseFileFunc : public ComFunc {
 public:
     CloseFileFunc(ComTerp*);
 
     virtual void execute();
     virtual const char* docstring() { 
-      return "close(fileobj|pipeobj) -- close file command"; }
+      return "close(fileobj|pipeobj|sockobj) -- close file command"; }
 };
 
 class FileObj {

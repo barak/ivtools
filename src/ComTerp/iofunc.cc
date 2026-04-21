@@ -106,7 +106,7 @@ PrintFunc::PrintFunc(ComTerp* comterp) : ComFunc(comterp) {
 }
 
 void PrintFunc::execute() {
-  ComValue formatstr(stack_arg(0));
+ ComValue formatstr(stack_arg(0));
   static int str_symid = symbol_add("str");
   ComValue strflag(stack_key(str_symid));
   static int string_symid = symbol_add("string");
@@ -128,6 +128,7 @@ void PrintFunc::execute() {
   ComValue::comterp(comterp());
 
   streambuf* strmbuf = nil;
+  #ifdef USE_FDSTREAMS
   if (stringflag.is_false() && strflag.is_false() &&
       symbolflag.is_false() && symflag.is_false()) {
     if (comterp()->handler() && fileobjv.is_unknown() && errflag.is_false() && outflag.is_false()) {
@@ -148,8 +149,13 @@ void PrintFunc::execute() {
       FILEBUFP(fbuf, errflag.is_false() ? stdout : stderr, ios_base::out);
       strmbuf = fbuf;
     }
-  } else
+  } else {
+#endif   
     strmbuf = new std::strstreambuf();
+#ifdef USE_FDSTREAMS    
+  }
+#endif
+  
   ostream out(strmbuf);
 
   int narg = nargsfixed();
@@ -163,6 +169,7 @@ void PrintFunc::execute() {
       if (prefixv.is_string()) out << prefixv.symbol_ptr();
       out << formatstr;  // which could be arbitrary ComValue
       if (prefixv.is_string()) out << "\n";
+      out.flush();
     }
 
   } else {
@@ -286,7 +293,6 @@ void PrintFunc::execute() {
     }
   }
 
-
   reset_stack();
   if (stringflag.is_true() || strflag.is_true()) {
     out << '\0';
@@ -298,7 +304,28 @@ void PrintFunc::execute() {
     ComValue retval(symbol_id, ComValue::SymbolType);
     push_stack(retval);
   } else {
+#ifdef USE_FDSTREAMS    
     out.flush();
+#else
+    out << '\0';
+    const char *str = ((std::strstreambuf*)strmbuf)->str();
+    FILE* fp = NULL;
+    if (comterp()->handler() && fileobjv.is_unknown() && errflag.is_false() && outflag.is_false()) {
+      fp = comterp()->handler() && comterp()->handler()->wrfptr() ? comterp()->handler()->wrfptr() : stdout;
+    } else if (fileobjv.is_known()) {
+      FileObj *fileobj = (FileObj*)fileobjv.geta(FileObj::class_symid());
+      if (fileobj) {
+        fp = fileobj->fptr();
+      } else {
+        PipeObj *pipeobj = (PipeObj*)fileobjv.geta(PipeObj::class_symid());
+        fp = pipeobj ? pipeobj->wrfptr() : stdout;
+      }
+    } else {
+      fp = errflag.is_false() ? stdout : stderr;
+    }
+    fputs(str, fp);
+    fflush(fp);
+ #endif
     push_stack(ComValue::blankval());
   }
 

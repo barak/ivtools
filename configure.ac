@@ -2,9 +2,9 @@
 # Process this file with autoconf to produce a configure script.
 
 # Header
-AC_PREREQ([2.69])
+AC_PREREQ([2.72])
 
-AC_INIT([InterViews Application Framework and Drawing Tools],[2.0.4],[johnston@vectaport.com],[ivtools],[http://www.ivtools.org])
+AC_INIT([InterViews Application Framework and Drawing Tools],[2.1.1],[johnston@vectaport.com],[ivtools],[http://www.ivtools.org])
 
 dnl The foreign option allows the follow files to not exist: NEWS AUTHORS ChangeLog
 AM_INIT_AUTOMAKE([subdir-objects foreign -Wall])
@@ -19,11 +19,6 @@ AC_ARG_WITH([ace],
        [with_ace=check])
 AC_MSG_RESULT([${with_ace}])
 
-AC_MSG_CHECKING([with_tiff])
-AC_ARG_WITH([tiff],
-       [AS_HELP_STRING([--with-tiff],[use the TIFF library (default: check)])],,
-       [with_tiff=check])
-AC_MSG_RESULT([${with_tiff}])
 
 AC_MSG_CHECKING([with_clippoly])
 AC_ARG_WITH([clippoly],
@@ -40,6 +35,19 @@ AC_MSG_RESULT([${with_PSFontDir}])
 # Checks for programs.
 AC_LANG([C++])
 AC_PROG_CXX
+### Work around autoconf 2.72 bug; remove for autoconf 2.73+
+# autoconf 2.72 AC_PROG_CXX's C++11 detection test uses u8"..." string
+# literals, which changed from const char* to const char8_t* in C++20,
+# causing the test to fail with a C++20-defaulting compiler like
+# GCC-16 and making autoconf fall back to -std=gnu++11. Strip whatever
+# -std= flag it may have added and explicitly require C++17 or later
+# instead.
+CXX=`echo "$CXX" | sed 's/ -std=[[^ ]]*//g'`
+CXXCPP=`echo "$CXXCPP" | sed 's/ -std=[[^ ]]*//g'`
+###
+dnl ask for -std=c++17
+# Uses features introduced in C++17:
+AX_CXX_COMPILE_STDCXX([17], [], [mandatory])
 AC_PROG_CC
 AM_PROG_CC_C_O
 AM_PROG_AR
@@ -67,29 +75,20 @@ AS_IF([test ${with_ace} != no],
      AC_MSG_WARN([Cannot find ACE library])],
     [AC_MSG_ERROR([Cannot find ACE library])])])])
 
-AS_IF([test ${with_tiff} != no],
- [AC_CHECK_LIB([tiff], [TIFFOpen],
-   [with_tiff=yes
-    TIFF_LD=-ltiff],
-   [AC_CHECK_LIB([TIFF], [TIFFOpen],
-     [with_tiff=yes
-      TIFF_LD=-lTIFF],
-     [AS_IF([test ${with_tiff} = check],
-       [with_tiff=no
-        AC_MSG_WARN([Cannot find tiff or TIFF library])],
-       [AC_MSG_ERROR([Cannot find tiff or TIFF library])])])])])
+AC_CHECK_LIB([tiff], [TIFFOpen],
+  [TIFF_LD=-ltiff],
+  [AC_MSG_ERROR([Cannot find tiff library])])
 
 AS_IF([test ${with_clippoly} != no],
  [AC_CHECK_LIB([clippoly], [clippoly_version],
    [with_clippoly=yes
     CLIPPOLY_LD=-lclippoly],
-   [AS_IF([test ${with_ace} = check],
+   [AS_IF([test ${with_clippoly} = check],
      [with_clippoly=no
       AC_MSG_WARN([Cannot find clippoly library])],
      [AC_MSG_ERROR([Cannot find clippoly library])])])])
 
 AM_CONDITIONAL([HAVE_LIBACE], [test ${with_ace} = yes])
-AM_CONDITIONAL([HAVE_LIBTIFF], [test ${with_tiff} = yes])
 AM_CONDITIONAL([HAVE_LIBCLIPPOLY], [test ${with_clippoly} = yes])
 
 AC_SUBST(X11_LD)
@@ -152,7 +151,11 @@ AS_IF([test x"${with_PSFontDir}" = xcheck],
 	     [PSFontDir=/Library/Fonts],
 	     [AC_CHECK_FILE([/System/Library/Fonts/],
 	       [PSFontDir=/System/Library/Fonts],
-	       [AC_MSG_ERROR([cannot find PS Font Directory])])])])])])])])
+	       [AC_CHECK_FILE([/usr/share/fonts/X11/Type1/],
+		 [PSFontDir=/usr/share/fonts/X11/Type1],
+		 [AC_CHECK_FILE([/usr/share/fonts/type1/urw-base35/NimbusRoman-Bold.afm],
+		   [PSFontDir=/usr/share/fonts/type1/urw-base35],
+		   [AC_MSG_ERROR([cannot find PS Font Directory])])])])])])])])])])
   AC_MSG_NOTICE([Using PSFontDir ${PSFontDir}])],
  [PSFontDir="${with_PSFontDir}"])
 AC_SUBST(PSFontDir)
@@ -168,6 +171,25 @@ AX_CHECK_COMPILE_FLAG([-Wno-sign-compare], [CXXFLAGS="${CXXFLAGS} -Wno-sign-comp
 
 
 # Trailer
-AC_CONFIG_FILES([Makefile src/Makefile src/include/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile src/include/Makefile
+                 pkgconfig/IV.pc
+                 pkgconfig/Unidraw.pc
+                 pkgconfig/ComUtil.pc
+                 pkgconfig/IVGlyph.pc
+                 pkgconfig/Attribute.pc
+                 pkgconfig/Time.pc
+                 pkgconfig/ComTerp.pc
+                 pkgconfig/AttrGlyph.pc
+                 pkgconfig/ComGlyph.pc
+                 pkgconfig/TopoFace.pc
+                 pkgconfig/UniIdraw.pc
+                 pkgconfig/OverlayUnidraw.pc
+                 pkgconfig/ComUnidraw.pc
+                 pkgconfig/FrameUnidraw.pc
+                 pkgconfig/GraphUnidraw.pc
+                 pkgconfig/Unidraw-common.pc
+                 pkgconfig/IV-common.pc
+                 pkgconfig/DrawServ.pc
+                 pkgconfig/AceDispatch.pc])
 
 AC_OUTPUT

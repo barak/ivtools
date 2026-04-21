@@ -28,6 +28,7 @@
 #include <iostream.h>
 #include <string.h>
 #include <strstream>
+#include <streambuf>
 #include <unistd.h>
 
 #include <fstream.h>
@@ -812,7 +813,8 @@ int ComTerp::print_stack(std::ostream& out) const {
 int ComTerp::print_stack_top() const {
     if (_stack_top < 0) return true;
     ComValue::comterp(this);
-    cout << _stack[_stack_top] << "\n";
+    ComValue cv(_stack[_stack_top]);
+    fprintf(stdout, "%s\n", cv.String());
     return true;
 }
 
@@ -1126,8 +1128,12 @@ int ComTerp::run(boolean one_expr, boolean nested) {
   char errbuf_save[BUFSIZ];
   errbuf_save[0] = '\0';
 
+#ifdef USE_FDSTREAMS  
   FILEBUF(fbuf, handler() && handler()->wrfptr() ? handler()->wrfptr() : (_fd>0 ? fdopen(_fd, "w") : stdout), ios_base::out);
   ostream out(&fbuf);
+#else
+  FILE *fp = handler() && handler()->wrfptr() ? handler()->wrfptr() : (_fd>0 ? fdopen(_fd, "w") : stdout);
+#endif
   boolean eolflag = false;
   boolean errorflag = false;
 
@@ -1152,17 +1158,51 @@ int ComTerp::run(boolean one_expr, boolean nested) {
 	      pop_stack();
 	      NextFunc::execute_impl(this, streamv, false);
 	      if (stack_top().is_known()) {
+		#ifdef USE_FDSTREAMS
 		print_stack_top(out);
-		out << "\n"; out.flush(); 
+		out << "\n";
+		out.flush();
+		#else
+		std::streambuf* strmbuf = new std::strstreambuf();
+		ostream out(strmbuf);
+		print_stack_top(out);
+		out << "\n";
+		out << '\0';
+		const char *str = ((std::strstreambuf*)strmbuf)->str();
+		fprintf(fp, "%s", str);
+		#endif
 	      }
 	    } while (stack_top().is_known());
 	  } else {
+	    #ifdef USE_FDSTREAMS
 	    print_stack_top(out);
-	    out << "\n"; out.flush(); 
+	    out << "\n"; 
+	    out.flush();
+	    #else
+	    std::streambuf* strmbuf = new std::strstreambuf();
+	    ostream out(strmbuf);
+	    print_stack_top(out);
+	    out << "\n"; 
+	    out << '\0';
+	    const char *str = ((std::strstreambuf*)strmbuf)->str();
+	    fprintf(fp, "%s", str);
+	    fflush(fp);
+	    #endif
 	  }
 	}
       } else {
-	out << _errbuf << "\n"; out.flush();
+	#ifdef USE_FDSTREAMS
+	out << _errbuf << "\n";
+	out.flush();
+	#else
+	std::streambuf* strmbuf = new std::strstreambuf();
+	ostream out(strmbuf);
+	out << _errbuf << "\n";
+	out << '\0';
+	const char *str = ((std::strstreambuf*)strmbuf)->str();
+	fprintf(fp, "%s", str);
+        fflush(fp);
+	#endif
 	strcpy(errbuf_save, _errbuf);
 	_errbuf[0] = '\0';
       }
@@ -1170,7 +1210,18 @@ int ComTerp::run(boolean one_expr, boolean nested) {
       err_str( _errbuf, BUFSIZ, "comterp" );
       if (strlen(_errbuf)>0) {
 	errorflag = true;
-	out << _errbuf << "\n"; out.flush();
+	#ifdef USE_FDSTREAMS
+	out << _errbuf << "\n";
+	out.flush();
+	#else
+	std::streambuf* strmbuf = new std::strstreambuf();
+	ostream out(strmbuf);
+	out << _errbuf << "\n";
+	out << '\0';
+	const char *str = ((std::strstreambuf*)strmbuf)->str();
+	fprintf(fp, "%s", str);
+        fflush(fp);
+	#endif
 	strcpy(errbuf_save, _errbuf);
 	_errbuf[0] = '\0';
       } else {

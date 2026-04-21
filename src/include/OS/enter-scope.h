@@ -43,9 +43,6 @@
 
 typedef unsigned boolean;
 
-static const unsigned false = 0;
-static const unsigned true = 1;
-
 #endif
 
 #ifndef iv_os_u_char

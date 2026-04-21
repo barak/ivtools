@@ -1,0 +1,11 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: Time
+Description: ivtools time and date library
+Version: @VERSION@
+Requires: IVGlyph IV
+Libs: -L${libdir} -lTime
+Cflags: -I${includedir}

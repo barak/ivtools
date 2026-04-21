@@ -48,12 +48,14 @@
 #include <Unidraw/grid.h>
 #include <Unidraw/iterator.h>
 #include <Unidraw/statevars.h>
+#include <Unidraw/upage.h>
 #include <Unidraw/Commands/command.h>
 #include <Unidraw/Commands/edit.h>
 #include <Unidraw/Components/compview.h>
 #include <Unidraw/Graphic/graphic.h>
 #include <InterViews/transformer.h>
 #include <InterViews/window.h>
+#include <IV-2_6/InterViews/perspective.h>
 #include <ComTerp/comhandler.h>
 #include <ComTerp/comterpserv.h>
 #include <ComTerp/comvalue.h>
@@ -85,7 +87,7 @@ void UnidrawFunc::execute_log(Command* cmd) {
 	} else {
 	    delete cmd;
 	}
-    }
+    }p
 #else
     unidraw->ExecuteCmd(cmd);
 #endif
@@ -107,8 +109,19 @@ UpdateFunc::UpdateFunc(ComTerp* comterp, Editor* ed) : UnidrawFunc(comterp, ed) 
 }
 
 void UpdateFunc::execute() {
+  ComValue longzero = ComValue(0L);
+  ComValue usecv(stack_arg(0, false, longzero));
+  long usec = usecv.long_val();
   reset_stack();
+
   unidraw->Update(true);
+
+  // check for incoming X Event with a timeout
+  long oldsec, oldusec;
+  ((OverlayUnidraw*)unidraw)->get_timeout(oldsec, oldusec);
+  ((OverlayUnidraw*)unidraw)->set_timeout(0, usec);
+  ((OverlayUnidraw*)unidraw)->Run();
+  ((OverlayUnidraw*)unidraw)->set_timeout(oldsec, oldusec);
   
 }
 
@@ -118,12 +131,13 @@ HandlesFunc::HandlesFunc(ComTerp* comterp, Editor* ed) : UnidrawFunc(comterp, ed
 }
 
 void HandlesFunc::execute() {
-    ComValue& flag = stack_arg(0);
+  ComValue dflt(0);
+  ComValue flag(stack_arg(0, false, dflt));
+    reset_stack();
     if (flag.int_val()) 
 	((OverlaySelection*)_ed->GetSelection())->EnableHandles();
     else
 	((OverlaySelection*)_ed->GetSelection())->DisableHandles();
-    reset_stack();
 }
 
 /*****************************************************************************/
@@ -717,7 +731,7 @@ void DrawingToScreenFunc::execute() {
     Iterator i;
     avl->First(i);
     float dx = avl->GetAttrVal(i)->float_val();
-    avl->Next(i);
+                                                                 avl->Next(i);
     float dy = avl->GetAttrVal(i)->float_val();
     float sx, sy;
     viewer->DrawingToScreen(dx, dy, sx, sy);
@@ -848,5 +862,75 @@ void GridSpacingFunc::execute() {
   ComValue retval(avl);
   push_stack(retval);
 
+}
+
+/*****************************************************************************/
+
+ScreenSizeFunc::ScreenSizeFunc(ComTerp* comterp, Editor* ed) : UnidrawFunc(comterp, ed) {
+}
+
+void ScreenSizeFunc::execute() {
+  reset_stack();
+  OverlayEditor* ed = (OverlayEditor*)GetEditor();
+  OverlayViewer* viewer = ed ? (OverlayViewer*)ed->GetViewer() : nil;
+  if (viewer==nil) {
+    push_stack(ComValue::nullval());
+    return;
+  }
+  if(!OverlayUnidraw::fully_mapped()) {
+    push_stack(ComValue::nullval());
+    return;
+  }
+  Perspective* perspective = viewer->GetPerspective();
+  AttributeValueList* avl = new AttributeValueList();
+  avl->Append(new AttributeValue(perspective->curwidth, AttributeValue::IntType));
+  avl->Append(new AttributeValue(perspective->curheight, AttributeValue::IntType));
+  ComValue retval(avl);
+  push_stack(retval);
+    
+}
+
+/*****************************************************************************/
+
+DrawingSizeFunc::DrawingSizeFunc(ComTerp* comterp, Editor* ed) : UnidrawFunc(comterp, ed) {
+}
+
+void DrawingSizeFunc::execute() {
+  reset_stack();
+  OverlayEditor* ed = (OverlayEditor*)GetEditor();
+  OverlayViewer* viewer = ed ? (OverlayViewer*)ed->GetViewer() : nil;
+  if (viewer==nil) {
+    push_stack(ComValue::nullval());
+    return;
+  }
+  UPage* page = viewer->GetPage();
+  PageGraphic* pg = (PageGraphic*)page->GetGraphic();
+  AttributeValueList* avl = new AttributeValueList();
+  avl->Append(new AttributeValue((int)pg->Width(), AttributeValue::IntType));
+  avl->Append(new AttributeValue((int)pg->Height(), AttributeValue::IntType));
+  ComValue retval(avl);
+  push_stack(retval);
+    
+}
+
+/*****************************************************************************/
+
+PointerLocFunc::PointerLocFunc(ComTerp* comterp, Editor* ed) : UnidrawFunc(comterp, ed) {
+}
+
+void PointerLocFunc::execute() {
+  reset_stack();
+  OverlayEditor* ed = (OverlayEditor*)GetEditor();
+  OverlayViewer* viewer = ed ? (OverlayViewer*)ed->GetViewer() : nil;
+  if (viewer==nil) {
+    push_stack(ComValue::nullval());
+    return;
+  }
+  AttributeValueList* avl = new AttributeValueList();
+  avl->Append(new AttributeValue(viewer->pointerx(), AttributeValue::IntType));
+  avl->Append(new AttributeValue(viewer->pointery(), AttributeValue::IntType));
+  ComValue retval(avl);
+  push_stack(retval);
+    
 }
 

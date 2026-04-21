@@ -942,7 +942,7 @@ boolean ParamList::bincheck(const char* command) {
 
 // octal converts a character to the string \ddd where d is an octal digit.
 
-char* ParamList::octal(unsigned char c, register char* p) {
+char* ParamList::octal(unsigned char c, char* p) {
     *p-- = '\0';		// backwards from terminating null...
     *p-- = (char)('0' + c%8);
     *p-- = (char)('0' + (c >>= 3)%8);

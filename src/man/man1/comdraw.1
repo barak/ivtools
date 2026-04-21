@@ -45,7 +45,7 @@ graphical object assigned to an interpreter variable.
     -- center of compview (dflt :xy)
  rectlist=mbr(compview :lbrt :lrbt :scrn)
     -- minimum bounding rectangle of compview (dflt :lbrt)
- ptlist=points(compview)
+ ptlist=points(compview :raw)
     -- return point list from compview graphic
 
 .SH GRAPHIC STATE COMMANDS
@@ -53,6 +53,7 @@ graphical object assigned to an interpreter variable.
  font(fontnum) -- set current font from menu
  brush(brushnum) -- set current brush from menu
  pattern(patternnum) --  set current pattern from menu
+ patternmask(int|list) -- set current pattern from a 16 bit int (4x4)  or a list of 16 ints (16x16)
  colors(fgcolornum bgcolornum) -- set current colors from menu
  colorsrgb(fgcolornum bgcolornum)
    -- set current colors by RGB name.
@@ -98,7 +99,7 @@ graphical object assigned to an interpreter variable.
 
 .SH VIEWER COMMANDS
 
- update() -- update viewer
+ update([usec]) -- update viewer with optional delay
 
  error=save([pathstr]) -- command to save document (to pathname)	
  compview=import(pathstr :popen :next)
@@ -121,9 +122,11 @@ graphical object assigned to an interpreter variable.
  sx,sy=dtos(dx,dy) -- convert from drawing to screen coordinates
  dx,dy=gtod(compview gx,gy) -- convert from graphic to drawing coordinates
  gx,gy=dtog(compview dx,dy) -- convert from drawing to graphic coordinates
+ sx,sy=ssize() -- size of screen
+ dx,dy=dsize() -- size of drawing
 
- handles(flag) --     
-   -- enable/disable current selection tic marks 
+ handles([flag]) --     
+   -- disable/enable current selection tic marks 
       and/or highlighting
  highlight(compview compviewgs)
    -- set the highlight graphic state for a graphic
@@ -159,7 +162,7 @@ graphical object assigned to an interpreter variable.
  pcols(compview) -- number of columns in a raster
  pcols(compview) -- number of rows in a raster
  pflush(compview) -- flush pixels poked into a raster
- pclip(compview x1,y1,x2,y2,x3,y3[,...,xn,yn]) -- clip raster with polygon
+ pclip(compview x1,y1,x2,y2,x3,y3[,...,xn,yn]|compview) -- clip raster with polygon
  alpha(compview [alphaval]) -- set/get alpha transparency
 
 .SH PLOTTING COMMANDS

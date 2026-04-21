@@ -80,7 +80,7 @@ public:
 	boolean operator<=(const Date& date) const	{ return julnum <= date.julnum; }
 	boolean operator>(const Date& date) const	{ return date < *this; }
 	boolean operator>=(const Date& date) const	{ return date <= *this; }
-	boolean operator==(const Date& date) const	{ return julnum == date.julnum; }
+	bool operator==(const Date& date) const	{ return julnum == date.julnum; }
 	boolean operator!=(const Date& date) const	{ return julnum != date.julnum; }
 	friend Date operator+(const Date& dt, int dd)	{ return Date(dt.julnum + dd); }
 	friend Date operator+(int dd, const Date& dt)	{ return Date(dt.julnum + dd); }

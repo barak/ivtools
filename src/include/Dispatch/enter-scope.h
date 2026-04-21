@@ -35,8 +35,6 @@
 
 #define String _lib_os(String)
 #define boolean _lib_os(boolean)
-#define true _lib_os(true)
-#define false _lib_os(false)
 #define u_char _lib_os(u_char)
 
 #endif

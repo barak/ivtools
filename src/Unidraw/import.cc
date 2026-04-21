@@ -51,7 +51,7 @@
 #include <InterViews/tiff.h>
 #include <InterViews/window.h>
 
-#include <TIFF/format.h>
+#include <Unidraw/img-format.h>
 #include <OS/string.h>
 
 #include <cstdio>

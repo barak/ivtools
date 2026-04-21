@@ -32,7 +32,7 @@ IV-look/dialogs.h IV-look/bevel.h IV-look/mf_dialogs.h			\
 IV-look/mono_kit.h IV-look/fbrowser.h IV-look/slider.h			\
 IV-look/button.h IV-look/stepper.h IV-look/menu.h IV-look/telltale.h	\
 IV-look/mf_kit.h IV-look/ol_kit.h IV-look/fchooser.h IV-look/field.h	\
-IV-look/choice.h IV-look/kit.h TIFF/tiff.h TIFF/tiffio.h TIFF/format.h	\
+IV-look/choice.h IV-look/kit.h \
 Dispatch/iostreamb.h Dispatch/rpcpeer.h Dispatch/dp.h			\
 Dispatch/rpcwriter.h Dispatch/leave-scope.h Dispatch/iohandler.h	\
 Dispatch/enter-scope.h Dispatch/_undefs.h Dispatch/rpcstream.h		\
@@ -81,7 +81,7 @@ Unidraw/uarray.h Unidraw/transfn.h Unidraw/viewer.h Unidraw/manip.h	\
 Unidraw/unidraw.h Unidraw/keymap.h Unidraw/kybd.h Unidraw/catalog.h	\
 Unidraw/creator.h Unidraw/umap.h Unidraw/_defines.h			\
 Unidraw/stateviews.h Unidraw/uhash.h Unidraw/editorinfo.h		\
-Unidraw/globals.h IV-2_6/InterViews/shape.h				\
+Unidraw/globals.h Unidraw/img-format.h IV-2_6/InterViews/shape.h				\
 IV-2_6/InterViews/streditor.h IV-2_6/InterViews/rubcurve.h		\
 IV-2_6/InterViews/textdisplay.h IV-2_6/InterViews/viewport.h		\
 IV-2_6/InterViews/filechooser.h IV-2_6/InterViews/scroller.h		\
@@ -115,3 +115,31 @@ ivstd/iosfwd ivstd/signal.h ivstd/string.h ivstd/leakchecker.h		\
 ivstd/malloc.h ivstd/stdio.h ivstd/math.h ivstd/nan.h			\
 ivstd/iostream.h ivstd/fstream.h ivstd/osfcn.h ivstd/stdlib.h		\
 ivstd/stream.h ivstd/fstream ivstd/ignores.h
+
+nobase_include_HEADERS += \
+InterViews/Bitmaps/big_checkmark.bm InterViews/Bitmaps/checkmark.bm	\
+InterViews/Bitmaps/chkbox.bm InterViews/Bitmaps/chkboxBoth.bm		\
+InterViews/Bitmaps/chkboxChosen.bm InterViews/Bitmaps/chkboxHit.bm	\
+InterViews/Bitmaps/dfast.bm InterViews/Bitmaps/dfastMask.bm		\
+InterViews/Bitmaps/dmover.bm InterViews/Bitmaps/dmoverHit.bm		\
+InterViews/Bitmaps/dmoverMask.bm InterViews/Bitmaps/enlarge.bm		\
+InterViews/Bitmaps/enlargeHit.bm InterViews/Bitmaps/enlargeMask.bm	\
+InterViews/Bitmaps/hand.bm InterViews/Bitmaps/handMask.bm		\
+InterViews/Bitmaps/ldfast.bm InterViews/Bitmaps/ldfastMask.bm		\
+InterViews/Bitmaps/lfast.bm InterViews/Bitmaps/lfastMask.bm		\
+InterViews/Bitmaps/lmover.bm InterViews/Bitmaps/lmoverHit.bm		\
+InterViews/Bitmaps/lmoverMask.bm InterViews/Bitmaps/lufast.bm		\
+InterViews/Bitmaps/lufastMask.bm InterViews/Bitmaps/page.bm		\
+InterViews/Bitmaps/pageBoth.bm InterViews/Bitmaps/pageChosen.bm	\
+InterViews/Bitmaps/pageHit.bm InterViews/Bitmaps/radio.bm		\
+InterViews/Bitmaps/radioBoth.bm InterViews/Bitmaps/radioChosen.bm	\
+InterViews/Bitmaps/radioHit.bm InterViews/Bitmaps/radioMask.bm		\
+InterViews/Bitmaps/rdfast.bm InterViews/Bitmaps/rdfastMask.bm		\
+InterViews/Bitmaps/reducer.bm InterViews/Bitmaps/reducerHit.bm		\
+InterViews/Bitmaps/reducerMask.bm InterViews/Bitmaps/rfast.bm		\
+InterViews/Bitmaps/rfastMask.bm InterViews/Bitmaps/rmover.bm		\
+InterViews/Bitmaps/rmoverHit.bm InterViews/Bitmaps/rmoverMask.bm	\
+InterViews/Bitmaps/rufast.bm InterViews/Bitmaps/rufastMask.bm		\
+InterViews/Bitmaps/ufast.bm InterViews/Bitmaps/ufastMask.bm		\
+InterViews/Bitmaps/umover.bm InterViews/Bitmaps/umoverHit.bm		\
+InterViews/Bitmaps/umoverMask.bm

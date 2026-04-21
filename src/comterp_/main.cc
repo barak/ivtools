@@ -21,9 +21,6 @@
  * WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 #include <cstdio>
 
 #ifdef HAVE_ACE
@@ -39,13 +36,17 @@ static const char *const SERVER_HOST = ACE_DEFAULT_SERVER_HOST;
 
 #include <iostream.h>
 #include <string.h>
+#include <signal.h>
 
 #include <sys/stat.h>
 #include <unistd.h>
 
+#include <version.h>
+
 #include <ComTerp/comterpserv.h>
 #include <ComTerp/comvalue.h>
 
+#include <execinfo.h>
 
 #if BUFSIZ>1024
 #undef BUFSIZ
@@ -67,8 +68,23 @@ static char newline;
 using std::cout;
 using std::cerr;
 
-int main(int argc, char *argv[]) {
+void stack_trace_handler(int sig) {
+  void *array[10];
+  size_t size;
 
+  // get void*'s for all entries on the stack
+  size = backtrace(array, 10);
+
+  // print out all the frames to stderr
+  fprintf(stderr, "Error: signal %d:\n", sig);
+  backtrace_symbols_fd(array, size, STDERR_FILENO);
+  exit(1);
+}
+
+int main(int argc, char *argv[]) {
+ 
+    signal(SIGSEGV, stack_trace_handler);
+    
     boolean server_flag = argc>1 && strcmp(argv[1], "server") == 0;
     boolean logger_flag = argc>1 && strcmp(argv[1], "logger") == 0;
     boolean remote_flag = argc>1 && strcmp(argv[1], "remote") == 0;
@@ -215,11 +231,10 @@ int main(int argc, char *argv[]) {
       if (S_ISREG(buf.st_mode) || S_ISFIFO(buf.st_mode))
 	terp->disable_prompt();
       else
-	fprintf(stderr,
-		"ivtools-%s comterp: type help for more info\n",
-		PACKAGE_VERSION);
+	fprintf(stderr, "ivtools-%s comterp: type help for more info\n", VersionString);
       return terp->run();
     } else {
+
       ComTerpServ* terp = new ComTerpServ();
       terp->add_defaults();
       if (run_flag && argc > 2 ) {
@@ -258,9 +273,7 @@ int main(int argc, char *argv[]) {
         if (S_ISREG(buf.st_mode) || S_ISFIFO(buf.st_mode))
 	  terp->disable_prompt();
 	else
-	  fprintf(stderr,
-		  "ivtools-%s comterp:  type help for more info\n",
-		  PACKAGE_VERSION);
+	  fprintf(stderr, "ivtools-%s comterp:  type help for more info\n", VersionString);
 	return terp->run();
       }
     }
