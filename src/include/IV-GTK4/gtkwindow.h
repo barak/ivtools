@@ -78,6 +78,9 @@ struct XColor {
     unsigned long  pixel; /* unused in GTK4, kept for API compat */
 };
 
+/* Forward declaration needed for declarePtrList */
+class WindowVisual;
+
 declarePtrList(WindowVisualList, WindowVisual)
 
 class WindowVisual {

@@ -273,7 +273,6 @@ const char* Event::typestr() const {
     case ClientMessage:     return "ClientMessage";
     case MappingNotify:     return "MappingNotify";
     case GenericEvent:      return "GenericEvent";
-    case LASTEvent:         return "LASTEvent";
     default:                return "NADAEvent";
     }
 }

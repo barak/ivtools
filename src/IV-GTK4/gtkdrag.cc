@@ -106,7 +106,7 @@ void GtkDrag::register_target(Window* w, const char** types, int n_types) {
  * start_drag() – initiate a drag-and-drop gesture from a window.
  */
 void GtkDrag::start_drag(Window* w, const char* data, int data_len,
-                          GdkDragAction action)
+                          unsigned int action)
 {
     if (!w || !data) return;
     GtkWidget* widget = w->rep()->widget_;
@@ -116,12 +116,12 @@ void GtkDrag::start_drag(Window* w, const char* data, int data_len,
         gdk_content_provider_new_for_bytes("text/plain",
             g_bytes_new_static(data, (gsize)data_len));
 
+    GdkSeat* seat = gdk_display_get_default_seat(gdk_display_get_default());
     GdkDrag* drag = gdk_drag_begin(
         gtk_native_get_surface(gtk_widget_get_native(widget)),
-        gdk_display_get_default_seat(
-            gdk_display_get_default())->pointer,
+        gdk_seat_get_pointer(seat),
         provider,
-        action,
+        (GdkDragAction)action,
         0.0, 0.0);
 
     if (drag) g_object_unref(drag);

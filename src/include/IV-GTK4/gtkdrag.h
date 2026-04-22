@@ -23,6 +23,17 @@ public:
      * locate() – fills in the pointer x/y coordinates for a drag event.
      */
     static void locate(const XEvent&, int& x, int& y);
+
+    /*
+     * register_target() – set up a window to accept drops.
+     */
+    static void register_target(Window*, const char** types, int n_types);
+
+    /*
+     * start_drag() – initiate a drag-and-drop gesture from a window.
+     */
+    static void start_drag(Window*, const char* data, int data_len,
+                           unsigned int action);
 };
 
 /* Source-level alias so code that says "XDrag::isDrag()" still compiles */

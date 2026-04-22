@@ -79,8 +79,10 @@ Raster::~Raster() {
     delete rep_;
 }
 
-unsigned long Raster::width()  const { return rep()->pwidth_; }
-unsigned long Raster::height() const { return rep()->pheight_; }
+Coord Raster::width()  const { return rep()->width_; }
+Coord Raster::height() const { return rep()->height_; }
+unsigned long Raster::pwidth()  const { return rep()->pwidth_; }
+unsigned long Raster::pheight() const { return rep()->pheight_; }
 
 /*
  * peek() – read back a pixel value (R, G, B, alpha 0.0–1.0).

@@ -145,7 +145,7 @@ Bitmap::Bitmap() {
                   Session::instance()->default_display() : nil;
 }
 
-Bitmap::Bitmap(void* data, unsigned int width, unsigned int height, int x, int y) {
+Bitmap::Bitmap(const void* data, unsigned int width, unsigned int height, int x, int y) {
     BitmapRep* b = new BitmapRep;
     rep_ = b;
     b->display_  = Session::instance()->default_display();
@@ -162,7 +162,7 @@ Bitmap::Bitmap(void* data, unsigned int width, unsigned int height, int x, int y
     b->height_ = d->to_coord(height);
 
     b->surface_ = cairo_image_surface_create_for_data(
-        (unsigned char*)data, CAIRO_FORMAT_A1, width, height,
+        (unsigned char*)const_cast<void*>(data), CAIRO_FORMAT_A1, width, height,
         cairo_format_stride_for_width(CAIRO_FORMAT_A1, width));
 
     /* We must copy because the source data might be static const */
@@ -175,7 +175,7 @@ Bitmap::Bitmap(void* data, unsigned int width, unsigned int height, int x, int y
     b->surface_ = copy;
 }
 
-Bitmap::Bitmap(Font*, int character, float scale) {
+Bitmap::Bitmap(const Font*, long character, float scale) {
     /* Render a single character glyph into a bitmap.
        This is a simplified implementation using Pango/Cairo. */
     BitmapRep* b = new BitmapRep;
@@ -192,14 +192,14 @@ Bitmap::Bitmap(Font*, int character, float scale) {
 }
 
 Bitmap::Bitmap(const Bitmap& b) {
-    rep_ = new BitmapRep(*b.rep_, BitmapRep::copy);
+    rep_ = new BitmapRep(b.rep_, BitmapRep::copy);
 }
 
 Bitmap::~Bitmap() {
     delete rep_;
 }
 
-BitmapRep* Bitmap::rep() const { return rep_; }
+/* rep() is defined inline in bitmap.h */
 
 Coord Bitmap::left_bearing()  const { return rep_->left_; }
 Coord Bitmap::right_bearing() const { return rep_->right_; }
@@ -243,22 +243,55 @@ void Bitmap::poke(boolean bit, int x, int y) {
     b.modified_ = true;
 }
 
-Bitmap* Bitmap::scale(float /*sx*/, float /*sy*/) const {
-    return new Bitmap(*this);
+void Bitmap::Scale(float sx, float sy) {
+    (void)sx; (void)sy; /* not implemented in GTK4 backend */
 }
 
-Bitmap* Bitmap::rotate(float /*angle*/) const {
-    return new Bitmap(*this);
+void Bitmap::Rotate(float angle) {
+    (void)angle;
 }
 
-Bitmap* Bitmap::fliph() const {
-    return new Bitmap(*new BitmapRep(rep_, BitmapRep::fliph));
+void Bitmap::FlipHorizontal() {
+    BitmapRep* new_rep = new BitmapRep(rep_, BitmapRep::fliph);
+    delete rep_;
+    rep_ = new_rep;
 }
 
-Bitmap* Bitmap::flipv() const {
-    return new Bitmap(*new BitmapRep(rep_, BitmapRep::flipv));
+void Bitmap::FlipVertical() {
+    BitmapRep* new_rep = new BitmapRep(rep_, BitmapRep::flipv);
+    delete rep_;
+    rep_ = new_rep;
 }
 
-Bitmap* Bitmap::inverse() const {
-    return new Bitmap(*new BitmapRep(rep_, BitmapRep::inv));
+void Bitmap::Rotate90() {
+    BitmapRep* new_rep = new BitmapRep(rep_, BitmapRep::rot90);
+    delete rep_;
+    rep_ = new_rep;
 }
+
+void Bitmap::Rotate180() {
+    BitmapRep* new_rep = new BitmapRep(rep_, BitmapRep::rot180);
+    delete rep_;
+    rep_ = new_rep;
+}
+
+void Bitmap::Rotate270() {
+    BitmapRep* new_rep = new BitmapRep(rep_, BitmapRep::rot270);
+    delete rep_;
+    rep_ = new_rep;
+}
+
+void Bitmap::Invert() {
+    BitmapRep* new_rep = new BitmapRep(rep_, BitmapRep::inv);
+    delete rep_;
+    rep_ = new_rep;
+}
+
+void Bitmap::Transform(const Transformer*) {
+    /* not implemented */
+}
+
+int Bitmap::Left()   const { return (int)(rep_->left_); }
+int Bitmap::Right()  const { return (int)(rep_->right_); }
+int Bitmap::Top()    const { return (int)(rep_->top_); }
+int Bitmap::Bottom() const { return (int)(rep_->bottom_); }

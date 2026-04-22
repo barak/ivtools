@@ -21,6 +21,7 @@
 #include <InterViews/session.h>
 #include <InterViews/style.h>
 #include <IV-GTK4/gdklib.h>
+#include <OS/string.h>
 #include <IV-GTK4/gdkbitmap.h>
 #include <IV-GTK4/gdkcolor.h>
 #include <IV-GTK4/gdkcursor.h>
@@ -152,9 +153,13 @@ void CursorRepData::make_cursor(Display* d, WindowVisual* wv) {
             data[idx+3] = a;
         }
     }
-    cairo_surface_mark_dirty(surf);
-
-    GdkTexture* texture = gdk_texture_new_for_surface(surf);
+    cairo_surface_flush(surf);
+    unsigned char* pixdata = cairo_image_surface_get_data(surf);
+    int            pixstride = cairo_image_surface_get_stride(surf);
+    GBytes*        bytes   = g_bytes_new_static(pixdata, (gsize)(pixstride * H));
+    GdkTexture* texture = gdk_memory_texture_new(W, H,
+        GDK_MEMORY_B8G8R8A8_PREMULTIPLIED, bytes, (gsize)pixstride);
+    g_bytes_unref(bytes);
     cairo_surface_destroy(surf);
 
     gdkcursor_ = gdk_cursor_new_from_texture(texture, x_, y_, nullptr);
@@ -217,7 +222,13 @@ void CursorRepBitmap::make_cursor(Display* d, WindowVisual* wv) {
 
     cairo_destroy(cr_tmp);
 
-    GdkTexture* texture = gdk_texture_new_for_surface(argb_surf);
+    cairo_surface_flush(argb_surf);
+    unsigned char* raw2   = cairo_image_surface_get_data(argb_surf);
+    int            stride2 = cairo_image_surface_get_stride(argb_surf);
+    GBytes* bytes = g_bytes_new_static(raw2, (gsize)(stride2 * H));
+    GdkTexture* texture = gdk_memory_texture_new(W, H,
+        GDK_MEMORY_B8G8R8A8_PREMULTIPLIED, bytes, (gsize)stride2);
+    g_bytes_unref(bytes);
     cairo_surface_destroy(argb_surf);
 
     gdkcursor_ = gdk_cursor_new_from_texture(texture, hot_x, hot_y, nullptr);
