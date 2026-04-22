@@ -157,7 +157,8 @@ BACKEND_SOURCES = \
 src/IV-GTK4/gdkbitmap.cc src/IV-GTK4/gtkbrush.cc src/IV-GTK4/gtkcanvas.cc	\
 src/IV-GTK4/gdkcolor.cc src/IV-GTK4/gdkcursor.cc src/IV-GTK4/gtkdrag.cc	\
 src/IV-GTK4/gdkevent.cc src/IV-GTK4/gdkfont.cc src/IV-GTK4/gdkraster.cc	\
-src/IV-GTK4/gtkreqerr.cc src/IV-GTK4/gtkselection.cc src/IV-GTK4/gtkwindow.cc
+src/IV-GTK4/gtkreqerr.cc src/IV-GTK4/gtkselection.cc src/IV-GTK4/gtkwindow.cc	\
+src/IV-GTK4/gtkpainter.cc src/IV-GTK4/gtkpattern.cc
 BACKEND_CPPFLAGS = $(GTK4_CFLAGS)
 else
 BACKEND_SOURCES = \
