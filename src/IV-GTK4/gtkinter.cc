@@ -29,7 +29,9 @@
 #include <IV-2_6/InterViews/world.h>
 #include <IV-GTK4/gdklib.h>
 #include <IV-GTK4/gdkdefs.h>
+#include <IV-GTK4/gtkcanvas.h>
 #include <IV-GTK4/gtkwindow.h>
+#include <IV-GTK4/gdkevent.h>
 #include <IV-GTK4/gdkdisplay.h>
 #include <OS/math.h>
 
@@ -229,7 +231,7 @@ int Interactor::CheckQueue() {
 void Interactor::Poll(Event& e) {
     e.window(nil);
     e.poll();
-    XMotionEvent& m = e.rep()->xevent_.xmotion;
+    auto& m = e.rep()->xevent_.xmotion;
     e.w = World::current();
     e.wx = m.x;
     e.wy = m.y;

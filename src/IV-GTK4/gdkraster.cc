@@ -142,3 +142,27 @@ void Raster::poke(unsigned long x, unsigned long y,
 void Raster::flush() const {
     if (rep_->surface_) cairo_surface_flush(rep_->surface_);
 }
+
+/* Raster constructor from RasterRep* (used by OverlayUnidraw) */
+Raster::Raster(RasterRep* r) : rep_(r) {}
+
+/* IV-2_6/OverlayUnidraw Raster methods */
+Coord Raster::left_bearing()  const { return 0.0f; }
+Coord Raster::right_bearing() const { return rep_ ? (Coord)rep_->pwidth_ : 0.0f; }
+Coord Raster::ascent()  const { return rep_ ? (Coord)rep_->pheight_ : 0.0f; }
+Coord Raster::descent() const { return 0.0f; }
+
+void Raster::flushrect(IntCoord /*l*/, IntCoord /*b*/,
+                        IntCoord /*r*/, IntCoord /*t*/) const {
+    if (rep_ && rep_->surface_) cairo_surface_flush(rep_->surface_);
+}
+
+boolean Raster::init_shared_memory() { return false; }
+
+/* RasterRep shared-memory stubs (OverlayUnidraw X-SHM path) */
+void RasterRep::free_shared_memory(Display& /*d*/, XShmSegmentInfo& /*si*/) {}
+
+boolean RasterRep::init_shared_memory(unsigned int& /*sz*/, Display& /*d*/,
+    XShmSegmentInfo& /*si*/, unsigned int /*w*/, unsigned int /*h*/,
+    _XImage*& /*img*/, unsigned long /*vis*/)
+{ return false; }

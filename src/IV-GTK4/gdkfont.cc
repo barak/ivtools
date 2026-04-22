@@ -504,3 +504,48 @@ Coord Font::width(const char* s, int len) const {
     double ppd = d ? d->to_coord(1) : 1.0;
     return (Coord)(f->scale_ * (logical.width / (double)PANGO_SCALE) * ppd);
 }
+
+/* IV-2_6 Font compatibility methods */
+int Font::Height() const {
+    FontRep* f = rep(nullptr);
+    if (!f || !f->layout_) return 0;
+    PangoFontMetrics* m = pango_context_get_metrics(
+        pango_layout_get_context(f->layout_), nullptr, nullptr);
+    int h = PANGO_PIXELS(pango_font_metrics_get_ascent(m) +
+                         pango_font_metrics_get_descent(m));
+    pango_font_metrics_unref(m);
+    return h;
+}
+
+int Font::Width(const char* s) const {
+    if (!s) return 0;
+    return (int)width(s, strlen(s));
+}
+
+int Font::Width(const char* s, int len) const {
+    if (!s || len <= 0) return 0;
+    return (int)width(s, len);
+}
+
+int Font::Index(const char* s, int offset, float between, boolean /*after*/) const {
+    if (!s) return 0;
+    Coord sofar = 0.0f;
+    int i = 0;
+    for (; s[i] && i < offset; i++) {
+        sofar += width(s[i]);
+        if (sofar + width(s[i])*between >= (Coord)offset)
+            break;
+    }
+    return i;
+}
+
+int Font::index(const char* s, int len, float offset, boolean /*between*/) const {
+    if (!s || len <= 0) return 0;
+    float sofar = 0.0f;
+    for (int i = 0; i < len; i++) {
+        float w = (float)width(s[i]);
+        if (sofar + w > offset) return i;
+        sofar += w;
+    }
+    return len;
+}

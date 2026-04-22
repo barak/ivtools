@@ -1,11 +1,6 @@
 /*
  * GTK4 backend: IV-2.6 event compatibility layer.
  * Replaces IV-2_6/xevent2_6.cc.
- *
- * The IVGdkEvent struct in gdkdefs.h mirrors the X11 XEvent layout, so
- * field accesses (xe.xbutton.x, xe.xkey.state, etc.) compile unchanged.
- * The event-type constants (KeyPress, MotionNotify, …) are #defined in
- * gdkdefs.h to the corresponding IV_GDK_* enum values.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -22,20 +17,16 @@
 #include <IV-GTK4/gdkdisplay.h>
 #include <string.h>
 
-/* Event masks — numeric values match the GDK modifier/event-mask bits */
+/* X11 event mask constants (numeric values) used by Sensor::mask */
 typedef unsigned long Mask;
-static Mask motionmask  = GDK_BUTTON_MOTION_MASK | GDK_POINTER_MOTION_MASK;
-static Mask keymask     = GDK_KEY_PRESS_MASK;
-static Mask entermask   = GDK_ENTER_NOTIFY_MASK;
-static Mask leavemask   = GDK_LEAVE_NOTIFY_MASK;
-static Mask focusmask   = GDK_FOCUS_CHANGE_MASK;
-static Mask upmask      = GDK_BUTTON_RELEASE_MASK;
-static Mask downmask    = GDK_BUTTON_PRESS_MASK;
-
-/* NotifyInferior – crossing detail constant not present in GTK4 */
-#ifndef NotifyInferior
-#define NotifyInferior 2
-#endif
+Mask motionmask  = 0x0040L;  /* PointerMotionMask */
+Mask keymask     = 0x0001L;  /* KeyPressMask      */
+Mask entermask   = 0x0010L;  /* EnterWindowMask   */
+Mask leavemask   = 0x0020L;  /* LeaveWindowMask   */
+Mask focusmask   = 0x0200L;  /* FocusChangeMask   */
+Mask upmask      = 0x0008L;  /* ButtonReleaseMask */
+Mask downmask    = 0x0004L;  /* ButtonPressMask   */
+Mask initmask    = 0x0080L;  /* PointerMotionHintMask */
 
 boolean Sensor::Caught(const Event& e) const {
     XEvent& xe = e.rep()->xevent_;
@@ -93,50 +84,48 @@ void Event::GetInfo() {
 
 void Event::GetMotionInfo() {
     rep()->acknowledge_motion();
-
-    XMotionEvent& m = rep()->xevent_.xmotion;
+    XEvent& xe = rep()->xevent_;
     eventType = MotionEvent;
     timestamp = 0;
-    x  = m.x;
-    y  = m.y;
-    wx = m.x;
-    wy = m.y;
-    GetKeyState(m.state);
+    x  = xe.xmotion.x;
+    y  = xe.xmotion.y;
+    wx = xe.xmotion.x;
+    wy = xe.xmotion.y;
+    GetKeyState(xe.xmotion.state);
 }
 
 void Event::GetButtonInfo(EventType t) {
-    XButtonEvent& b = rep()->xevent_.xbutton;
-    eventType  = t;
-    timestamp  = 0;
-    x  = b.x;
-    y  = b.y;
-    wx = b.x;
-    wy = b.y;
-    button = (int)b.button - 1;
+    XEvent& xe = rep()->xevent_;
+    eventType = t;
+    timestamp = 0;
+    x  = xe.xbutton.x;
+    y  = xe.xbutton.y;
+    wx = xe.xbutton.x;
+    wy = xe.xbutton.y;
+    button = (int)xe.xbutton.button - 1;
     len = 0;
-    GetKeyState(b.state | (Button1Mask << button));
+    GetKeyState(xe.xbutton.state | (Button1Mask << button));
 }
 
 void Event::GetKeyInfo() {
-    XKeyEvent& k = rep()->xevent_.xkey;
-
+    XEvent& xe = rep()->xevent_;
     eventType = KeyEvent;
     timestamp = 0;
-    x  = k.x;
-    y  = k.y;
-    wx = k.x;
-    wy = k.y;
-    button = (int)k.keycode;
+    x  = 0;
+    y  = 0;
+    wx = 0;
+    wy = 0;
+    button = (int)xe.xkey.keycode;
 
-    int buflen = k.buflen;
+    int buflen = xe.xkey.buflen;
     if (buflen > 0 && buflen < (int)sizeof(keydata)) {
         keystring = keydata;
-        strncpy(keydata, k.buf, buflen);
+        strncpy(keydata, xe.xkey.buf, buflen);
         keydata[buflen] = '\0';
         len = buflen;
     } else if (buflen > 0) {
         keystring = new char[buflen + 1];
-        strncpy(keystring, k.buf, buflen);
+        strncpy(keystring, xe.xkey.buf, buflen);
         keystring[buflen] = '\0';
         len = buflen;
     } else {
@@ -144,28 +133,28 @@ void Event::GetKeyInfo() {
         keydata[0] = '\0';
         len = 0;
     }
-    GetKeyState(k.state);
+    GetKeyState(xe.xkey.state);
 }
 
 void Event::GetKeyState(unsigned state) {
-    shift      = (state & ShiftMask)   != 0;
-    control    = (state & ControlMask) != 0;
-    meta       = (state & Mod1Mask)    != 0;
-    shiftlock  = (state & LockMask)    != 0;
-    leftmouse  = (state & Button1Mask) != 0;
-    middlemouse= (state & Button2Mask) != 0;
-    rightmouse = (state & Button3Mask) != 0;
+    shift       = (state & ShiftMask)   != 0;
+    control     = (state & ControlMask) != 0;
+    meta        = (state & Mod1Mask)    != 0;
+    shiftlock   = (state & LockMask)    != 0;
+    leftmouse   = (state & Button1Mask) != 0;
+    middlemouse = (state & Button2Mask) != 0;
+    rightmouse  = (state & Button3Mask) != 0;
 }
 
 void Event::GetCrossingInfo(EventType t) {
-    XCrossingEvent& c = rep()->xevent_.xcrossing;
+    XEvent& xe = rep()->xevent_;
     eventType = t;
     timestamp = 0;
-    x  = c.x;
-    y  = c.y;
-    wx = c.x;
-    wy = c.y;
-    GetKeyState(c.state);
+    x  = xe.xcrossing.x;
+    y  = xe.xcrossing.y;
+    wx = xe.xcrossing.x;
+    wy = xe.xcrossing.y;
+    GetKeyState(xe.xcrossing.state);
 }
 
 void Event::GetAbsolute(_lib_iv2_6(Coord)& absx, _lib_iv2_6(Coord)& absy) {
