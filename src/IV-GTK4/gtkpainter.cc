@@ -16,7 +16,7 @@
 #include <InterViews/canvas.h>
 #include <InterViews/color.h>
 #include <InterViews/font.h>
-#include <InterViews/painter.h>
+#include <IV-2_6/InterViews/painter.h>
 #include <InterViews/raster.h>
 #include <InterViews/transformer.h>
 #include <IV-GTK4/gdklib.h>

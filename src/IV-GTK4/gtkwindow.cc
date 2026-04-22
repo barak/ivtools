@@ -513,25 +513,16 @@ Handler* Window::target(const Event& e) const {
 void Window::grab_pointer(Cursor* c) const {
     WindowRep& w = *rep();
     if (!w.widget_) return;
-    GdkDisplay* gdpy = gdk_widget_get_display(w.widget_);
-    GdkSeat* seat = gdk_display_get_default_seat(gdpy);
+    /* GTK4 removed gdk_seat_grab; set the cursor as a best-effort substitute */
     GdkCursor* gdk_cur = nullptr;
     if (c) gdk_cur = c->rep()->xid(w.display_, w.visual_);
-    GdkSurface* surface = gtk_native_get_surface(
-        gtk_widget_get_native(w.widget_));
-    if (surface) {
-        gdk_seat_grab(seat, surface,
-                      GDK_SEAT_CAPABILITY_ALL_POINTING,
-                      FALSE, gdk_cur, nullptr, nullptr, nullptr);
-    }
+    gtk_widget_set_cursor(w.widget_, gdk_cur);
 }
 
 void Window::ungrab_pointer() const {
     WindowRep& w = *rep();
     if (!w.widget_) return;
-    GdkDisplay* gdpy = gdk_widget_get_display(w.widget_);
-    GdkSeat* seat = gdk_display_get_default_seat(gdpy);
-    gdk_seat_ungrab(seat);
+    gtk_widget_set_cursor(w.widget_, nullptr);
 }
 
 void Window::repair() {
@@ -1358,17 +1349,9 @@ void ManagedWindowRep::wm_normal_hints(Window* window) {
 
     gtk_widget_set_size_request(w.widget_, min_w, min_h);
 
-    /* Maximum size hint via GdkGeometry */
-    if (max_width < x_largest || max_height < y_largest) {
-        GdkGeometry geom;
-        geom.max_width  = d.to_pixels(Math::min(max_width,  x_largest));
-        geom.max_height = d.to_pixels(Math::min(max_height, y_largest));
-        geom.min_width  = min_w;
-        geom.min_height = min_h;
-        gtk_window_set_geometry_hints(GTK_WINDOW(w.gtkwindow_),
-                                      nullptr, &geom,
-                                      GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE);
-    }
+    /* GTK4 does not provide GdkGeometry / gtk_window_set_geometry_hints.
+       Maximum-size constraints are not enforced; only the minimum is set. */
+    (void)max_width; (void)max_height; (void)x_largest; (void)y_largest;
 }
 
 void ManagedWindowRep::wm_name(Window* window) {
@@ -1491,8 +1474,13 @@ void DisplayRep::init(GdkDisplay* dpy) {
     }
     set_dpi(dpi > 0 ? *(Coord*)&dpi : *(Coord*)nullptr);
 
-    width_  = to_coord(pwidth_);
-    height_ = to_coord(pheight_);
+    /* Compute coord dimensions directly (to_coord is a Display method) */
+    {
+        double safe_dpi = dpi > 0 ? dpi : 96.0;
+        double pixel = 72.0 / safe_dpi;
+        width_  = Coord(pwidth_)  * Coord(pixel);
+        height_ = Coord(pheight_) * Coord(pixel);
+    }
 
     wtable_     = new WindowTable(256);
     grabbers_   = nullptr;

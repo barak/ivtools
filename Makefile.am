@@ -160,6 +160,9 @@ src/IV-GTK4/gdkevent.cc src/IV-GTK4/gdkfont.cc src/IV-GTK4/gdkraster.cc	\
 src/IV-GTK4/gtkreqerr.cc src/IV-GTK4/gtkselection.cc src/IV-GTK4/gtkwindow.cc	\
 src/IV-GTK4/gtkpainter.cc src/IV-GTK4/gtkpattern.cc
 BACKEND_CPPFLAGS = $(GTK4_CFLAGS)
+### IV-2_6 backend sources for GTK4: replaces xbitmap2_6, xevent2_6, xinter, xpainter, xpattern
+IV26_BACKEND_SOURCES = \
+src/IV-GTK4/gtkevent2_6.cc src/IV-GTK4/gtkinter.cc
 else
 BACKEND_SOURCES = \
 src/IV-X11/xbitmap.cc src/IV-X11/xbrush.cc src/IV-X11/xcanvas.cc	\
@@ -167,6 +170,10 @@ src/IV-X11/xcolor.cc src/IV-X11/xcursor.cc src/IV-X11/xdrag.cc		\
 src/IV-X11/xevent.cc src/IV-X11/xfont.cc src/IV-X11/xraster.cc		\
 src/IV-X11/xreqerr.cc src/IV-X11/xselection.cc src/IV-X11/xwindow.cc
 BACKEND_CPPFLAGS =
+### IV-2_6 backend sources for X11
+IV26_BACKEND_SOURCES = \
+src/IV-2_6/xbitmap2_6.cc src/IV-2_6/xevent2_6.cc \
+src/IV-2_6/xinter.cc src/IV-2_6/xpainter.cc src/IV-2_6/xpattern.cc
 endif
 
 ### libComTerp
@@ -374,8 +381,7 @@ src/IV-2_6/strbrowser.cc src/IV-2_6/strchooser.cc			\
 src/IV-2_6/streditor.cc src/IV-2_6/subject.cc src/IV-2_6/textbuffer.cc	\
 src/IV-2_6/textdisplay.cc src/IV-2_6/texteditor.cc			\
 src/IV-2_6/tform2_6.cc src/IV-2_6/tray.cc src/IV-2_6/viewport.cc	\
-src/IV-2_6/world.cc src/IV-2_6/xbitmap2_6.cc src/IV-2_6/xevent2_6.cc	\
-src/IV-2_6/xinter.cc src/IV-2_6/xpainter.cc src/IV-2_6/xpattern.cc	\
+src/IV-2_6/world.cc $(IV26_BACKEND_SOURCES)				\
 $(BACKEND_SOURCES)						\
 src/InterViews/action.cc src/InterViews/adjust.cc			\
 src/InterViews/aggr.cc src/InterViews/align.cc				\
