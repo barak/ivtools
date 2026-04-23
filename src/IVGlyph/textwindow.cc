@@ -45,7 +45,11 @@ void TextEditAppWindow::receive(const Event& e)
       name = XGetAtomName(d.display_, atom);
       s = w.display_->find_selection(name);
       // request the selecton
+#ifdef IV_USE_GTK4_BACKEND
+      s->rep()->request(s, xe);
+#else
       s->rep()->request(s, xe.xselectionrequest);
+#endif
       XFree(name);
       break;
    case SelectionNotify:
@@ -54,7 +58,11 @@ void TextEditAppWindow::receive(const Event& e)
       name = XGetAtomName(d.display_, atom);
       s = w.display_->find_selection(name);
       // notify about the selection
+#ifdef IV_USE_GTK4_BACKEND
+      s->rep()->notify(s, xe);
+#else
       s->rep()->notify(s, xe.xselection);
+#endif
       XFree(name);
    default:
       // pass everything else to Window::receive
