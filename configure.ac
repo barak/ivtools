@@ -66,13 +66,16 @@ AC_CHECK_LIB([m], [pow], [MATH_LD=-lm], [AC_MSG_WARN([Cannot find math library])
 
 AS_IF([test "x${with_backend}" = xgtk4],
  [PKG_CHECK_MODULES([GTK4], [gtk4],
-   [CFLAGS="${GTK4_CFLAGS} ${CFLAGS}"
-    CXXFLAGS="${GTK4_CFLAGS} ${CXXFLAGS}"],
-   [AC_MSG_ERROR([Cannot find GTK4 library; install libgtk-4-dev and try again])])
-  AC_SUBST(GTK4_CFLAGS)
-  AC_SUBST(GTK4_LIBS)],
- [AC_CHECK_LIB([X11], [XOpenDisplay], [X11_LD=-lX11], [AC_MSG_ERROR([Cannot find X11 library])])
-  AC_CHECK_LIB([Xext], [XextFindDisplay], [XEXT_LD=-lXext], [AC_MSG_ERROR([Cannot find Xext library])])])
+    [CFLAGS="${GTK4_CFLAGS} ${CFLAGS}"
+     CXXFLAGS="${GTK4_CFLAGS} ${CXXFLAGS}"],
+    [AC_MSG_ERROR([Cannot find GTK4 library; install libgtk-4-dev and try again])])])
+
+AC_CHECK_LIB([X11], [XOpenDisplay], [X11_LD=-lX11], [AC_MSG_ERROR([Cannot find X11 library])])
+AC_CHECK_LIB([Xext], [XextFindDisplay], [XEXT_LD=-lXext], [AC_MSG_ERROR([Cannot find Xext library])])
+
+AS_IF([test "x${with_backend}" = xgtk4],
+ [AC_SUBST(GTK4_CFLAGS)
+  AC_SUBST(GTK4_LIBS)])
 
 AS_IF([test ${with_ace} != no],
  [AC_CHECK_LIB([ACE], [ace_cleanup_destroyer],
