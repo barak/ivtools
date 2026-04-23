@@ -742,20 +742,20 @@ stdcmapppm_CPPFLAGS	=
 
 # AM_LDFLAGS =
 
-comdraw_LDADD	= libComUnidraw.la libComTerp.la libOverlayUnidraw.la libUnidraw.la $(ACEDISPATCH_LA) libIV.la $(ACE_LD) $(X11_LD) $(XEXT_LD) $(MATH_LD)
+comdraw_LDADD	= libComUnidraw.la libComTerp.la libOverlayUnidraw.la libUnidraw.la $(ACEDISPATCH_LA) libIV.la $(ACE_LD) $(MATH_LD)
 comterp_LDADD	= libComTerp.la libTopoFace.la libUnidraw.la $(ACE_LD) $(MATH_LD)
 comtest_LDADD	= libAttribute.la libComTerp.la libComUtil.la
-dclock_LDADD	= libIV.la $(X11_LD) $(XEXT_LD) $(MATH_LD)
-drawserv_LDADD	= libDrawServ.la libFrameUnidraw.la libGraphUnidraw.la libOverlayUnidraw.la libComUnidraw.la libUnidraw.la libComTerp.la $(ACEDISPATCH_LA) libIV.la $(ACE_LD) $(X11_LD) $(XEXT_LD) $(MATH_LD)
-drawtool_LDADD	= libAceDispatch.la libOverlayUnidraw.la libUnidraw.la libComTerp.la libIV.la $(ACE_LD) $(X11_LD) $(XEXT_LD) $(MATH_LD)
-flipbook_LDADD	= libFrameUnidraw.la libComUnidraw.la libOverlayUnidraw.la libUnidraw.la libComTerp.la $(ACEDISPATCH_LA) libIV.la $(ACE_LD) $(X11_LD) $(XEXT_LD) $(MATH_LD)
-gclock_LDADD	= libTime.la libIV.la $(X11_LD) $(XEXT_LD) $(MATH_LD)
-glyphterp_LDADD= libIVGlyph.la libComGlyph.la libIV.la $(X11_LD) $(XEXT_LD) $(MATH_LD)
-graphdraw_LDADD= libGraphUnidraw.la libComUnidraw.la libAceDispatch.la libComTerp.la libOverlayUnidraw.la libUnidraw.la libIV.la $(ACE_LD) $(X11_LD) $(XEXT_LD) $(MATH_LD)
-iclass_LDADD	= libIV.la $(X11_LD) $(XEXT_LD) $(MATH_LD)
-idemo_LDADD	= libIV.la $(X11_LD) $(XEXT_LD) $(MATH_LD)
-idraw_LDADD	= libUniIdraw.la libUnidraw.la $(X11_LD) $(XEXT_LD) $(MATH_LD)
-ivtext_LDADD	= libIVGlyph.la libIV.la $(X11_LD) $(XEXT_LD) $(MATH_LD)
+dclock_LDADD	= libIV.la $(MATH_LD)
+drawserv_LDADD	= libDrawServ.la libFrameUnidraw.la libGraphUnidraw.la libOverlayUnidraw.la libComUnidraw.la libUnidraw.la libComTerp.la $(ACEDISPATCH_LA) libIV.la $(ACE_LD) $(MATH_LD)
+drawtool_LDADD	= libAceDispatch.la libOverlayUnidraw.la libUnidraw.la libComTerp.la libIV.la $(ACE_LD) $(MATH_LD)
+flipbook_LDADD	= libFrameUnidraw.la libComUnidraw.la libOverlayUnidraw.la libUnidraw.la libComTerp.la $(ACEDISPATCH_LA) libIV.la $(ACE_LD) $(MATH_LD)
+gclock_LDADD	= libTime.la libIV.la $(MATH_LD)
+glyphterp_LDADD= libIVGlyph.la libComGlyph.la libIV.la $(MATH_LD)
+graphdraw_LDADD= libGraphUnidraw.la libComUnidraw.la libAceDispatch.la libComTerp.la libOverlayUnidraw.la libUnidraw.la libIV.la $(ACE_LD) $(MATH_LD)
+iclass_LDADD	= libIV.la $(MATH_LD)
+idemo_LDADD	= libIV.la $(MATH_LD)
+idraw_LDADD	= libUniIdraw.la libUnidraw.la $(MATH_LD)
+ivtext_LDADD	= libIVGlyph.la libIV.la $(MATH_LD)
 stdcmapppm_LDADD=
 
 ### directories to recurse into, for installation of include files
