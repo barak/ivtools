@@ -1462,6 +1462,14 @@ unsigned long WindowVisual::x_or_(const Style&) const {
    the InterViews/session.cc and InterViews/display.cc which call
    Display::open() → DisplayRep::init().  We implement init() here.) */
 
+static void ensure_gtk_initialized() {
+    static bool gtk_initialized = false;
+    if (!gtk_initialized) {
+        gtk_init();
+        gtk_initialized = true;
+    }
+}
+
 Display* Display::open(const String& s) {
     NullTerminatedString ns(s);
     return open(ns.string());
@@ -1476,6 +1484,7 @@ Display* Display::open() {
 }
 
 Display* Display::open(const char* device) {
+    ensure_gtk_initialized();
     GdkDisplay* dpy = device ? gdk_display_open(device) : gdk_display_get_default();
     if (dpy == nullptr) {
         return nil;
