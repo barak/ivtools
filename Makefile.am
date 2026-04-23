@@ -325,7 +325,7 @@ libIVPART1_la_SOURCES = src/InterViews/psfont.cc
 
 libIVPART1_la_CPPFLAGS = \
  \
- -Dps_metrics_dir='"$(PSFontDir)"' \
+ -Dps_metrics_path='"$(PSFontDir)"' \
  -I$(srcdir)/src/IV $(IVSTD_INCLUDES)
 
 libIVPART2_la_SOURCES = src/InterViews/dialogs.cc src/InterViews/kit.cc

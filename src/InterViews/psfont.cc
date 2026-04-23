@@ -31,11 +31,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-/*
- * Users can also override this by setting the PSFONTDIR environment variable.
- */
-#ifndef ps_metrics_dir
-#define ps_metrics_dir "/usr/lib/ps"
+/* PSFONTDIR env var overrides; both accept colon-separated directory lists. */
+#ifndef ps_metrics_path
+#define ps_metrics_path "/usr/lib/ps"
 #endif
 
 class PSFontImpl {
@@ -59,28 +57,30 @@ PSFont31::PSFont31(
     p->encoding = nil;
     p->size = size;
     char* metrics_file = PSFontImpl::psfile(psname);
-    FILE* file = fopen(metrics_file, "r");
-    if (file != nil) {
-	p->name = new char[256];
-	p->encoding = new char[256];
+    if (metrics_file != nil) {
+	FILE* file = fopen(metrics_file, "r");
+	delete[] metrics_file;
+	if (file != nil) {
+	    p->name = new char[256];
+	    p->encoding = new char[256];
 
-	char line[256];
-	int c;
-	int w;
-	while (fgets(line, 255, file) != NULL) {
-	    if (sscanf(line, "FullName %[a-zA-Z ]", p->name) == 1) {
-		;
-	    } else if (sscanf(line, "EncodingScheme %s", p->encoding) == 1) {
-		;
-	    } else if (sscanf(line, "C %d ; WX %d ;", &c, &w) == 2) {
-		if (c != -1) {
-		    p->widths[c] = float(w) / 1000 * p->size;
+	    char line[256];
+	    int c;
+	    int w;
+	    while (fgets(line, 255, file) != NULL) {
+		if (sscanf(line, "FullName %[a-zA-Z ]", p->name) == 1) {
+		    ;
+		} else if (sscanf(line, "EncodingScheme %s", p->encoding) == 1) {
+		    ;
+		} else if (sscanf(line, "C %d ; WX %d ;", &c, &w) == 2) {
+		    if (c != -1) {
+			p->widths[c] = float(w) / 1000 * p->size;
+		    }
 		}
 	    }
+	    fclose(file);
 	}
-	fclose(file);
     }
-    delete metrics_file;
 }
 
 PSFont31::~PSFont31() {
@@ -97,23 +97,34 @@ Coord PSFont31::width(const char* s, int n) const { return Font::width(s, n); }
 
 boolean PSFont31::exists(const char* psname) {
     char* metrics_file = PSFontImpl::psfile(psname);
-    FILE* f = fopen(metrics_file, "r");
-    delete metrics_file;
-    if (f == nil) {
+    if (metrics_file == nil)
 	return false;
-    }
-    fclose(f);
+    delete[] metrics_file;
     return true;
 }
 
 char* PSFontImpl::psfile(const char* name) {
-    const char* dir = getenv("PSFONTDIR");
-    if (dir == nil) {
-	dir = ps_metrics_dir;
+    const char* path = getenv("PSFONTDIR");
+    if (path == nil)
+	path = ps_metrics_path;
+    const size_t namelen = strlen(name);
+    const char* p = path;
+    while (*p) {
+	const char* colon = strchr(p, ':');
+	const size_t dirlen = colon ? (size_t)(colon - p) : strlen(p);
+	if (dirlen > 0) {
+	    char* metrics_file = new char[dirlen + 1 + namelen + 4 + 1];
+	    memcpy(metrics_file, p, dirlen);
+	    sprintf(metrics_file + dirlen, "/%s.afm", name);
+	    FILE* f = fopen(metrics_file, "r");
+	    if (f != nil) {
+		fclose(f);
+		return metrics_file;
+	    }
+	    delete[] metrics_file;
+	}
+	if (!colon) break;
+	p = colon + 1;
     }
-    char* metrics_file = new char[
-	strlen(dir) + strlen("/") + strlen(name) + strlen(".afm") + 1
-    ];
-    sprintf(metrics_file, "%s/%s.afm", dir, name);
-    return metrics_file;
+    return nil;
 }

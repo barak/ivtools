@@ -28,7 +28,7 @@ AC_MSG_RESULT([${with_clippoly}])
 
 AC_MSG_CHECKING([PSFontDir])
 AC_ARG_WITH([PSFontDir],
-       [AS_HELP_STRING([--with-PSFontDir=DIR],[for font metrics (default: searches)])],,
+       [AS_HELP_STRING([--with-PSFontDir=PATH],[colon-separated dirs for font metrics (default: searches)])],,
        [with_PSFontDir=check])
 AC_MSG_RESULT([${with_PSFontDir}])
 
@@ -136,26 +136,38 @@ strncasecmp strrchr strstr strtol uname hypot hypotf])
 
 # Checks for locations
 AS_IF([test x"${with_PSFontDir}" = xcheck],
- [AC_MSG_NOTICE([scanning ad-hoc list of locations for PSFontDir])
-  AC_CHECK_FILE([/usr/share/fonts/type1/gsfonts/a010015l.afm],
-   [PSFontDir=/usr/share/fonts/type1/gsfonts],
-   [AC_CHECK_FILE([/usr/share/ghostscript/fonts/bchr.afm],
-     [PSFontDir=/usr/share/ghostscript/fonts],
-     [AC_CHECK_FILE([/usr/lib/ghostscript/fonts/bchr.afm],
-       [PSFontDir=/usr/lib/ghostscript/fonts],
-       [AC_CHECK_FILE([/usr/lib/ps/bchr.afm],
-	 [PSFontDir=/usr/lib/ps],
-	 [AC_CHECK_FILE([/usr/lib/X11/fonts/Type1Adobe/afm/bchr.afm],
-	   [PSFontDir=/usr/lib/X11/fonts/Type1Adobe/afm],
-	   [AC_CHECK_FILE([/Library/Fonts/],
-	     [PSFontDir=/Library/Fonts],
-	     [AC_CHECK_FILE([/System/Library/Fonts/],
-	       [PSFontDir=/System/Library/Fonts],
-	       [AC_CHECK_FILE([/usr/share/fonts/X11/Type1/],
-		 [PSFontDir=/usr/share/fonts/X11/Type1],
-		 [AC_CHECK_FILE([/usr/share/fonts/type1/urw-base35/NimbusRoman-Bold.afm],
-		   [PSFontDir=/usr/share/fonts/type1/urw-base35],
-		   [AC_MSG_ERROR([cannot find PS Font Directory])])])])])])])])])])
+ [AC_MSG_NOTICE([scanning for PS font metric directories])
+  PSFontDir=""
+  for d in \
+    /usr/share/texlive/texmf-dist/fonts/afm/* \
+    /usr/share/texlive/texmf-dist/fonts/afm/*/* \
+    /usr/share/texlive/texmf-dist/fonts/afm/*/*/* \
+    /usr/share/texmf/fonts/afm/*/* \
+    /usr/share/texmf/fonts/type1/*/* \
+    /usr/share/fonts/type1/* \
+    /usr/share/fonts/X11/Type1 \
+    /usr/share/matplotlib/mpl-data/fonts/afm \
+    /usr/share/matplotlib/mpl-data/fonts/pdfcorefonts \
+    /usr/share/enscript/afm \
+    /usr/share/groff/*/font/devps \
+    /usr/share/groff/*/oldfont/devps \
+    /usr/share/ghostscript/fonts \
+    /usr/lib/ghostscript/fonts \
+    /usr/lib/ps \
+    /usr/lib/X11/fonts/Type1Adobe/afm \
+    /Library/Fonts \
+    /System/Library/Fonts; do
+    if test -d "$d"; then
+      if test -z "$PSFontDir"; then
+        PSFontDir="$d"
+      else
+        PSFontDir="${PSFontDir}:$d"
+      fi
+    fi
+  done
+  if test -z "$PSFontDir"; then
+    AC_MSG_ERROR([cannot find any PS font directory])
+  fi
   AC_MSG_NOTICE([Using PSFontDir ${PSFontDir}])],
  [PSFontDir="${with_PSFontDir}"])
 AC_SUBST(PSFontDir)
