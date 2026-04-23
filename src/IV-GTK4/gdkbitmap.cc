@@ -25,6 +25,14 @@
 /* BitmapRep helpers                                                    */
 /* ================================================================== */
 
+static inline unsigned char bitmap_mask_for_x(int x) {
+#if G_BYTE_ORDER == G_LITTLE_ENDIAN
+    return (unsigned char)(1u << (x % 8));
+#else
+    return (unsigned char)(1u << (7 - (x % 8)));
+#endif
+}
+
 BitmapRep::BitmapRep()
 : display_(nil), surface_(nullptr),
   left_(0), bottom_(0), right_(0), top_(0),
@@ -199,7 +207,7 @@ Bitmap* Bitmap::open(const char* filename) {
             const int luminance = (int)p[0] + (int)p[1] + (int)p[2];
             const bool on = alpha >= 128 && luminance < (3 * 128);
             if (on) {
-                data[y * stride + x / 8] |= (1 << (x % 8));
+                data[y * stride + x / 8] |= bitmap_mask_for_x(x);
             }
         }
     }
@@ -286,8 +294,7 @@ boolean Bitmap::peek(int x, int y) const {
         return false;
     /* A1 format: bit N in byte M, starting from LSB */
     int byte_idx = y * stride + x / 8;
-    int bit_idx  = x % 8;
-    return (data[byte_idx] >> bit_idx) & 1;
+    return (data[byte_idx] & bitmap_mask_for_x(x)) != 0;
 }
 
 void Bitmap::poke(boolean bit, int x, int y) {
@@ -299,9 +306,9 @@ void Bitmap::poke(boolean bit, int x, int y) {
     if (x < 0 || y < 0 || (unsigned)x >= b.pwidth_ || (unsigned)y >= b.pheight_)
         return;
     int byte_idx = y * stride + x / 8;
-    int bit_idx  = x % 8;
-    if (bit) data[byte_idx] |=  (1 << bit_idx);
-    else     data[byte_idx] &= ~(1 << bit_idx);
+    unsigned char mask = bitmap_mask_for_x(x);
+    if (bit) data[byte_idx] |= mask;
+    else     data[byte_idx] &= ~mask;
     cairo_surface_mark_dirty(b.surface_);
     b.modified_ = true;
 }

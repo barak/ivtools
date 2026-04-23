@@ -134,6 +134,11 @@ void SelectionManagerRep::notify(
     /* In GTK4 there are no SelectionNotify events; handled by GDK */
 }
 
+/*
+ * Keep the legacy X11-mangled entry points available because some
+ * non-backend-specific objects are still compiled against IV-X11 headers
+ * and expect those exact ABI symbols even in GTK4 builds.
+ */
 void gtk_selection_request_x11_compat(
     SelectionManagerRep* rep, SelectionManager* s, const void* xe
 ) __asm__("_ZN21ivSelectionManagerRep7requestEP18ivSelectionManagerRK22XSelectionRequestEvent");
