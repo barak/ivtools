@@ -122,12 +122,36 @@ void SelectionManager::get_value(
     format = 8;
 }
 
-void SelectionManagerRep::request(SelectionManager*, const XEvent& /*xe*/) {
+void SelectionManagerRep::request(
+    SelectionManager*, const XSelectionRequestEvent& /*xe*/
+) {
     /* In GTK4 there are no SelectionRequest events; handled by GDK */
 }
 
-void SelectionManagerRep::notify(SelectionManager*, const XEvent& /*xe*/) {
+void SelectionManagerRep::notify(
+    SelectionManager*, const XSelectionEvent& /*xe*/
+) {
     /* In GTK4 there are no SelectionNotify events; handled by GDK */
+}
+
+void gtk_selection_request_x11_compat(
+    SelectionManagerRep* rep, SelectionManager* s, const void* xe
+) __asm__("_ZN21ivSelectionManagerRep7requestEP18ivSelectionManagerRK22XSelectionRequestEvent");
+
+void gtk_selection_request_x11_compat(
+    SelectionManagerRep* rep, SelectionManager* s, const void* xe
+) {
+    rep->request(s, *reinterpret_cast<const XEvent*>(xe));
+}
+
+void gtk_selection_notify_x11_compat(
+    SelectionManagerRep* rep, SelectionManager* s, const void* xe
+) __asm__("_ZN21ivSelectionManagerRep6notifyEP18ivSelectionManagerRK15XSelectionEvent");
+
+void gtk_selection_notify_x11_compat(
+    SelectionManagerRep* rep, SelectionManager* s, const void* xe
+) {
+    rep->notify(s, *reinterpret_cast<const XEvent*>(xe));
 }
 
 /* class SelectionHandler */

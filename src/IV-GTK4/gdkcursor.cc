@@ -316,8 +316,32 @@ Cursor* lowerleft;
 Cursor* lowerright;
 Cursor* noCursor;
 
-/* Cursor::Cursor(Bitmap*, Bitmap*, Color*, Color*) etc. are implemented in
-   InterViews/cursor.cc which calls into CursorRepBitmap / CursorRepData etc. */
+Cursor::Cursor(
+    short xoff, short yoff, const int* p, const int* m,
+    const Color* fg, const Color* bg
+) {
+    rep_ = new CursorRepData(xoff, yoff, p, m, fg, bg);
+}
+
+Cursor::Cursor(
+    const Bitmap* pat, const Bitmap* mask, const Color* fg, const Color* bg
+) {
+    rep_ = new CursorRepBitmap(pat, mask, fg, bg);
+}
+
+Cursor::Cursor(
+    const Font* font, int pat, int mask, const Color* fg, const Color* bg
+) {
+    rep_ = new CursorRepFont(font, pat, mask, fg, bg);
+}
+
+Cursor::Cursor(int n, const Color* fg, const Color* bg) {
+    rep_ = new CursorRepXFont(n, fg, bg);
+}
+
+Cursor::~Cursor() {
+    delete rep_;
+}
 
 static const int arrow_pat[16] = {
     0x8000, 0xc000, 0xe000, 0xf000,

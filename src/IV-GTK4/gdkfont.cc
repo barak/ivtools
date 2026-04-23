@@ -527,16 +527,14 @@ int Font::Width(const char* s, int len) const {
     return (int)width(s, len);
 }
 
-int Font::Index(const char* s, int offset, float between, boolean /*after*/) const {
+int Font::Index(const char* s, int offset, boolean between) const {
     if (!s) return 0;
-    Coord sofar = 0.0f;
-    int i = 0;
-    for (; s[i] && i < offset; i++) {
-        sofar += width(s[i]);
-        if (sofar + width(s[i])*between >= (Coord)offset)
-            break;
-    }
-    return i;
+    return index(s, strlen(s), float(offset), between);
+}
+
+int Font::Index(const char* s, int len, int offset, boolean between) const {
+    if (!s || len <= 0) return 0;
+    return index(s, len, float(offset), between);
 }
 
 int Font::index(const char* s, int len, float offset, boolean /*between*/) const {

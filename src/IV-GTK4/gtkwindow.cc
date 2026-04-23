@@ -70,6 +70,24 @@ implementPtrList(WindowVisualList, WindowVisual)
 declarePtrList(WindowCursorStack, Cursor)
 implementPtrList(WindowCursorStack, Cursor)
 
+declarePtrList(DamageList, Window)
+implementPtrList(DamageList, Window)
+
+class GrabInfo {
+private:
+    friend class Display;
+    friend class DisplayRep;
+
+    Window* window_;
+    Handler* handler_;
+};
+
+declareList(GrabList, GrabInfo)
+implementList(GrabList, GrabInfo)
+
+declarePtrList(SelectionList, SelectionManager)
+implementPtrList(SelectionList, SelectionManager)
+
 /* ------------------------------------------------------------------ */
 /* Forward declarations for GTK4 signal callbacks                      */
 /* ------------------------------------------------------------------ */
@@ -1439,6 +1457,189 @@ unsigned long WindowVisual::x_or_(const Style&) const {
 /* (DisplayRep::init and the rest of Display are implemented in
    the InterViews/session.cc and InterViews/display.cc which call
    Display::open() → DisplayRep::init().  We implement init() here.) */
+
+Display* Display::open(const String& s) {
+    NullTerminatedString ns(s);
+    return open(ns.string());
+}
+
+Display::Display(DisplayRep* d) {
+    rep_ = d;
+}
+
+Display* Display::open() {
+    return open(nil);
+}
+
+Display* Display::open(const char* device) {
+    GdkDisplay* dpy = device ? gdk_display_open(device) : gdk_display_get_default();
+    if (dpy == nullptr) {
+        return nil;
+    }
+    DisplayRep* d = new DisplayRep;
+    d->init(dpy);
+    return new Display(d);
+}
+
+void Display::close() {
+    DisplayRep* d = rep();
+    if (d && d->display_) {
+        gdk_display_close(d->display_);
+    }
+}
+
+Display::~Display() {
+    DisplayRep* d = rep();
+    Resource::unref_deferred(d->style_);
+    for (ListItr(SelectionList) i(*d->selections_); i.more(); i.next()) {
+        SelectionManager* s = i.cur();
+        delete s;
+    }
+    delete d->selections_;
+    delete d->damaged_;
+    delete d->grabbers_;
+    delete d->wtable_;
+    delete d;
+}
+
+int Display::fd() const { return -1; }
+Coord Display::width() const { return rep()->width_; }
+Coord Display::height() const { return rep()->height_; }
+PixelCoord Display::pwidth() const { return rep()->pwidth_; }
+PixelCoord Display::pheight() const { return rep()->pheight_; }
+
+Coord Display::a_width() const { return width(); }
+Coord Display::a_height() const { return height(); }
+
+boolean Display::defaults(String&) const { return false; }
+
+void Display::style(Style* s) {
+    DisplayRep& d = *rep();
+    Resource::ref(s);
+    Resource::unref(d.style_);
+    d.style_ = s;
+    set_screen(d.screen_);
+}
+
+Style* Display::style() const { return rep()->style_; }
+
+void Display::set_screen(int s) {
+    DisplayRep& d = *rep();
+    d.screen_ = (s < 0) ? 0 : (unsigned int)s;
+    if (d.default_visual_ == nil) {
+        d.default_visual_ = WindowVisual::find_visual(this, d.style_);
+    }
+    d.set_dpi(pixel_);
+    point_ = (pixel_ != 0) ? Coord(1.0 / pixel_) : Coord(0);
+    d.width_ = to_coord(d.pwidth_);
+    d.height_ = to_coord(d.pheight_);
+}
+
+void Display::repair() {
+    DamageList& list = *rep()->damaged_;
+    for (ListItr(DamageList) i(list); i.more(); i.next()) {
+        i.cur()->repair();
+    }
+    list.remove_all();
+}
+
+void Display::flush() {}
+
+void Display::sync() {
+    while (g_main_context_pending(nullptr)) {
+        g_main_context_iteration(nullptr, false);
+    }
+}
+
+boolean Display::get(Event&) {
+    if (rep()->damaged_->count() != 0) {
+        repair();
+    }
+    return false;
+}
+
+void Display::put(const Event&) {}
+
+boolean Display::closed() {
+    return rep()->display_ == nullptr;
+}
+
+void Display::grab(Window* w, Handler* h) {
+    GrabInfo g;
+    g.window_ = w;
+    Resource::ref(h);
+    g.handler_ = h;
+    rep()->grabbers_->prepend(g);
+}
+
+void Display::ungrab(Handler* h, boolean all) {
+    for (ListUpdater(GrabList) i(*rep()->grabbers_); i.more(); i.next()) {
+        const GrabInfo& g = i.cur_ref();
+        if (g.handler_ == h) {
+            i.remove_cur();
+            Resource::unref(h);
+            if (!all) {
+                break;
+            }
+        }
+    }
+}
+
+Handler* Display::grabber() const {
+    GrabList& g = *rep()->grabbers_;
+    return (g.count() == 0) ? nil : g.item(0).handler_;
+}
+
+boolean Display::is_grabbing(Handler* h) const {
+    for (ListItr(GrabList) i(*rep()->grabbers_); i.more(); i.next()) {
+        const GrabInfo& g = i.cur_ref();
+        if (g.handler_ == h) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void Display::ring_bell(int) {
+    if (rep()->display_) {
+        gdk_display_beep(rep()->display_);
+    }
+}
+
+void Display::set_key_click(int) {}
+void Display::set_auto_repeat(boolean) {}
+void Display::set_pointer_feedback(int, int) {}
+void Display::move_pointer(Coord, Coord) {}
+
+SelectionManager* Display::primary_selection() {
+    return find_selection("PRIMARY");
+}
+
+SelectionManager* Display::secondary_selection() {
+    return find_selection("SECONDARY");
+}
+
+SelectionManager* Display::clipboard_selection() {
+    return find_selection("CLIPBOARD");
+}
+
+SelectionManager* Display::find_selection(const char* name) {
+    return find_selection(String(name));
+}
+
+SelectionManager* Display::find_selection(const String& name) {
+    SelectionManager* s;
+    SelectionList& list = *rep()->selections_;
+    for (ListItr(SelectionList) i(list); i.more(); i.next()) {
+        s = i.cur();
+        if (*s->rep()->name_ == name) {
+            return s;
+        }
+    }
+    s = new SelectionManager(this, name);
+    list.append(s);
+    return s;
+}
 
 void DisplayRep::init(GdkDisplay* dpy) {
     display_ = dpy;

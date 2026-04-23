@@ -158,11 +158,3 @@ void Raster::flushrect(IntCoord /*l*/, IntCoord /*b*/,
 }
 
 boolean Raster::init_shared_memory() { return false; }
-
-/* RasterRep shared-memory stubs (OverlayUnidraw X-SHM path) */
-void RasterRep::free_shared_memory(Display& /*d*/, XShmSegmentInfo& /*si*/) {}
-
-boolean RasterRep::init_shared_memory(unsigned int& /*sz*/, Display& /*d*/,
-    XShmSegmentInfo& /*si*/, unsigned int /*w*/, unsigned int /*h*/,
-    _XImage*& /*img*/, unsigned long /*vis*/)
-{ return false; }

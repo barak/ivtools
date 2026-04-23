@@ -37,8 +37,8 @@ public:
     SelectionManagerRep(Display*, const String&);
     ~SelectionManagerRep();
 
-    void request(SelectionManager*, const XEvent& req);
-    void notify(SelectionManager*, const XEvent& note);
+    void request(SelectionManager*, const XSelectionRequestEvent& req);
+    void notify(SelectionManager*, const XSelectionEvent& note);
 };
 
 #endif /* iv_gtkselection_h */
