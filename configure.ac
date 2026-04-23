@@ -70,8 +70,9 @@ AS_IF([test "x${with_backend}" = xgtk4],
      CXXFLAGS="${GTK4_CFLAGS} ${CXXFLAGS}"],
     [AC_MSG_ERROR([Cannot find GTK4 library; install libgtk-4-dev and try again])])])
 
-AC_CHECK_LIB([X11], [XOpenDisplay], [X11_LD=-lX11], [AC_MSG_ERROR([Cannot find X11 library])])
-AC_CHECK_LIB([Xext], [XextFindDisplay], [XEXT_LD=-lXext], [AC_MSG_ERROR([Cannot find Xext library])])
+AS_IF([test "x${with_backend}" != xgtk4],
+ [AC_CHECK_LIB([X11], [XOpenDisplay], [X11_LD=-lX11], [AC_MSG_ERROR([Cannot find X11 library])])
+  AC_CHECK_LIB([Xext], [XextFindDisplay], [XEXT_LD=-lXext], [AC_MSG_ERROR([Cannot find Xext library])])])
 
 AS_IF([test "x${with_backend}" = xgtk4],
  [AC_SUBST(GTK4_CFLAGS)
