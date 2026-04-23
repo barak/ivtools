@@ -276,6 +276,7 @@ const Font* FontImpl::new_font(
 ) {
     Font* f = new Font(name, scale);
     f->impl_->attach(r);
+    f->impl_->entry_ = k;
     k->fonts.append(f);
     return f;
 }

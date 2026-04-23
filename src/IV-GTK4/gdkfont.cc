@@ -302,6 +302,7 @@ const Font* FontImpl::new_font(const String& name, float scale,
 {
     Font* f = new Font(name, scale);
     f->impl_->attach(r);
+    f->impl_->entry_ = k;
     k->fonts.append(f);
     return f;
 }
