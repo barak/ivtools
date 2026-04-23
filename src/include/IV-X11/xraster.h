@@ -36,7 +36,6 @@
 #if !defined(__CYGWIN__) /* &&(!defined(__APPLE__)||__GNUC__>2) */
 #define XSHM
 #endif
-#endif
 
 #include <InterViews/coord.h>
 #include <IV-X11/Xlib.h>
@@ -83,4 +82,5 @@ public:
 
 #include <InterViews/_leave.h>
 
+#endif
 #endif

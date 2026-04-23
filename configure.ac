@@ -60,10 +60,11 @@ AM_CONDITIONAL([PS2PDF], [test x$ps2pdf != xno])
 LT_INIT
 
 # Checks for libraries.
-AC_PATH_XTRA
-CFLAGS="${X_CFLAGS} ${CFLAGS}"
-CXXFLAGS="${X_CFLAGS} ${CXXFLAGS}"
-LDFLAGS="${X_LIBS} ${LDFLAGS}"
+AS_IF([test "x${with_backend}" = xx11],
+ [AC_PATH_XTRA
+  CFLAGS="${X_CFLAGS} ${CFLAGS}"
+  CXXFLAGS="${X_CFLAGS} ${CXXFLAGS}"
+  LDFLAGS="${X_LIBS} ${LDFLAGS}"])
 
 AC_CHECK_LIB([m], [pow], [MATH_LD=-lm], [AC_MSG_WARN([Cannot find math library])])
 

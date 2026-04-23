@@ -1178,7 +1178,7 @@ void OverlayPainter::DoRasterRect(
     XDisplay* dpy = d.rep()->display_;
     XDrawable xid = c->rep()->xdrawable_;
 
-    if (xid != nullptr) {
+    if (xid != 0) {
         XSetRegion(dpy, Rep()->fillgc, rg);
         XSetGraphicsExposures(dpy, Rep()->fillgc, False);
 	int _ymin = c->pheight() - 1 - (ymin + pheight);
@@ -1348,7 +1348,6 @@ void OverlayPainter::MapRoundUp(
     delete source_table_;
     source_table_ = nil;
 }
-
 
 
 

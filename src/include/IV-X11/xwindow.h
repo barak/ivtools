@@ -71,7 +71,6 @@ public:
 #ifdef _DELTA_EXTENSIONS
 #pragma __static_class
 #endif
-#endif
     WindowVisual(const WindowVisualInfo&);
     ~WindowVisual();
 
@@ -251,4 +250,5 @@ public:
 
 #include <InterViews/_leave.h>
 
+#endif
 #endif

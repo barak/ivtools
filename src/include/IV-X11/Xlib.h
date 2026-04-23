@@ -45,7 +45,6 @@ struct _XContextDB;
 struct _XIMFilter;
 struct _XrmHashBucketRec;
 #endif
-#endif
 
 #ifdef __DECCXX
 struct _XDisplay;
@@ -59,4 +58,5 @@ struct _XrmHashBucketRec;
 
 }
 
+#endif
 #endif
