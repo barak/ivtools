@@ -145,6 +145,69 @@ Bitmap::Bitmap() {
                   Session::instance()->default_display() : nil;
 }
 
+Bitmap* Bitmap::open(const char* filename) {
+    if (filename == nil) {
+        return nil;
+    }
+
+    GError* error = nullptr;
+    GdkPixbuf* pixbuf = gdk_pixbuf_new_from_file(filename, &error);
+    if (pixbuf == nullptr) {
+        if (error) {
+            g_error_free(error);
+        }
+        return nil;
+    }
+
+    const int width = gdk_pixbuf_get_width(pixbuf);
+    const int height = gdk_pixbuf_get_height(pixbuf);
+    if (width <= 0 || height <= 0) {
+        g_object_unref(pixbuf);
+        return nil;
+    }
+
+    Bitmap* bm = new Bitmap;
+    BitmapRep* b = bm->rep_;
+    Display* d = Session::instance() ? Session::instance()->default_display() : nil;
+    b->display_ = d;
+    b->pwidth_ = (unsigned int)width;
+    b->pheight_ = (unsigned int)height;
+    b->width_ = d ? d->to_coord(width) : Coord(width);
+    b->height_ = d ? d->to_coord(height) : Coord(height);
+    b->left_ = 0;
+    b->right_ = b->width_;
+    b->bottom_ = 0;
+    b->top_ = b->height_;
+    b->modified_ = false;
+    b->surface_ = cairo_image_surface_create(CAIRO_FORMAT_A1, width, height);
+
+    const guchar* pixels = gdk_pixbuf_read_pixels(pixbuf);
+    const int rowstride = gdk_pixbuf_get_rowstride(pixbuf);
+    const int nchan = gdk_pixbuf_get_n_channels(pixbuf);
+    const gboolean has_alpha = gdk_pixbuf_get_has_alpha(pixbuf);
+
+    cairo_surface_flush(b->surface_);
+    unsigned char* data = cairo_image_surface_get_data(b->surface_);
+    const int stride = cairo_image_surface_get_stride(b->surface_);
+    memset(data, 0, (size_t)stride * height);
+
+    for (int y = 0; y < height; ++y) {
+        const guchar* row = pixels + y * rowstride;
+        for (int x = 0; x < width; ++x) {
+            const guchar* p = row + x * nchan;
+            const int alpha = has_alpha ? p[nchan - 1] : 255;
+            const int luminance = (int)p[0] + (int)p[1] + (int)p[2];
+            const bool on = alpha >= 128 && luminance < (3 * 128);
+            if (on) {
+                data[y * stride + x / 8] |= (1 << (x % 8));
+            }
+        }
+    }
+    cairo_surface_mark_dirty(b->surface_);
+    g_object_unref(pixbuf);
+    return bm;
+}
+
 Bitmap::Bitmap(const void* data, unsigned int width, unsigned int height, int x, int y) {
     BitmapRep* b = new BitmapRep;
     rep_ = b;

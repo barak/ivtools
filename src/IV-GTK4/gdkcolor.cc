@@ -134,6 +134,15 @@ boolean Color::distinguished(const Color* c) const {
     return distinguished(Session::instance()->default_display(), c);
 }
 
+int Color::PixelValue() const {
+    ColorIntensity r, g, b;
+    intensities(r, g, b);
+    unsigned long red = (unsigned long)(Math::min(r, 1.0f) * 255.0f);
+    unsigned long green = (unsigned long)(Math::min(g, 1.0f) * 255.0f);
+    unsigned long blue = (unsigned long)(Math::min(b, 1.0f) * 255.0f);
+    return (int)((red << 16) | (green << 8) | blue);
+}
+
 void Color::intensities(ColorIntensity& r, ColorIntensity& g, ColorIntensity& b) const {
     intensities(Session::instance()->default_display(), r, g, b);
 }

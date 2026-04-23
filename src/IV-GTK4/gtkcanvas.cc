@@ -46,6 +46,10 @@ implementPtrList(ClipStack, cairo_region_t)
 TextRenderInfo CanvasRep::text_;
 PathRenderInfo CanvasRep::path_;
 
+XDisplay* CanvasRep::dpy() const {
+    return (display_ && display_->rep()) ? &display_->rep()->display_ : nullptr;
+}
+
 /* ================================================================== */
 /* class Canvas                                                         */
 /* ================================================================== */

@@ -154,6 +154,8 @@ public:
 
     /* ABI compat */
     CanvasLocation status_;
+
+    XDisplay* dpy() const;
 };
 
 #include <InterViews/_leave.h>

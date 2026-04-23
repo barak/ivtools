@@ -158,3 +158,19 @@ void Raster::flushrect(IntCoord /*l*/, IntCoord /*b*/,
 }
 
 boolean Raster::init_shared_memory() { return false; }
+
+void gtk_rasterrep_free_shared_memory_compat(
+    Display&, void*
+) __asm__("_ZN11ivRasterRep18free_shared_memoryER9ivDisplayR15XShmSegmentInfo");
+
+void gtk_rasterrep_free_shared_memory_compat(Display&, void*) {}
+
+boolean gtk_rasterrep_init_shared_memory_compat(
+    unsigned int&, Display&, void*, unsigned int, unsigned int, void*&, unsigned long
+) __asm__("_ZN11ivRasterRep18init_shared_memoryERjR9ivDisplayR15XShmSegmentInfojjRP7_XImagem");
+
+boolean gtk_rasterrep_init_shared_memory_compat(
+    unsigned int&, Display&, void*, unsigned int, unsigned int, void*&, unsigned long
+) {
+    return false;
+}
