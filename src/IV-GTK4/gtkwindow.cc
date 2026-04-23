@@ -1658,6 +1658,11 @@ void DisplayRep::init(GdkDisplay* dpy) {
     display_ = dpy;
     screen_  = 0;
     root_    = nullptr; /* no root surface concept on Wayland */
+    style_      = nullptr;
+    grabbers_   = new GrabList;
+    damaged_    = new DamageList;
+    selections_ = new SelectionList;
+    wtable_     = new WindowTable(256);
 
     /* Physical screen dimensions */
     GdkMonitor* monitor = nullptr;
@@ -1695,12 +1700,6 @@ void DisplayRep::init(GdkDisplay* dpy) {
         width_  = Coord(pwidth_)  * Coord(pixel);
         height_ = Coord(pheight_) * Coord(pixel);
     }
-
-    wtable_     = new WindowTable(256);
-    grabbers_   = nullptr;
-    damaged_    = nullptr;
-    selections_ = nullptr;
-    style_      = nullptr;
 
     /* Create the default WindowVisual */
     WindowVisualInfo vi;
