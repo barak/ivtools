@@ -1,3 +1,6 @@
+#ifdef IV_USE_GTK4_BACKEND
+#include <IV-GTK4/gdkraster.h>
+#else
 /*
  * Copyright (c) 1987, 1988, 1989, 1990, 1991 Stanford University
  * Copyright (c) 1991 Silicon Graphics, Inc.
@@ -32,6 +35,7 @@
 // should be defined externally
 #if !defined(__CYGWIN__) /* &&(!defined(__APPLE__)||__GNUC__>2) */
 #define XSHM
+#endif
 #endif
 
 #include <InterViews/coord.h>

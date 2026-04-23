@@ -46,8 +46,15 @@ implementPtrList(ClipStack, cairo_region_t)
 TextRenderInfo CanvasRep::text_;
 PathRenderInfo CanvasRep::path_;
 
+static void gtk4_canvasrep_sync_compat(CanvasRep* c) {
+    c->xdrawable_ = c->surface_;
+    c->drawbuffer_ = c->surface_;
+    c->copybuffer_ = c->copysurface_ ? c->copysurface_ : c->surface_;
+    c->copygc_ = c->cr_;
+}
+
 XDisplay* CanvasRep::dpy() const {
-    return (display_ && display_->rep()) ? &display_->rep()->display_ : nullptr;
+    return (display_ && display_->rep()) ? display_->rep()->display_ : nullptr;
 }
 
 /* ================================================================== */
@@ -71,15 +78,21 @@ Canvas::Canvas() {
     }
 
     c->surface_        = nullptr;
+    c->xdrawable_      = nullptr;
+    c->drawbuffer_     = nullptr;
     c->cr_             = nullptr;
+    c->copygc_         = nullptr;
     c->widget_cr_      = nullptr;
     c->copysurface_    = nullptr;
+    c->copybuffer_     = nullptr;
     c->clipping_       = cairo_region_create();
     c->empty_          = cairo_region_create();
     c->clippers_       = new ClipStack;
     c->transformers_   = new TransformerStack;
     c->transformed_    = false;
     c->double_buffered_= false;
+    c->clip_.x = c->clip_.y = 0;
+    c->clip_.width = c->clip_.height = 0;
 
     Transformer* identity = new Transformer;
     c->transformers_->append(identity);
@@ -198,12 +211,14 @@ void CanvasRep::bind(boolean double_buffered) {
     cr_      = cairo_create(surface_);
     cairo_set_source_rgb(cr_, 1, 1, 1);
     cairo_paint(cr_);
+    gtk4_canvasrep_sync_compat(this);
 }
 
 void CanvasRep::unbind() {
     if (cr_)          { cairo_destroy(cr_);              cr_          = nullptr; }
     if (surface_)     { cairo_surface_destroy(surface_); surface_     = nullptr; }
     if (copysurface_) { cairo_surface_destroy(copysurface_); copysurface_ = nullptr; }
+    gtk4_canvasrep_sync_compat(this);
 }
 
 void CanvasRep::needs_repair(Window*) {
@@ -337,6 +352,10 @@ void Canvas::clip() {
     r.x = (int)x1; r.y = (int)y1;
     r.width  = (int)(x2 - x1);
     r.height = (int)(y2 - y1);
+    c->clip_.x = (short)r.x;
+    c->clip_.y = (short)r.y;
+    c->clip_.width = (unsigned short)r.width;
+    c->clip_.height = (unsigned short)r.height;
     if (c->clipping_) cairo_region_destroy(c->clipping_);
     c->clipping_ = cairo_region_create_rectangle(&r);
 }

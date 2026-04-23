@@ -195,6 +195,8 @@ Window::Window(Glyph* g) {
     w->wm_delete_ = nil;
     w->widget_ = nullptr;
     w->gtkwindow_ = nullptr;
+    w->xwindow_ = nullptr;
+    w->xtoplevel_ = nullptr;
     w->toplevel_widget_ = nullptr;
     w->xpos_ = 0;
     w->ypos_ = 0;
@@ -1426,11 +1428,11 @@ WindowVisual* WindowVisual::find_visual(Display* d, Style*) {
 
 void WindowVisual::init_color_tables() { }
 
-void WindowVisual::find_color(unsigned long, XColor& xc) {
-    /* Cannot reverse-map a pixel value to RGB without a colormap.
-       Return white as a safe fallback. */
-    xc.red = xc.green = xc.blue = 0xffff;
-    xc.pixel = 0;
+void WindowVisual::find_color(unsigned long pixel, XColor& xc) {
+    xc.red = (unsigned short)(((pixel >> 16) & 0xff) * 257);
+    xc.green = (unsigned short)(((pixel >> 8) & 0xff) * 257);
+    xc.blue = (unsigned short)((pixel & 0xff) * 257);
+    xc.pixel = pixel;
 }
 
 void WindowVisual::find_color(unsigned short r, unsigned short g, unsigned short b,
@@ -1439,7 +1441,9 @@ void WindowVisual::find_color(unsigned short r, unsigned short g, unsigned short
     xc.red   = r;
     xc.green = g;
     xc.blue  = b;
-    xc.pixel = 0; /* unused in GTK4 */
+    xc.pixel = ((unsigned long)(r >> 8) << 16)
+             | ((unsigned long)(g >> 8) << 8)
+             | (unsigned long)(b >> 8);
 }
 
 unsigned long WindowVisual::x_or(const Style& s) const { return x_or_(s); }

@@ -1,3 +1,6 @@
+#ifdef IV_USE_GTK4_BACKEND
+#include <IV-GTK4/gtkselection.h>
+#else
 /*
  * Copyright (c) 1992 Stanford University
  * Copyright (c) 1992 Silicon Graphics, Inc.
@@ -34,6 +37,7 @@ class SelectionManagerRep {
 public:
 #ifdef _DELTA_EXTENSIONS
 #pragma __static_class
+#endif
 #endif
     XDisplay* xdisplay_;
     String* name_;

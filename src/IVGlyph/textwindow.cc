@@ -45,7 +45,7 @@ void TextEditAppWindow::receive(const Event& e)
       name = XGetAtomName(d.display_, atom);
       s = w.display_->find_selection(name);
       // request the selecton
-      s->rep()->request(s, xe.xselectionrequest);
+      s->rep()->request(s, xe);
       XFree(name);
       break;
    case SelectionNotify:
@@ -54,7 +54,7 @@ void TextEditAppWindow::receive(const Event& e)
       name = XGetAtomName(d.display_, atom);
       s = w.display_->find_selection(name);
       // notify about the selection
-      s->rep()->notify(s, xe.xselection);
+      s->rep()->notify(s, xe);
       XFree(name);
    default:
       // pass everything else to Window::receive

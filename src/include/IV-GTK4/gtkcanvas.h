@@ -8,6 +8,7 @@
 
 #include <InterViews/canvas.h>
 #include <IV-GTK4/gdklib.h>
+#include <IV-GTK4/gdkdefs.h>
 
 #include <InterViews/_enter.h>
 
@@ -74,12 +75,16 @@ public:
 
     /* Back-buffer for double-buffering (replaces XDrawable xdrawable_) */
     cairo_surface_t*  surface_;
+    XDrawable         xdrawable_;
+    XDrawable         drawbuffer_;
     /* Drawing context onto the back-buffer */
     cairo_t*          cr_;
+    GC                copygc_;
     /* GTK4 draw-callback context (front buffer / screen) */
     cairo_t*          widget_cr_;
     /* Auxiliary surface for copybuffer (replaces XDrawable copybuffer_) */
     cairo_surface_t*  copysurface_;
+    XDrawable         copybuffer_;
 
     Coord             width_;
     Coord             height_;
@@ -92,6 +97,7 @@ public:
     CanvasDamage      damage_;
 
     /* Current clip rectangle (replaces XRectangle clip_) */
+    XRectangle         clip_;
     cairo_rectangle_int_t clip_rect_;
 
     const Brush*      brush_;

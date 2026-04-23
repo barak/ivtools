@@ -152,7 +152,11 @@
 #include <Attribute/attrlist.h>
 #include <Attribute/attrvalue.h>
 
+#ifdef IV_USE_GTK4_BACKEND
+#include <IV-GTK4/gdkutil.h>
+#else
 #include <X11/keysym.h>
+#endif
 
 #include <stdlib.h>
 #include <string.h>
@@ -869,7 +873,12 @@ Glyph* OverlayKit::MenuPatRect (PSPattern * pat) {
     Resource::ref(brush);
     Color * color = new Color(*(wk.foreground()));
     Resource::ref(color);
-    color->rep(Session::instance()->default_display()->rep()->default_visual_)->stipple_ = pat->rep()->pixmap_;
+    ColorRep* color_rep = color->rep(Session::instance()->default_display()->rep()->default_visual_);
+#ifdef IV_USE_GTK4_BACKEND
+    color_rep->stipple_ = pat->rep()->pixmap_ ? cairo_pattern_create_for_surface(pat->rep()->pixmap_) : nullptr;
+#else
+    color_rep->stipple_ = pat->rep()->pixmap_;
+#endif
     Coord w = (MENU_WIDTH*ivcm);
     Coord h = (MENU_HEIGHT*ivcm);
     

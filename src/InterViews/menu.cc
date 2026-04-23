@@ -36,7 +36,11 @@
 #include <InterViews/patch.h>
 #include <InterViews/window.h>
 #include <OS/list.h>
+#ifdef IV_USE_GTK4_BACKEND
+#include <IV-GTK4/gdkdefs.h>
+#else
 #include <X11/cursorfont.h>
+#endif
 
 declarePtrList(MenuItemList,MenuItem)
 implementPtrList(MenuItemList,MenuItem)

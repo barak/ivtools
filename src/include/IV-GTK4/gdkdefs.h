@@ -188,6 +188,24 @@ typedef IVGdkEvent XClientMessageEvent;
 /* Pixmap type (1-bit surfaces in GTK4 are just cairo_surface_t*) */
 typedef cairo_surface_t * Pixmap;
 
+struct XPoint {
+    short x;
+    short y;
+};
+
+struct XRectangle {
+    short x;
+    short y;
+    unsigned short width;
+    unsigned short height;
+};
+
+struct XImage {
+    cairo_surface_t* surface_;
+    int width;
+    int height;
+};
+
 /* Region type (XRegion → cairo_region_t*) */
 typedef cairo_region_t * Region;
 
@@ -216,6 +234,7 @@ struct _IVWindowVisual;  /* forward */
 #define CoordModeOrigin 0
 
 /* PolyShape */
+#define Convex   0
 #define Complex  0
 #define EvenOddRule 0
 
@@ -223,16 +242,31 @@ struct _IVWindowVisual;  /* forward */
 #define FillSolid     0
 #define FillStippled  1
 
+/* Line style / cap / join / ordering compatibility */
+#define LineSolid 0
+#define CapButt 0
+#define JoinMiter 0
+#define Unsorted 0
+
 /* ZPixmap */
 #define ZPixmap 2
 
 /* PropModeReplace / XA_WM_CLIENT_MACHINE / XA_STRING – unused stubs */
 #define PropModeReplace  0
+#define XA_PRIMARY "PRIMARY"
 #define XA_WM_CLIENT_MACHINE  "WM_CLIENT_MACHINE"
 #define XA_STRING  "STRING"
+#define XA_FULL_NAME "FULL_NAME"
+#define XA_FONT_NAME "FONT_NAME"
+#define XA_FAMILY_NAME "FAMILY_NAME"
+#define XA_POINT_SIZE "POINT_SIZE"
+
+/* X cursor-font IDs used by shared code. */
+#define XC_arrow 2
 
 /* BitmapSuccess */
 #define BitmapSuccess 0
+#define Success 0
 
 /* WhenMapped – backing store hint, ignored in GTK4 */
 #define WhenMapped 1

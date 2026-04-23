@@ -39,15 +39,17 @@
 
 /*
  * GDK-based type aliases replacing core Xlib types.
- * "XDisplay" throughout the codebase maps to GdkDisplay*.
+ * "XDisplay*" throughout the codebase maps to GdkDisplay*.
  * "XWindow" maps to GdkSurface*.
  * "XDrawable" maps to cairo_surface_t*.
  */
+typedef GdkDisplay   XDisplay;
 typedef GdkDisplay   XDisplayType;   /* opaque display connection */
-typedef GdkDisplay * XDisplay;
 typedef GdkSurface * XWindow;
-typedef GdkSurface * XDrawable;
+typedef void *       XDrawable;
 typedef cairo_t *    GC;             /* graphics context is now a cairo context */
+typedef unsigned long XFont;
+typedef int XScreen;
 
 /* Atom: GDK doesn't use numeric atoms; use string-keyed GdkAtom */
 typedef const char * Atom;
@@ -59,6 +61,20 @@ typedef const char * Atom;
 
 /* Pixel value: colours are represented as GdkRGBA, not indices */
 typedef unsigned long Pixel;
+
+/* Dummy XColor replacement – carries RGBA-compatible component values. */
+struct XColor {
+    unsigned short red;
+    unsigned short green;
+    unsigned short blue;
+    unsigned char  flags;
+    unsigned char  pad;
+    unsigned long  pixel;
+};
+
+#define DoRed   1
+#define DoGreen 2
+#define DoBlue  4
 
 /* Coordinate types */
 typedef int          PixelCoord;

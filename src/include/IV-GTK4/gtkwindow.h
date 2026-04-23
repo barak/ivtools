@@ -69,15 +69,6 @@ struct WindowVisualInfo {
     int          depth_;      /* colour depth in bits */
 };
 
-/* Dummy XColor replacement – carries the RGBA values for ColorRep */
-struct XColor {
-    unsigned short red;
-    unsigned short green;
-    unsigned short blue;
-    /* alpha is carried separately in ColorRep */
-    unsigned long  pixel; /* unused in GTK4, kept for API compat */
-};
-
 /* Forward declaration needed for declarePtrList */
 class WindowVisual;
 
@@ -144,6 +135,8 @@ public:
     /* GTK4 widget pointers replacing XWindow xwindow_ / xtoplevel_ */
     GtkWidget*  widget_;          /* drawing area for this window */
     GtkWidget*  gtkwindow_;       /* top-level GtkWindow (may == widget_) */
+    XWindow     xwindow_;
+    XWindow     xtoplevel_;
 
     /* Position / size – kept in pixel coords as before */
     int         xpos_;

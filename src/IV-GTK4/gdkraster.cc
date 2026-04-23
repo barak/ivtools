@@ -14,9 +14,24 @@
 #include <InterViews/raster.h>
 #include <InterViews/session.h>
 #include <IV-GTK4/gdklib.h>
+#include <IV-GTK4/gdkdefs.h>
 #include <IV-GTK4/gdkdisplay.h>
 #include <IV-GTK4/gdkraster.h>
 #include <OS/math.h>
+
+static void gtk4_rasterrep_sync_compat(RasterRep* r) {
+    r->pixmap_ = r->surface_;
+    if (r->gc_ != nullptr) {
+        cairo_destroy(r->gc_);
+    }
+    r->gc_ = r->surface_ ? cairo_create(r->surface_) : nullptr;
+    if (r->image_ == nullptr) {
+        r->image_ = new XImage;
+    }
+    r->image_->surface_ = r->surface_;
+    r->image_->width = (int)r->pwidth_;
+    r->image_->height = (int)r->pheight_;
+}
 
 /* ================================================================== */
 /* class Raster                                                         */
@@ -35,6 +50,9 @@ Raster::Raster(unsigned long width, unsigned long height) {
     r->top_           = (Coord)height;
     r->width_         = (Coord)width;
     r->height_        = (Coord)height;
+    r->image_         = nullptr;
+    r->pixmap_        = nullptr;
+    r->gc_            = nullptr;
     r->shared_memory_ = false;
 
     r->surface_ = cairo_image_surface_create(
@@ -44,6 +62,7 @@ Raster::Raster(unsigned long width, unsigned long height) {
     cairo_set_operator(cr, CAIRO_OPERATOR_CLEAR);
     cairo_paint(cr);
     cairo_destroy(cr);
+    gtk4_rasterrep_sync_compat(r);
 }
 
 Raster::Raster(const Raster& src) {
@@ -60,6 +79,9 @@ Raster::Raster(const Raster& src) {
     r->top_           = s.top_;
     r->width_         = s.width_;
     r->height_        = s.height_;
+    r->image_         = nullptr;
+    r->pixmap_        = nullptr;
+    r->gc_            = nullptr;
     r->shared_memory_ = false;
 
     r->surface_ = cairo_image_surface_create(
@@ -68,6 +90,7 @@ Raster::Raster(const Raster& src) {
     cairo_set_source_surface(cr, s.surface_, 0, 0);
     cairo_paint(cr);
     cairo_destroy(cr);
+    gtk4_rasterrep_sync_compat(r);
 }
 
 Raster::~Raster() {
@@ -76,6 +99,12 @@ Raster::~Raster() {
         cairo_surface_destroy(r.surface_);
         r.surface_ = nullptr;
     }
+    if (r.gc_) {
+        cairo_destroy(r.gc_);
+        r.gc_ = nullptr;
+    }
+    delete r.image_;
+    r.image_ = nullptr;
     delete rep_;
 }
 

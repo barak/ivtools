@@ -1,3 +1,6 @@
+#ifdef IV_USE_GTK4_BACKEND
+#include <IV-GTK4/gdkdefs.h>
+#else
 #undef boolean
 #undef Bitmap
 #undef Colormap
@@ -16,3 +19,4 @@
 #define Font XFont
 #define Screen XScreen
 #define Window XWindow
+#endif

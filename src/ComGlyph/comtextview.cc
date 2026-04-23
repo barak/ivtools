@@ -56,8 +56,12 @@
 using std::cerr;
 using std::cout;
 
+#ifdef IV_USE_GTK4_BACKEND
+#include <IV-GTK4/gdkutil.h>
+#else
 #define XK_MISCELLANY           /* to get the keysym's we need */
 #include <X11/keysymdef.h>
+#endif
 
 // Note: Sun-specific keyboard symbols
 static TE_ViewKeySymInfo default_key_sym_map[] = {
@@ -259,4 +263,3 @@ void ComTE_View::newline()
   delete out; 
   delete[] buffer;
 }
-

@@ -26,6 +26,9 @@ public:
     Coord            height_;
     unsigned int     pwidth_;
     unsigned int     pheight_;
+    XImage*          image_;
+    Pixmap           pixmap_;
+    GC               gc_;
 
     /*
      * surface_ replaces XImage* image_ + Pixmap pixmap_.

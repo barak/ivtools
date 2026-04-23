@@ -7,6 +7,7 @@
 #define iv_gtkpainter_h
 
 #include <IV-GTK4/gdklib.h>
+#include <IV-GTK4/gdkdefs.h>
 
 class Brush;
 class Pattern;
@@ -34,7 +35,7 @@ public:
     Display*    display;
 
     /* Clip rectangle (replaces XRectangle xclip[1]) */
-    cairo_rectangle_int_t xclip[1];
+    XRectangle xclip[1];
 
     /* Cairo-specific: fill pattern (replaces X11 pattern stipple) */
     cairo_pattern_t* fill_pattern_;

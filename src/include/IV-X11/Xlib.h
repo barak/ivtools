@@ -1,3 +1,6 @@
+#ifdef IV_USE_GTK4_BACKEND
+#include <IV-GTK4/gdkdefs.h>
+#else
 /*
  * Copyright (c) 1987, 1988, 1989, 1990, 1991 Stanford University
  * Copyright (c) 1991 Silicon Graphics, Inc.
@@ -41,6 +44,7 @@ struct _XDisplayAtoms;
 struct _XContextDB;
 struct _XIMFilter;
 struct _XrmHashBucketRec;
+#endif
 #endif
 
 #ifdef __DECCXX

@@ -1,3 +1,6 @@
+#ifdef IV_USE_GTK4_BACKEND
+#include <IV-GTK4/gtkwindow.h>
+#else
 /*
  * Copyright (c) 1987, 1988, 1989, 1990, 1991 Stanford University
  * Copyright (c) 1991 Silicon Graphics, Inc.
@@ -67,6 +70,7 @@ class WindowVisual {
 public:
 #ifdef _DELTA_EXTENSIONS
 #pragma __static_class
+#endif
 #endif
     WindowVisual(const WindowVisualInfo&);
     ~WindowVisual();

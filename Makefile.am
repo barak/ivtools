@@ -148,8 +148,8 @@ libUniIdraw_la_LIBADD		= libUnidraw.la libIV.la
 libUnidraw_common_la_LIBADD	= libIV.la
 libUnidraw_la_LIBADD		= libIV.la $(X11_LD) $(GTK4_LIBS)
 
-IVSTD_INCLUDES = -I$(srcdir)/src -I$(srcdir)/src/include -I$(srcdir)/src/include/ivstd
-IV2_6_INCLUDES = -Div2_6_compatible -I$(srcdir)/src -I$(srcdir)/src/include/IV-2_6 -I$(srcdir)/src/include -I$(srcdir)/src/include/ivstd
+IVSTD_INCLUDES = $(BACKEND_CPPFLAGS) -I$(srcdir)/src -I$(srcdir)/src/include -I$(srcdir)/src/include/ivstd
+IV2_6_INCLUDES = $(BACKEND_CPPFLAGS) -Div2_6_compatible -I$(srcdir)/src -I$(srcdir)/src/include/IV-2_6 -I$(srcdir)/src/include -I$(srcdir)/src/include/ivstd
 
 ### Backend-specific source files
 if BACKEND_GTK4
@@ -158,8 +158,8 @@ src/IV-GTK4/gdkbitmap.cc src/IV-GTK4/gtkbrush.cc src/IV-GTK4/gtkcanvas.cc	\
 src/IV-GTK4/gdkcolor.cc src/IV-GTK4/gdkcursor.cc src/IV-GTK4/gtkdrag.cc	\
 src/IV-GTK4/gdkevent.cc src/IV-GTK4/gdkfont.cc src/IV-GTK4/gdkraster.cc	\
 src/IV-GTK4/gtkreqerr.cc src/IV-GTK4/gtkselection.cc src/IV-GTK4/gtkwindow.cc	\
-src/IV-GTK4/gtkpainter.cc src/IV-GTK4/gtkpattern.cc
-BACKEND_CPPFLAGS = $(GTK4_CFLAGS)
+src/IV-GTK4/gtkpainter.cc src/IV-GTK4/gtkpattern.cc src/IV-GTK4/gdkxcompat.cc
+BACKEND_CPPFLAGS = $(GTK4_CFLAGS) -DIV_USE_GTK4_BACKEND
 ### IV-2_6 backend sources for GTK4: replaces xbitmap2_6, xevent2_6, xinter, xpainter, xpattern
 IV26_BACKEND_SOURCES = \
 src/IV-GTK4/gtkevent2_6.cc src/IV-GTK4/gtkinter.cc

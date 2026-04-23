@@ -1,3 +1,6 @@
+#ifdef IV_USE_GTK4_BACKEND
+#include <IV-GTK4/gdkundefs.h>
+#else
 #undef Bitmap
 #undef Colormap
 #undef Cursor
@@ -19,4 +22,5 @@
 
 #ifdef iv__2_6_h
 #include <IV-2_6/_names.h>
+#endif
 #endif

@@ -34,6 +34,7 @@
 
 #include <InterViews/canvas.h>
 #include <IV-X11/xcanvas.h>
+#include <IV-X11/Xutil.h>
 #include <IV-2_6/InterViews/painter.h>
 
 /*****************************************************************************/
@@ -68,5 +69,4 @@ void OverlayDamage::DrawAreas () {
     }
     c->xdrawable_ = c->copybuffer_;
 }    
-
 
