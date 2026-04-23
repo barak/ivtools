@@ -146,7 +146,7 @@ void gtk_selection_request_x11_compat(
 void gtk_selection_request_x11_compat(
     SelectionManagerRep* rep, SelectionManager* s, const void* xe
 ) {
-    rep->request(s, *reinterpret_cast<const XEvent*>(xe));
+    rep->request(s, *reinterpret_cast<const XSelectionRequestEvent*>(xe));
 }
 
 void gtk_selection_notify_x11_compat(
@@ -156,7 +156,7 @@ void gtk_selection_notify_x11_compat(
 void gtk_selection_notify_x11_compat(
     SelectionManagerRep* rep, SelectionManager* s, const void* xe
 ) {
-    rep->notify(s, *reinterpret_cast<const XEvent*>(xe));
+    rep->notify(s, *reinterpret_cast<const XSelectionEvent*>(xe));
 }
 
 /* class SelectionHandler */
