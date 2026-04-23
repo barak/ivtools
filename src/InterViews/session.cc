@@ -41,6 +41,9 @@
 #include <ctype.h>
 #include <cstdio>
 #include <stdlib.h>
+#ifdef IV_USE_GTK4_BACKEND
+#include <IV-GTK4/gdklib.h>
+#endif
 
 #ifdef sgi
 #include <malloc.h>
@@ -156,6 +159,9 @@ private:
     void init_display(Display* display = nil);
     void connect(Display*);
     void set_style(Display*);
+    boolean uses_native_event_loop() const;
+    void wait_for_backend_event();
+    boolean wait_for_backend_event(long&, long&);
     boolean check(Event&);
 };
 
@@ -245,7 +251,10 @@ void Session::disconnect(Display* d) {
     long n = list.count();
     for (long i = 0; i < n; i++) {
 	if (list.item(i) == d) {
-	    Dispatcher::instance().unlink(d->fd());
+            int fd = d->fd();
+            if (fd >= 0) {
+	        Dispatcher::instance().unlink(fd);
+            }
 	    d->close();
 	    list.remove(i);
 	    break;
@@ -341,7 +350,7 @@ void Session::read(Event& e, boolean (*test)()) {
     boolean save = rep_->readinput_;
     rep_->readinput_ = false;
     while (!rep_->done_ && !rep_->check(e) && !rep_->done_) {
-	Dispatcher::instance().dispatch();
+	rep_->wait_for_backend_event();
 	if (test && (*test)()) return;
     }
     rep_->readinput_ = save;
@@ -363,7 +372,10 @@ boolean Session::read(long sec, long usec, Event& e, boolean (*test)()) {
 	    rep_->readinput_ = save;
 	    return false;
 	}
-	Dispatcher::instance().dispatch(sec_left, usec_left);
+        if (!rep_->wait_for_backend_event(sec_left, usec_left)) {
+            rep_->readinput_ = save;
+            return false;
+        }
 	if (test && (*test)()) return true;
     }
     rep_->readinput_ = save;
@@ -384,7 +396,10 @@ boolean Session::read(long* sec, long* usec, Event& e, boolean (*test)()) {
 	    rep_->readinput_ = save;
 	    return false;
 	}
-	Dispatcher::instance().dispatch(*sec, *usec);
+        if (!rep_->wait_for_backend_event(*sec, *usec)) {
+            rep_->readinput_ = save;
+            return false;
+        }
 	if (test && (*test)()) return true;
     }
     rep_->readinput_ = save;
@@ -767,8 +782,77 @@ void SessionRep::init_display(Display* display) {
 
 void SessionRep::connect(Display* d) {
     set_style(d);
-    Dispatcher::instance().link(
-	d->fd(), Dispatcher::ReadMask, new SessionIOHandler(this, d)
-    );
+    int fd = d->fd();
+    if (fd >= 0) {
+        Dispatcher::instance().link(
+	    fd, Dispatcher::ReadMask, new SessionIOHandler(this, d)
+        );
+    }
     displays_->append(d);
+}
+
+boolean SessionRep::uses_native_event_loop() const {
+#ifdef IV_USE_GTK4_BACKEND
+    return default_ != nil && default_->fd() < 0;
+#else
+    return false;
+#endif
+}
+
+void SessionRep::wait_for_backend_event() {
+#ifdef IV_USE_GTK4_BACKEND
+    if (uses_native_event_loop()) {
+        g_main_context_iteration(nullptr, TRUE);
+        return;
+    }
+#endif
+    Dispatcher::instance().dispatch();
+}
+
+boolean SessionRep::wait_for_backend_event(long& sec, long& usec) {
+#ifdef IV_USE_GTK4_BACKEND
+    if (uses_native_event_loop()) {
+        const long timeout_usec = sec * 1000000L + usec;
+        if (g_main_context_pending(nullptr)) {
+            while (g_main_context_pending(nullptr)) {
+                g_main_context_iteration(nullptr, FALSE);
+            }
+            sec = 0;
+            usec = 0;
+            return true;
+        }
+        if (timeout_usec <= 0) {
+            return false;
+        }
+        const long slice_usec = 10000L;
+        long waited_usec = 0;
+        while (
+            !done_ && !g_main_context_pending(nullptr) &&
+            waited_usec < timeout_usec
+        ) {
+            long sleep_usec = timeout_usec - waited_usec;
+            if (sleep_usec > slice_usec) {
+                sleep_usec = slice_usec;
+            }
+            g_usleep((gulong)sleep_usec);
+            waited_usec += sleep_usec;
+        }
+        long remaining_usec = timeout_usec - waited_usec;
+        if (remaining_usec < 0) {
+            remaining_usec = 0;
+        }
+        sec = remaining_usec / 1000000L;
+        usec = remaining_usec % 1000000L;
+        if (g_main_context_pending(nullptr)) {
+            while (g_main_context_pending(nullptr)) {
+                g_main_context_iteration(nullptr, FALSE);
+            }
+            sec = 0;
+            usec = 0;
+            return true;
+        }
+        return false;
+    }
+#endif
+    return Dispatcher::instance().dispatch(sec, usec);
 }

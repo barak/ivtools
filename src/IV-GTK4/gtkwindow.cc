@@ -1660,11 +1660,10 @@ void DisplayRep::init(GdkDisplay* dpy) {
     root_    = nullptr; /* no root surface concept on Wayland */
 
     /* Physical screen dimensions */
-    GdkMonitor* monitor = gdk_display_get_monitor_at_surface(dpy, nullptr);
-    if (!monitor) {
-        GListModel* monitors = gdk_display_get_monitors(dpy);
-        if (g_list_model_get_n_items(monitors) > 0)
-            monitor = GDK_MONITOR(g_list_model_get_item(monitors, 0));
+    GdkMonitor* monitor = nullptr;
+    GListModel* monitors = gdk_display_get_monitors(dpy);
+    if (monitors && g_list_model_get_n_items(monitors) > 0) {
+        monitor = GDK_MONITOR(g_list_model_get_item(monitors, 0));
     }
 
     if (monitor) {
@@ -1686,7 +1685,8 @@ void DisplayRep::init(GdkDisplay* dpy) {
             dpi = (double)pwidth_ * 25.4 / (double)width_mm;
         }
     }
-    set_dpi(dpi > 0 ? *(Coord*)&dpi : *(Coord*)nullptr);
+    Coord dpi_coord = Coord(dpi > 0 ? dpi : 96.0);
+    set_dpi(dpi_coord);
 
     /* Compute coord dimensions directly (to_coord is a Display method) */
     {
@@ -1709,6 +1709,9 @@ void DisplayRep::init(GdkDisplay* dpy) {
     vi.depth_   = 24;
     default_visual_ = new WindowVisual(vi);
     visuals_.append(default_visual_);
+    if (monitor) {
+        g_object_unref(monitor);
+    }
 }
 
 void DisplayRep::set_dpi(Coord& /*dpi*/) {
