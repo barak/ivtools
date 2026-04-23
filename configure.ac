@@ -31,6 +31,9 @@ AC_ARG_WITH([backend],
        [AS_HELP_STRING([--with-backend=BACKEND],[graphics backend: x11 or gtk4 (default: x11)])],,
        [with_backend=x11])
 AC_MSG_RESULT([${with_backend}])
+AS_CASE([${with_backend}],
+  [x11|gtk4], [],
+  [AC_MSG_ERROR([Unknown backend '${with_backend}'; supported backends are x11 and gtk4])])
 
 # Checks for programs.
 AC_LANG([C++])
@@ -70,7 +73,7 @@ AS_IF([test "x${with_backend}" = xgtk4],
      CXXFLAGS="${GTK4_CFLAGS} ${CXXFLAGS}"],
     [AC_MSG_ERROR([Cannot find GTK4 library; install libgtk-4-dev and try again])])])
 
-AS_IF([test "x${with_backend}" != xgtk4],
+AS_IF([test "x${with_backend}" = xx11],
  [AC_CHECK_LIB([X11], [XOpenDisplay], [X11_LD=-lX11], [AC_MSG_ERROR([Cannot find X11 library])])
   AC_CHECK_LIB([Xext], [XextFindDisplay], [XEXT_LD=-lXext], [AC_MSG_ERROR([Cannot find Xext library])])])
 
@@ -111,7 +114,7 @@ AS_IF([test ${with_clippoly} != no],
 AM_CONDITIONAL([HAVE_LIBACE], [test ${with_ace} = yes])
 AM_CONDITIONAL([HAVE_LIBCLIPPOLY], [test ${with_clippoly} = yes])
 AM_CONDITIONAL([BACKEND_GTK4], [test "x${with_backend}" = xgtk4])
-AM_CONDITIONAL([BACKEND_X11], [test "x${with_backend}" != xgtk4])
+AM_CONDITIONAL([BACKEND_X11], [test "x${with_backend}" = xx11])
 
 AC_SUBST(X11_LD)
 AC_SUBST(XEXT_LD)
