@@ -140,7 +140,7 @@ libFrameUnidraw_la_LIBADD	= libAttribute.la libComGlyph.la libComTerp.la libComU
 libGraphUnidraw_la_LIBADD	= libAttribute.la libComTerp.la libComUnidraw.la libIVGlyph.la libOverlayUnidraw.la libTopoFace.la libUniIdraw.la libUnidraw.la libIV.la libComUtil.la
 libIVGlyph_la_LIBADD		= libIV.la $(X11_LD)
 libIV_common_la_LIBADD		=
-libIV_la_LIBADD			= $(TIFF_LD) $(XEXT_LD) $(X11_LD) $(MATH_LD)
+libIV_la_LIBADD			= $(TIFF_LD) $(XEXT_LD) $(X11_LD) $(MATH_LD) $(FREETYPE_LIBS) $(FONTCONFIG_LIBS)
 libOverlayUnidraw_la_LIBADD	= libAttrGlyph.la libAttribute.la libComGlyph.la libComTerp.la libIVGlyph.la libTopoFace.la libUniIdraw.la libUnidraw.la libIV.la libComUtil.la $(ACE_LD) $(CLIPPOLY_LD) $(X11_LD) $(MATH_LD)
 libTime_la_LIBADD		= libIVGlyph.la libIV.la
 libTopoFace_la_LIBADD		= libUnidraw.la libIV.la
@@ -324,8 +324,7 @@ libIV_la_CPPFLAGS = \
 libIVPART1_la_SOURCES = src/InterViews/psfont.cc
 
 libIVPART1_la_CPPFLAGS = \
- \
- -Dps_metrics_dir='"$(PSFontDir)"' \
+ $(FREETYPE_CFLAGS) $(FONTCONFIG_CFLAGS) \
  -I$(srcdir)/src/IV $(IVSTD_INCLUDES)
 
 libIVPART2_la_SOURCES = src/InterViews/dialogs.cc src/InterViews/kit.cc
