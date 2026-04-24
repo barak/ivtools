@@ -965,8 +965,8 @@ void WindowRep::do_bind(Window* w, GtkWidget* /*parent*/, int left, int top) {
         /* Create drawing area as the window's content */
         GtkWidget* da = gtk_drawing_area_new();
         gtk_window_set_child(GTK_WINDOW(win), da);
-        gtk_drawing_area_set_content_width(GTK_DRAWING_AREA(da),  c.pwidth_);
-        gtk_drawing_area_set_content_height(GTK_DRAWING_AREA(da), c.pheight_);
+        if (c.pwidth_  > 0) gtk_drawing_area_set_content_width(GTK_DRAWING_AREA(da),  c.pwidth_);
+        if (c.pheight_ > 0) gtk_drawing_area_set_content_height(GTK_DRAWING_AREA(da), c.pheight_);
         gtk_drawing_area_set_draw_func(GTK_DRAWING_AREA(da), on_draw, w, nullptr);
 
         /* GTK4 resize: listen to size-allocate on the drawing area */
@@ -993,8 +993,8 @@ void WindowRep::do_bind(Window* w, GtkWidget* /*parent*/, int left, int top) {
            For simplicity, treat as a floating overlay widget.
            This is sufficient for popups that are children of a window. */
         GtkWidget* da = gtk_drawing_area_new();
-        gtk_drawing_area_set_content_width(GTK_DRAWING_AREA(da),  c.pwidth_);
-        gtk_drawing_area_set_content_height(GTK_DRAWING_AREA(da), c.pheight_);
+        if (c.pwidth_  > 0) gtk_drawing_area_set_content_width(GTK_DRAWING_AREA(da),  c.pwidth_);
+        if (c.pheight_ > 0) gtk_drawing_area_set_content_height(GTK_DRAWING_AREA(da), c.pheight_);
         gtk_drawing_area_set_draw_func(GTK_DRAWING_AREA(da), on_draw, w, nullptr);
         g_signal_connect(da, "resize", G_CALLBACK(on_resize), w);
         attach_controllers(da, w);
@@ -1053,6 +1053,11 @@ static void on_draw(GtkDrawingArea*, cairo_t* cr, int w, int h, gpointer data)
     /* Store the GTK4 draw context so finish_repair() can blit to it */
     c->widget_cr_ = cr;
     dispatch_event(win, xe);
+    /* GTK4 draw callbacks must paint synchronously.  The Expose dispatch
+       above sets up the layout (resize) and marks the canvas damaged, but
+       does not actually draw.  Repair now while widget_cr_ is still valid
+       so that glyph_->draw() results are blitted to the screen. */
+    win->repair();
     c->widget_cr_ = nullptr;
 }
 
@@ -1477,6 +1482,11 @@ Display* Display::open(const String& s) {
 
 Display::Display(DisplayRep* d) {
     rep_ = d;
+    /* Initialize to a safe 96-DPI default so that to_pixels() always
+       returns a well-defined (positive) value even before set_screen() or
+       set_dpi() have been called via Display::style(). */
+    pixel_ = Coord(72.0 / 96.0);   /* points per pixel at 96 DPI */
+    point_ = Coord(96.0 / 72.0);   /* pixels per point  at 96 DPI */
 }
 
 Display* Display::open() {
@@ -1713,8 +1723,24 @@ void DisplayRep::init(GdkDisplay* dpy) {
     }
 }
 
-void DisplayRep::set_dpi(Coord& /*dpi*/) {
-    /* dpi is configured via Display::set_dpi() in display.cc */
+void DisplayRep::set_dpi(Coord& pixel_out) {
+    /* pixel_out is Display::pixel_: points per pixel = 72 / dpi.
+       Compute dpi from the primary GDK monitor; fall back to 96 dpi. */
+    double dpi = 96.0;
+    if (display_) {
+        GdkMonitor* monitor = nullptr;
+        GListModel* monitors = gdk_display_get_monitors(display_);
+        if (monitors && g_list_model_get_n_items(monitors) > 0)
+            monitor = GDK_MONITOR(g_list_model_get_item(monitors, 0));
+        if (monitor) {
+            int width_mm = gdk_monitor_get_width_mm(monitor);
+            if (width_mm > 0 && pwidth_ > 0)
+                dpi = (double)pwidth_ * 25.4 / (double)width_mm;
+            g_object_unref(monitor);
+        }
+    }
+    if (dpi <= 0.0) dpi = 96.0;
+    pixel_out = Coord(72.0 / dpi);
 }
 
 void DisplayRep::needs_repair(Window* w) {

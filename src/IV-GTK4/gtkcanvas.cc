@@ -221,10 +221,8 @@ void CanvasRep::unbind() {
     gtk4_canvasrep_sync_compat(this);
 }
 
-void CanvasRep::needs_repair(Window*) {
-    /* In GTK4 we request a redraw via gtk_widget_queue_draw() on the
-       associated widget.  That callback is wired in gtkwindow.cc. */
-    /* Stub: actual wiring is done by WindowRep */
+void CanvasRep::needs_repair(Window* w) {
+    if (display_) display_->rep()->needs_repair(w);
 }
 
 void CanvasRep::swapbuffers() {
