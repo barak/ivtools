@@ -26,12 +26,6 @@ AC_ARG_WITH([clippoly],
        [with_clippoly=check])
 AC_MSG_RESULT([${with_clippoly}])
 
-AC_MSG_CHECKING([PSFontDir])
-AC_ARG_WITH([PSFontDir],
-       [AS_HELP_STRING([--with-PSFontDir=PATH],[colon-separated dirs for font metrics (default: searches)])],,
-       [with_PSFontDir=check])
-AC_MSG_RESULT([${with_PSFontDir}])
-
 # Checks for programs.
 AC_LANG([C++])
 AC_PROG_CXX
@@ -78,6 +72,14 @@ AS_IF([test ${with_ace} != no],
 AC_CHECK_LIB([tiff], [TIFFOpen],
   [TIFF_LD=-ltiff],
   [AC_MSG_ERROR([Cannot find tiff library])])
+
+PKG_CHECK_MODULES([FREETYPE], [freetype2],
+  [],
+  [AC_MSG_ERROR([Cannot find FreeType2 library])])
+
+PKG_CHECK_MODULES([FONTCONFIG], [fontconfig],
+  [],
+  [AC_MSG_ERROR([Cannot find Fontconfig library])])
 
 AS_IF([test ${with_clippoly} != no],
  [AC_CHECK_LIB([clippoly], [clippoly_version],
@@ -133,44 +135,6 @@ AC_CHECK_FUNCS([bzero floor getcwd gethostbyname gethostname \
 gettimeofday isascii memchr memmove memset munmap pow realpath \
 regcomp select socket sqrt strcasecmp strchr strcspn strdup strerror \
 strncasecmp strrchr strstr strtol uname hypot hypotf])
-
-# Checks for locations
-AS_IF([test x"${with_PSFontDir}" = xcheck],
- [AC_MSG_NOTICE([scanning for PS font metric directories])
-  PSFontDir=""
-  for d in \
-    /usr/share/texlive/texmf-dist/fonts/afm/* \
-    /usr/share/texlive/texmf-dist/fonts/afm/*/* \
-    /usr/share/texlive/texmf-dist/fonts/afm/*/*/* \
-    /usr/share/texmf/fonts/afm/*/* \
-    /usr/share/texmf/fonts/type1/*/* \
-    /usr/share/fonts/type1/* \
-    /usr/share/fonts/X11/Type1 \
-    /usr/share/matplotlib/mpl-data/fonts/afm \
-    /usr/share/matplotlib/mpl-data/fonts/pdfcorefonts \
-    /usr/share/enscript/afm \
-    /usr/share/groff/*/font/devps \
-    /usr/share/groff/*/oldfont/devps \
-    /usr/share/ghostscript/fonts \
-    /usr/lib/ghostscript/fonts \
-    /usr/lib/ps \
-    /usr/lib/X11/fonts/Type1Adobe/afm \
-    /Library/Fonts \
-    /System/Library/Fonts; do
-    if test -d "$d"; then
-      if test -z "$PSFontDir"; then
-        PSFontDir="$d"
-      else
-        PSFontDir="${PSFontDir}:$d"
-      fi
-    fi
-  done
-  if test -z "$PSFontDir"; then
-    AC_MSG_ERROR([cannot find any PS font directory])
-  fi
-  AC_MSG_NOTICE([Using PSFontDir ${PSFontDir}])],
- [PSFontDir="${with_PSFontDir}"])
-AC_SUBST(PSFontDir)
 
 # Random noise-control options.
 AX_CFLAGS_WARN_ALL
