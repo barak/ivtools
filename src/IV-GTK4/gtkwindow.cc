@@ -64,6 +64,9 @@
 
 using std::cerr;
 
+/* Default screen DPI used when the monitor reports no physical size. */
+static const double DEFAULT_SCREEN_DPI = 96.0;
+
 implementTable(WindowTable, GtkWidgetKey, Window*)
 implementPtrList(WindowVisualList, WindowVisual)
 
@@ -1485,8 +1488,8 @@ Display::Display(DisplayRep* d) {
     /* Initialize to a safe 96-DPI default so that to_pixels() always
        returns a well-defined (positive) value even before set_screen() or
        set_dpi() have been called via Display::style(). */
-    pixel_ = Coord(72.0 / 96.0);   /* points per pixel at 96 DPI */
-    point_ = Coord(96.0 / 72.0);   /* pixels per point  at 96 DPI */
+    pixel_ = Coord(72.0 / DEFAULT_SCREEN_DPI);   /* points per pixel */
+    point_ = Coord(DEFAULT_SCREEN_DPI / 72.0);   /* pixels per point */
 }
 
 Display* Display::open() {
@@ -1726,7 +1729,7 @@ void DisplayRep::init(GdkDisplay* dpy) {
 void DisplayRep::set_dpi(Coord& pixel_out) {
     /* pixel_out is Display::pixel_: points per pixel = 72 / dpi.
        Compute dpi from the primary GDK monitor; fall back to 96 dpi. */
-    double dpi = 96.0;
+    double dpi = DEFAULT_SCREEN_DPI;
     if (display_) {
         GdkMonitor* monitor = nullptr;
         GListModel* monitors = gdk_display_get_monitors(display_);
@@ -1739,7 +1742,7 @@ void DisplayRep::set_dpi(Coord& pixel_out) {
             g_object_unref(monitor);
         }
     }
-    if (dpi <= 0.0) dpi = 96.0;
+    if (dpi <= 0.0) dpi = DEFAULT_SCREEN_DPI;
     pixel_out = Coord(72.0 / dpi);
 }
 
