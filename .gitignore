@@ -2,6 +2,7 @@ DARWIN
 Makefile
 a.out
 *.o
+*.o-[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]
 config.log
 config.status
 config/config-darwin-gcc.defs
@@ -204,8 +205,6 @@ LINUX/
 config/config-linux-gcc.defs
 src/utils/DARWIN/ivtmpnam
 src/IV/DARWIN/mkg3states
-src/GraphUnidraw/DARWIN/graphcmds.o-7f5490ff
-src/iclass/DARWIN/classinfo.o-9f882d1e
 # autotools generated files
 autom4te.cache/
 configure~
@@ -259,3 +258,4 @@ src/include/Makefile.in
 /refman.pdf
 /stdcmapppm
 /pkgconfig/*.pc
+.DS_Store
