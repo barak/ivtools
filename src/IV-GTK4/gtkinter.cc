@@ -102,6 +102,9 @@ void Interactor::draw(Canvas* c, const Allocation& a) const {
                     (int)pwidth, (int)pheight);
                 gtk_widget_queue_allocate(wr.widget_);
             }
+            /* Recreate the drawing context at the new position/size on the
+               (possibly reallocated) top-level backing surface. */
+            wr.init_renderer(i->window);
             i->xmax = (int)pwidth  - 1;
             i->ymax = (int)pheight - 1;
             i->Resize();
@@ -278,9 +281,22 @@ void InteractorWindow::bind() {
     }
     WindowRep& w = *Window::rep();
     if (parent_ != nil) {
+        /* Sub-window: share the top-level's Cairo backing surface rather
+           than creating an orphaned GtkWidget that would never be rendered.
+           Populate only the fields that bound(), init_renderer() and
+           needs_repair() rely on; skip do_bind() entirely. */
         WindowRep& pw = *parent_->Window::rep();
-        w.toplevel_ = pw.toplevel_;
-        w.do_bind(this, pw.widget_, w.xpos_, w.ypos_);
+        w.toplevel_        = pw.toplevel_;
+        w.display_         = pw.display_;
+        w.canvas_->rep()->display_ = pw.display_;
+        w.toplevel_widget_ = pw.toplevel_widget_;
+        w.visual_          = pw.visual_;
+        if (!w.style_)
+            w.style_ = pw.style_;
+        w.parent_window_   = parent_;
+        /* Sub-windows have no GtkWidget of their own. */
+        w.widget_          = nullptr;
+        w.gtkwindow_       = nullptr;
     } else {
         w.do_bind(this, nullptr, w.xpos_, w.ypos_);
     }

@@ -210,6 +210,7 @@ Window::Window(Glyph* g) {
     w->cursor_ = defaultCursor;
     w->cursor_stack_ = new WindowCursorStack;
     w->toplevel_ = this;
+    w->parent_window_ = nullptr;
     w->canvas_ = new Canvas;
     w->canvas_->rep()->window_ = this;
 }
@@ -416,9 +417,14 @@ void Window::unbind() {
 
 boolean Window::bound() const {
     WindowRep& w = *rep();
-    if (!w.widget_) return false;
-    if (w.toplevel_ == this) return true;
-    /* check that the top-level window is still registered */
+    if (w.toplevel_ == this) {
+        /* Top-level window: must have its own GTK widget. */
+        return w.widget_ != nullptr;
+    }
+    /* Sub-window: it has no widget_ of its own; instead it draws
+       directly into the top-level's backing surface.  Consider it bound
+       as long as the top-level window is still registered in the table. */
+    if (!w.toplevel_widget_) return false;
     GtkWidgetKey top_key = widget_to_key(w.toplevel_widget_);
     Window* toplevel_found;
     if (w.display_ &&
@@ -1016,6 +1022,38 @@ void WindowRep::do_bind(Window* w, GtkWidget* /*parent*/, int left, int top) {
 void WindowRep::init_renderer(Window* w) {
     CanvasRep& c = *w->canvas()->rep();
     c.unbind();
+
+    /* Sub-windows (InteractorWindows created inside another window) share
+       the top-level's Cairo backing surface.  We create a translated drawing
+       context onto that surface so that Painter calls render directly into
+       the correct region without requiring a separate surface or an explicit
+       compositing step. */
+    if (parent_window_ != nullptr) {
+        CanvasRep* pc = toplevel_ ? toplevel_->canvas()->rep() : nullptr;
+        if (pc && pc->surface_) {
+            /* Walk up the parent chain to compute the absolute pixel offset
+               within the top-level surface. */
+            int abs_x = xpos_;
+            int abs_y = ypos_;
+            Window* p = parent_window_;
+            while (p && p != toplevel_) {
+                abs_x += p->rep()->xpos_;
+                abs_y += p->rep()->ypos_;
+                p = p->rep()->parent_window_;
+            }
+            c.cr_ = cairo_create(pc->surface_);
+            cairo_translate(c.cr_, (double)abs_x, (double)abs_y);
+            /* Sync the compat pointers (copygc_ etc.) used by Painter. */
+            c.copygc_ = c.cr_;
+            c.xdrawable_  = pc->surface_;
+            c.drawbuffer_ = pc->surface_;
+            c.copybuffer_ = pc->surface_;
+            return;
+        }
+        /* Top-level surface not yet allocated (race during startup); fall
+           through to allocate a private surface as a temporary fallback. */
+    }
+
     c.bind(style_ && style_->value_is_on("double_buffered"));
 }
 
@@ -1752,8 +1790,11 @@ void DisplayRep::needs_repair(Window* w) {
        dispatch_event() returns.  Queuing another draw here would create
        a continuous 60-fps redraw loop, so we skip it. */
     if (w->canvas()->rep()->widget_cr_) return;
-    /* Trigger a GTK queue-draw on the window's drawing area */
-    GtkWidget* da = w->rep()->widget_;
+    WindowRep* wr = w->rep();
+    /* Sub-windows have no widget_ of their own; they draw into the
+       top-level's surface.  Queue a redraw on the top-level drawing area
+       so the screen is updated. */
+    GtkWidget* da = (wr->toplevel_ != w) ? wr->toplevel_widget_ : wr->widget_;
     if (da) gtk_widget_queue_draw(da);
 }
 

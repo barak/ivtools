@@ -144,6 +144,12 @@ public:
 
     Window*     toplevel_;
     GtkWidget*  toplevel_widget_;
+    /* For sub-windows (InteractorWindows) that draw into the top-level's
+       backing surface rather than their own: pointer to the direct parent
+       Window.  Used by init_renderer() to walk up the parent chain and
+       compute the absolute pixel offset within the top-level surface.
+       nullptr for top-level windows. */
+    Window*     parent_window_;
 
     /* Mapping state */
     boolean placed_       : 1;
