@@ -186,6 +186,14 @@ void Interactor::pick(Canvas*, const Allocation& a, int depth, Hit& h) {
     {
         Event& e = *(Event*)ep;
         e.GetInfo();
+        /* GTK4 delivers pointer events in top-level window coordinates,
+           not per-canvas coordinates like X11 sub-windows do.  Subtract
+           the canvas offset so that e.x/e.y become canvas-local. */
+        if (window != nil) {
+            WindowRep* wr = window->Window::rep();
+            e.x -= (IntCoord)wr->xpos_;
+            e.y -= (IntCoord)wr->ypos_;
+        }
         Sensor* s = cursensor == nil ? input_ : cursensor;
         if ((s != nil && s->Caught(e)) || grabbing) {
             e.target = this;
