@@ -432,6 +432,10 @@ void EventRep::locate() {
                     }
                 }
             }
+            /* Populate xkey.x/y so that GetKeyInfo() returns correct
+               window-relative pixel coordinates (matching X11 behaviour). */
+            const_cast<XEvent&>(xe).xkey.x = (int)x;
+            const_cast<XEvent&>(xe).xkey.y = (int)y;
         }
         root_x = x; root_y = y;
         has_root_location = false;

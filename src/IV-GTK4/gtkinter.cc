@@ -157,6 +157,11 @@ void Interactor::undraw() {
             } else {
                 window->unbind();
             }
+        } else if (window->bound()) {
+            /* Sub-window sharing the top-level surface: no GTK widget to
+               hide, just mark the canvas as unmapped so Interactor::draw()
+               knows it needs to be re-initialised next time it is drawn. */
+            canvas->rep()->status_ = Canvas::unmapped;
         }
     }
 }
@@ -590,8 +595,9 @@ void Scene::Place(
 
     Display* d = window->display();
     InteractorWindow* iw = i->window;
+    bool already_bound = (iw != nil && iw->bound());
     GtkWidget* old_widget = nullptr;
-    if (iw != nil && iw->bound()) {
+    if (already_bound) {
         old_widget = iw->Window::rep()->widget_;
     } else {
         iw = new InteractorWindow(i, canvas->window());
@@ -610,11 +616,16 @@ void Scene::Place(
     c->width_   = d->to_coord(width);
     c->height_  = d->to_coord(height);
 
-    if (old_widget == nullptr) {
+    if (!already_bound) {
         iw->bind();
-    } else {
+    } else if (old_widget) {
+        /* Top-level sub-window with its own GtkWidget: resize it. */
         gtk_widget_set_size_request(old_widget, (int)width, (int)height);
         gtk_widget_queue_allocate(old_widget);
+    } else {
+        /* Sub-window sharing the top-level Cairo surface: update the
+           translated drawing context to reflect the new position/size. */
+        w->init_renderer(iw);
     }
     i->xmax = (int)width  - 1;
     i->ymax = (int)height - 1;
