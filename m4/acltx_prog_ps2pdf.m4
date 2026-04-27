@@ -23,7 +23,7 @@ else
 fi
 if test $ps2pdf = "no" ;
 then
-ifelse($#,0,[AC_MSG_ERROR([Unable to find the ps2pdf application])],
+	ifelse($#,0,[AC_MSG_ERROR([Unable to find the ps2pdf application])],
         $1)
 fi
 ])
