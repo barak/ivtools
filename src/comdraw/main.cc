@@ -337,11 +337,12 @@ int main (int argc, char** argv) {
 #endif
 
 	fprintf(stderr, "ivtools-%s comdraw: see \"man comdraw\" or type help here for command info\n", VersionString);
+#ifndef IV_USE_GTK4_BACKEND
 	XSync(unidraw->GetWorld()->display()->rep()->display_,false);
+#endif
 	unidraw->Run();
     }
 
     delete unidraw;
     return exit_status;
 }
-

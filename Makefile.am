@@ -133,23 +133,54 @@ libAttrGlyph_la_LIBADD		= libAttribute.la libIVGlyph.la libUnidraw.la libIV.la
 libAttribute_la_LIBADD		= libUnidraw.la libIV.la libComUtil.la
 libComGlyph_la_LIBADD		= libAttribute.la libComTerp.la libIVGlyph.la libIV.la libComUtil.la
 libComTerp_la_LIBADD		= libAttribute.la libTime.la libUnidraw.la libIV.la libComUtil.la $(ACE_LD) $(MATH_LD)
-libComUnidraw_la_LIBADD		= libAttribute.la libComGlyph.la libComTerp.la libIVGlyph.la libOverlayUnidraw.la libUniIdraw.la libUnidraw.la libIV.la libComUtil.la $(ACE_LD) $(X11_LD)
+libComUnidraw_la_LIBADD		= libAttribute.la libComGlyph.la libComTerp.la libIVGlyph.la libOverlayUnidraw.la libUniIdraw.la libUnidraw.la libIV.la libComUtil.la $(ACE_LD) $(BACKEND_X11_LIBS) $(GTK4_LIBS)
 libComUtil_la_LIBADD		= 
 libDrawServ_la_LIBADD		= libAttribute.la libComTerp.la libComUnidraw.la libFrameUnidraw.la libGraphUnidraw.la libIVGlyph.la libOverlayUnidraw.la libTopoFace.la libUniIdraw.la libUnidraw.la libIV.la libComUtil.la $(ACE_LD)
 libFrameUnidraw_la_LIBADD	= libAttribute.la libComGlyph.la libComTerp.la libComUnidraw.la libIVGlyph.la libOverlayUnidraw.la libUniIdraw.la libUnidraw.la libIV.la libComUtil.la
 libGraphUnidraw_la_LIBADD	= libAttribute.la libComTerp.la libComUnidraw.la libIVGlyph.la libOverlayUnidraw.la libTopoFace.la libUniIdraw.la libUnidraw.la libIV.la libComUtil.la
-libIVGlyph_la_LIBADD		= libIV.la $(X11_LD)
+libIVGlyph_la_LIBADD		= libIV.la $(BACKEND_X11_LIBS) $(GTK4_LIBS)
 libIV_common_la_LIBADD		=
-libIV_la_LIBADD			= $(TIFF_LD) $(XEXT_LD) $(X11_LD) $(MATH_LD) $(FREETYPE_LIBS) $(FONTCONFIG_LIBS)
-libOverlayUnidraw_la_LIBADD	= libAttrGlyph.la libAttribute.la libComGlyph.la libComTerp.la libIVGlyph.la libTopoFace.la libUniIdraw.la libUnidraw.la libIV.la libComUtil.la $(ACE_LD) $(CLIPPOLY_LD) $(X11_LD) $(MATH_LD)
+libIV_la_LIBADD			= $(TIFF_LD) $(FREETYPE_LIBS) $(FONTCONFIG_LIBS) $(BACKEND_XEXT_LIBS) $(BACKEND_X11_LIBS) $(GTK4_LIBS) $(MATH_LD)
+libOverlayUnidraw_la_LIBADD	= libAttrGlyph.la libAttribute.la libComGlyph.la libComTerp.la libIVGlyph.la libTopoFace.la libUniIdraw.la libUnidraw.la libIV.la libComUtil.la $(ACE_LD) $(CLIPPOLY_LD) $(BACKEND_X11_LIBS) $(GTK4_LIBS) $(MATH_LD)
 libTime_la_LIBADD		= libIVGlyph.la libIV.la
 libTopoFace_la_LIBADD		= libUnidraw.la libIV.la
 libUniIdraw_la_LIBADD		= libUnidraw.la libIV.la
 libUnidraw_common_la_LIBADD	= libIV.la
-libUnidraw_la_LIBADD		= libIV.la $(X11_LD)
+libUnidraw_la_LIBADD		= libIV.la $(BACKEND_X11_LIBS) $(GTK4_LIBS)
 
-IVSTD_INCLUDES = -I$(srcdir)/src -I$(srcdir)/src/include -I$(srcdir)/src/include/ivstd
-IV2_6_INCLUDES = -Div2_6_compatible -I$(srcdir)/src -I$(srcdir)/src/include/IV-2_6 -I$(srcdir)/src/include -I$(srcdir)/src/include/ivstd
+IVSTD_INCLUDES = $(BACKEND_CPPFLAGS) -I$(srcdir)/src -I$(srcdir)/src/include -I$(srcdir)/src/include/ivstd
+IV2_6_INCLUDES = $(BACKEND_CPPFLAGS) -Div2_6_compatible -I$(srcdir)/src -I$(srcdir)/src/include/IV-2_6 -I$(srcdir)/src/include -I$(srcdir)/src/include/ivstd
+
+### Backend-specific source files
+if BACKEND_GTK4
+BACKEND_X11_LIBS =
+BACKEND_XEXT_LIBS =
+BACKEND_X11_PROGRAM_LIBS =
+BACKEND_SOURCES = \
+src/IV-GTK4/gdkbitmap.cc src/IV-GTK4/gtkbrush.cc src/IV-GTK4/gtkcanvas.cc	\
+src/IV-GTK4/gdkcolor.cc src/IV-GTK4/gdkcursor.cc src/IV-GTK4/gtkdrag.cc	\
+src/IV-GTK4/gdkevent.cc src/IV-GTK4/gdkfont.cc src/IV-GTK4/gdkraster.cc	\
+src/IV-GTK4/gtkreqerr.cc src/IV-GTK4/gtkselection.cc src/IV-GTK4/gtkwindow.cc	\
+src/IV-GTK4/gtkpainter.cc src/IV-GTK4/gtkpattern.cc src/IV-GTK4/gdkxcompat.cc
+BACKEND_CPPFLAGS = $(GTK4_CFLAGS) -DIV_USE_GTK4_BACKEND
+### IV-2_6 backend sources for GTK4: replaces xbitmap2_6, xevent2_6, xinter, xpainter, xpattern
+IV26_BACKEND_SOURCES = \
+src/IV-GTK4/gtkevent2_6.cc src/IV-GTK4/gtkinter.cc
+else
+BACKEND_X11_LIBS = $(X11_LD)
+BACKEND_XEXT_LIBS = $(XEXT_LD)
+BACKEND_X11_PROGRAM_LIBS = $(BACKEND_XEXT_LIBS) $(BACKEND_X11_LIBS)
+BACKEND_SOURCES = \
+src/IV-X11/xbitmap.cc src/IV-X11/xbrush.cc src/IV-X11/xcanvas.cc	\
+src/IV-X11/xcolor.cc src/IV-X11/xcursor.cc src/IV-X11/xdrag.cc		\
+src/IV-X11/xevent.cc src/IV-X11/xfont.cc src/IV-X11/xraster.cc		\
+src/IV-X11/xreqerr.cc src/IV-X11/xselection.cc src/IV-X11/xwindow.cc
+BACKEND_CPPFLAGS =
+### IV-2_6 backend sources for X11
+IV26_BACKEND_SOURCES = \
+src/IV-2_6/xbitmap2_6.cc src/IV-2_6/xevent2_6.cc \
+src/IV-2_6/xinter.cc src/IV-2_6/xpainter.cc src/IV-2_6/xpattern.cc
+endif
 
 ### libComTerp
 
@@ -319,7 +350,7 @@ libIV_la_CPPFLAGS = \
  -DABSLIBALLDIR='"$(pkgdatadir)"' \
  -DRELLIBALLDIR='"lib/$(PACKAGE)"' \
  -DX_LIBDIR='"$(libdir)"' \
- -I$(srcdir)/src/IV $(IVSTD_INCLUDES)
+ $(BACKEND_CPPFLAGS) -I$(srcdir)/src/IV $(IVSTD_INCLUDES)
 
 libIVPART1_la_SOURCES = src/InterViews/psfont.cc
 
@@ -356,12 +387,8 @@ src/IV-2_6/strbrowser.cc src/IV-2_6/strchooser.cc			\
 src/IV-2_6/streditor.cc src/IV-2_6/subject.cc src/IV-2_6/textbuffer.cc	\
 src/IV-2_6/textdisplay.cc src/IV-2_6/texteditor.cc			\
 src/IV-2_6/tform2_6.cc src/IV-2_6/tray.cc src/IV-2_6/viewport.cc	\
-src/IV-2_6/world.cc src/IV-2_6/xbitmap2_6.cc src/IV-2_6/xevent2_6.cc	\
-src/IV-2_6/xinter.cc src/IV-2_6/xpainter.cc src/IV-2_6/xpattern.cc	\
-src/IV-X11/xbitmap.cc src/IV-X11/xbrush.cc src/IV-X11/xcanvas.cc	\
-src/IV-X11/xcolor.cc src/IV-X11/xcursor.cc src/IV-X11/xdrag.cc		\
-src/IV-X11/xevent.cc src/IV-X11/xfont.cc src/IV-X11/xraster.cc		\
-src/IV-X11/xreqerr.cc src/IV-X11/xselection.cc src/IV-X11/xwindow.cc	\
+src/IV-2_6/world.cc $(IV26_BACKEND_SOURCES)				\
+$(BACKEND_SOURCES)						\
 src/InterViews/action.cc src/InterViews/adjust.cc			\
 src/InterViews/aggr.cc src/InterViews/align.cc				\
 src/InterViews/alloctbl.cc src/InterViews/arrcomp.cc			\
@@ -397,7 +424,7 @@ src/OS/host.cc src/OS/listimpl.cc src/OS/math.cc src/OS/memory.cc	\
 src/OS/string.cc src/OS/ustring.cc
 
 libIVPART3_la_CPPFLAGS = \
- -I$(srcdir)/src/IV $(IVSTD_INCLUDES)
+ $(BACKEND_CPPFLAGS) -I$(srcdir)/src/IV $(IVSTD_INCLUDES)
 
 libIVPART4_la_SOURCES = src/InterViews/tiff.cc
 
@@ -721,20 +748,20 @@ stdcmapppm_CPPFLAGS	=
 
 # AM_LDFLAGS =
 
-comdraw_LDADD	= libComUnidraw.la libComTerp.la libOverlayUnidraw.la libUnidraw.la $(ACEDISPATCH_LA) libIV.la $(ACE_LD) $(X11_LD) $(XEXT_LD) $(MATH_LD)
-comterp_LDADD	= libComTerp.la libTopoFace.la libUnidraw.la $(ACE_LD) $(MATH_LD)
-comtest_LDADD	= libAttribute.la libComTerp.la libComUtil.la
-dclock_LDADD	= libIV.la $(X11_LD) $(XEXT_LD) $(MATH_LD)
-drawserv_LDADD	= libDrawServ.la libFrameUnidraw.la libGraphUnidraw.la libOverlayUnidraw.la libComUnidraw.la libUnidraw.la libComTerp.la $(ACEDISPATCH_LA) libIV.la $(ACE_LD) $(X11_LD) $(XEXT_LD) $(MATH_LD)
-drawtool_LDADD	= libAceDispatch.la libOverlayUnidraw.la libUnidraw.la libComTerp.la libIV.la $(ACE_LD) $(X11_LD) $(XEXT_LD) $(MATH_LD)
-flipbook_LDADD	= libFrameUnidraw.la libComUnidraw.la libOverlayUnidraw.la libUnidraw.la libComTerp.la $(ACEDISPATCH_LA) libIV.la $(ACE_LD) $(X11_LD) $(XEXT_LD) $(MATH_LD)
-gclock_LDADD	= libTime.la libIV.la $(X11_LD) $(XEXT_LD) $(MATH_LD)
-glyphterp_LDADD= libIVGlyph.la libComGlyph.la libIV.la $(X11_LD) $(XEXT_LD) $(MATH_LD)
-graphdraw_LDADD= libGraphUnidraw.la libComUnidraw.la libAceDispatch.la libComTerp.la libOverlayUnidraw.la libUnidraw.la libIV.la $(ACE_LD) $(X11_LD) $(XEXT_LD) $(MATH_LD)
-iclass_LDADD	= libIV.la $(X11_LD) $(XEXT_LD) $(MATH_LD)
-idemo_LDADD	= libIV.la $(X11_LD) $(XEXT_LD) $(MATH_LD)
-idraw_LDADD	= libUniIdraw.la libUnidraw.la $(X11_LD) $(XEXT_LD) $(MATH_LD)
-ivtext_LDADD	= libIVGlyph.la libIV.la $(X11_LD) $(XEXT_LD) $(MATH_LD)
+comdraw_LDADD	= libComUnidraw.la libComTerp.la libOverlayUnidraw.la libUnidraw.la $(ACEDISPATCH_LA) libIV.la $(ACE_LD) $(MATH_LD) $(BACKEND_X11_PROGRAM_LIBS)
+comterp_LDADD	= libComTerp.la libTopoFace.la libUnidraw.la $(ACE_LD) $(MATH_LD) $(BACKEND_X11_PROGRAM_LIBS)
+comtest_LDADD	= libAttribute.la libComTerp.la libComUtil.la $(BACKEND_X11_PROGRAM_LIBS)
+dclock_LDADD	= libIV.la $(MATH_LD) $(BACKEND_X11_PROGRAM_LIBS)
+drawserv_LDADD	= libDrawServ.la libFrameUnidraw.la libGraphUnidraw.la libOverlayUnidraw.la libComUnidraw.la libUnidraw.la libComTerp.la $(ACEDISPATCH_LA) libIV.la $(ACE_LD) $(MATH_LD) $(BACKEND_X11_PROGRAM_LIBS)
+drawtool_LDADD	= libAceDispatch.la libOverlayUnidraw.la libUnidraw.la libComTerp.la libIV.la $(ACE_LD) $(MATH_LD) $(BACKEND_X11_PROGRAM_LIBS)
+flipbook_LDADD	= libFrameUnidraw.la libComUnidraw.la libOverlayUnidraw.la libUnidraw.la libComTerp.la $(ACEDISPATCH_LA) libIV.la $(ACE_LD) $(MATH_LD) $(BACKEND_X11_PROGRAM_LIBS)
+gclock_LDADD	= libTime.la libIV.la $(MATH_LD) $(BACKEND_X11_PROGRAM_LIBS)
+glyphterp_LDADD= libIVGlyph.la libComGlyph.la libIV.la $(MATH_LD) $(BACKEND_X11_PROGRAM_LIBS)
+graphdraw_LDADD= libGraphUnidraw.la libComUnidraw.la libAceDispatch.la libComTerp.la libOverlayUnidraw.la libUnidraw.la libIV.la $(ACE_LD) $(MATH_LD) $(BACKEND_X11_PROGRAM_LIBS)
+iclass_LDADD	= libIV.la $(MATH_LD) $(BACKEND_X11_PROGRAM_LIBS)
+idemo_LDADD	= libIV.la $(MATH_LD) $(BACKEND_X11_PROGRAM_LIBS)
+idraw_LDADD	= libUniIdraw.la libUnidraw.la $(MATH_LD) $(BACKEND_X11_PROGRAM_LIBS)
+ivtext_LDADD	= libIVGlyph.la libIV.la $(MATH_LD) $(BACKEND_X11_PROGRAM_LIBS)
 stdcmapppm_LDADD=
 
 ### directories to recurse into, for installation of include files

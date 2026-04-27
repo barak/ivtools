@@ -124,8 +124,7 @@ void Editor::keystroke(const Event& e) {
 	buf[n] = '\0';
 	GetKeyMap()->Execute(buf);
     } else if (e.rep()->xevent_.type == KeyPress) {
-      KeySym ks = XKeycodeToKeysym(e.rep()->display_->rep()->display_,
-				   e.rep()->xevent_.xkey.keycode, 0);
+      unsigned long ks = e.keysym();
       if (ks) {
 	strncpy(buf, (const char*)&ks, 2);
 	n = 2;

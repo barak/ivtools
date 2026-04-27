@@ -47,8 +47,12 @@
 #include <cstdio>
 #include <string.h>
 
+#ifdef IV_USE_GTK4_BACKEND
+#include <IV-GTK4/gdkutil.h>
+#else
 #define XK_MISCELLANY           /* to get the keysym's we need */
 #include <X11/keysymdef.h>
+#endif
 
 // key maps
 static TE_ViewKeyInfo default_key_map[] = {

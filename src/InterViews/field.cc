@@ -54,9 +54,13 @@
 #include <IV-X11/xwindow.h>
 #include <IV-X11/xcanvas.h>
 #include <InterViews/window.h>
+#ifdef IV_USE_GTK4_BACKEND
+#include <IV-GTK4/gdkutil.h>
+#else
 extern "C" {
 #include <X11/Xatom.h>
 }
+#endif
 
 #include <OS/math.h>
 #include <OS/string.h>
@@ -230,6 +234,9 @@ void FieldStringEditor::do_rate_scroll(Event& e) {
 }
 
 void FieldStringEditor::do_xselection_request(Event& e) {
+#ifdef IV_USE_GTK4_BACKEND
+  (void)e;
+#else
   int origin = display->Left(0, 0);
   int width = display->Width();
   Poll(e);
@@ -249,9 +256,13 @@ void FieldStringEditor::do_xselection_request(Event& e) {
   Atom target_property = XInternAtom(disp, "PASTESTRING", false);
   int ret = XConvertSelection(disp, XA_PRIMARY, XA_STRING, target_property,
 			      win, e.rep()->xevent_.xbutton.time);
+#endif
 }
 
 void FieldStringEditor::do_xselection_paste(const Event& e) {
+#ifdef IV_USE_GTK4_BACKEND
+  (void)e;
+#else
   XDisplay* disp = GetWorld()->display()->rep()->display_;
   unsigned int win = GetCanvas()->rep()->window_->rep()->xwindow_;
   Atom target_property = XInternAtom(disp, "PASTESTRING", false);
@@ -267,6 +278,7 @@ void FieldStringEditor::do_xselection_paste(const Event& e) {
     InsertText((char*) data, strlen((char*)data));
     XFree(data);
   }
+#endif
 }
 
 

@@ -111,6 +111,12 @@ IV-X11/Xdefs.h IV-X11/Xext.h IV-X11/xpainter.h IV-X11/xbrush.h		\
 IV-X11/Xundefs.h IV-X11/xevent.h IV-X11/xpattern.h IV-X11/xwindow.h	\
 IV-X11/xraster.h IV-X11/xdrag.h IV-X11/xfont.h IV-X11/xcursor.h		\
 IV-X11/Xlib.h IV-X11/xbitmap.h IV-X11/xselection.h IV-X11/Xutil.h	\
+IV-GTK4/gdklib.h IV-GTK4/gdkutil.h IV-GTK4/gdkdefs.h IV-GTK4/gdkundefs.h	\
+IV-GTK4/gtkwindow.h IV-GTK4/gtkcanvas.h IV-GTK4/gdkevent.h			\
+IV-GTK4/gdkdisplay.h IV-GTK4/gdkcolor.h IV-GTK4/gdkfont.h			\
+IV-GTK4/gdkcursor.h IV-GTK4/gdkraster.h IV-GTK4/gdkbitmap.h		\
+IV-GTK4/gtkpainter.h IV-GTK4/gtkbrush.h IV-GTK4/gtkselection.h		\
+IV-GTK4/gtkdrag.h IV-GTK4/gtkpattern.h					\
 ivstd/iosfwd ivstd/signal.h ivstd/string.h ivstd/leakchecker.h		\
 ivstd/malloc.h ivstd/stdio.h ivstd/math.h ivstd/nan.h			\
 ivstd/iostream.h ivstd/fstream.h ivstd/osfcn.h ivstd/stdlib.h		\

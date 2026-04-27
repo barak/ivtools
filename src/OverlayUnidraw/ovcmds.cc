@@ -1123,15 +1123,21 @@ void OvWindowDumpAsCmd::Execute () {
 		style->attribute("caption", "");
 		style->attribute("caption", "Couldn't save to file!" );
             } else {
+#ifdef IV_USE_GTK4_BACKEND
+	      /* xwd is an X11-only utility; xwindow_ is not an X11 window ID
+	         in the GTK4 backend.  Report the limitation instead. */
+	      style->attribute("caption", "Window dump requires X11 backend.");
+#else
 	      char cmdbuf[CHARBUFSIZE];
 	      sprintf(cmdbuf, "xwd -id %ld -out %s",
-		     ed->GetViewer()->GetCanvas()->window()->rep()->xwindow_,
+		     (long)(ed->GetViewer()->GetCanvas()->window()->rep()->xwindow_),
 		     name);
 	      ed->GetWindow()->cursor(hourglass);
 	      chooser_->twindow()->cursor(hourglass);
 	      system(cmdbuf);
 	      ed->GetWindow()->cursor(arrow);
 	      chooser_->twindow()->cursor(arrow);
+#endif
 	      break;
             }
         }

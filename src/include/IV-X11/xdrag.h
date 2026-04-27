@@ -1,3 +1,6 @@
+#ifdef IV_USE_GTK4_BACKEND
+#include <IV-GTK4/gtkdrag.h>
+#else
 /*
  * Copyright (c) 1992 Redwood Design Automation
  *
@@ -35,4 +38,5 @@ public:
 
 #include <InterViews/_leave.h>
 
+#endif
 #endif

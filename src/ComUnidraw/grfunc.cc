@@ -67,7 +67,11 @@
 #include <IV-X11/Xlib.h>
 #include <IV-X11/xdisplay.h>
 #include <IV-X11/xfont.h>
+#ifdef IV_USE_GTK4_BACKEND
+#include <IV-GTK4/gdkutil.h>
+#else
 #include <X11/Xatom.h>
+#endif
 
 #include <Attribute/aliterator.h>
 #include <Attribute/attrlist.h>
@@ -1668,4 +1672,3 @@ void FlipVerticalFunc::execute() {
 
     execute_log(cmd);
 }
-

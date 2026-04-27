@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 # Header
-AC_PREREQ([2.72])
+AC_PREREQ([2.71])
 
 AC_INIT([InterViews Application Framework and Drawing Tools],[2.1.1],[johnston@vectaport.com],[ivtools],[http://www.ivtools.org])
 
@@ -25,6 +25,15 @@ AC_ARG_WITH([clippoly],
        [AS_HELP_STRING([--with-clippoly],[use the CLIPPOLY library (default: check)])],,
        [with_clippoly=check])
 AC_MSG_RESULT([${with_clippoly}])
+
+AC_MSG_CHECKING([with_backend])
+AC_ARG_WITH([backend],
+       [AS_HELP_STRING([--with-backend=BACKEND],[graphics backend: x11 or gtk4 (default: x11)])],,
+       [with_backend=x11])
+AC_MSG_RESULT([${with_backend}])
+AS_CASE([${with_backend}],
+  [x11|gtk4], [],
+  [AC_MSG_ERROR([Unknown backend '${with_backend}'; supported backends are x11 and gtk4])])
 
 # Checks for programs.
 AC_LANG([C++])
@@ -51,14 +60,27 @@ AM_CONDITIONAL([PS2PDF], [test x$ps2pdf != xno])
 LT_INIT
 
 # Checks for libraries.
-AC_PATH_XTRA
-CFLAGS="${X_CFLAGS} ${CFLAGS}"
-CXXFLAGS="${X_CFLAGS} ${CXXFLAGS}"
-LDFLAGS="${X_LIBS} ${LDFLAGS}"
+AS_IF([test "x${with_backend}" = xx11],
+ [AC_PATH_XTRA
+  CFLAGS="${X_CFLAGS} ${CFLAGS}"
+  CXXFLAGS="${X_CFLAGS} ${CXXFLAGS}"
+  LDFLAGS="${X_LIBS} ${LDFLAGS}"])
 
 AC_CHECK_LIB([m], [pow], [MATH_LD=-lm], [AC_MSG_WARN([Cannot find math library])])
-AC_CHECK_LIB([X11], [XOpenDisplay], [X11_LD=-lX11], [AC_MSG_ERROR([Cannot find X11 library])])
-AC_CHECK_LIB([Xext], [XextFindDisplay], [XEXT_LD=-lXext], [AC_MSG_ERROR([Cannot find Xext library])])
+
+AS_IF([test "x${with_backend}" = xgtk4],
+ [PKG_CHECK_MODULES([GTK4], [gtk4],
+    [CFLAGS="${GTK4_CFLAGS} ${CFLAGS}"
+     CXXFLAGS="${GTK4_CFLAGS} ${CXXFLAGS}"],
+    [AC_MSG_ERROR([Cannot find GTK4 library; install libgtk-4-dev and try again])])])
+
+AS_IF([test "x${with_backend}" = xx11],
+ [AC_CHECK_LIB([X11], [XOpenDisplay], [X11_LD=-lX11], [AC_MSG_ERROR([Cannot find X11 library])])
+  AC_CHECK_LIB([Xext], [XextFindDisplay], [XEXT_LD=-lXext], [AC_MSG_ERROR([Cannot find Xext library])])])
+
+AS_IF([test "x${with_backend}" = xgtk4],
+ [AC_SUBST(GTK4_CFLAGS)
+  AC_SUBST(GTK4_LIBS)])
 
 AS_IF([test ${with_ace} != no],
  [AC_CHECK_LIB([ACE], [ace_cleanup_destroyer],
@@ -92,6 +114,8 @@ AS_IF([test ${with_clippoly} != no],
 
 AM_CONDITIONAL([HAVE_LIBACE], [test ${with_ace} = yes])
 AM_CONDITIONAL([HAVE_LIBCLIPPOLY], [test ${with_clippoly} = yes])
+AM_CONDITIONAL([BACKEND_GTK4], [test "x${with_backend}" = xgtk4])
+AM_CONDITIONAL([BACKEND_X11], [test "x${with_backend}" = xx11])
 
 AC_SUBST(X11_LD)
 AC_SUBST(XEXT_LD)
