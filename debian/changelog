@@ -1,8 +1,9 @@
 ivtools (2.1.1+git.2025.07.26.a1-2) UNRELEASED; urgency=medium
 
   * Track proposed rewrite to upstream font metric system
+  * Track proposed gtk4 backend
 
- -- Barak A. Pearlmutter <bap@debian.org>  Mon, 27 Apr 2026 11:34:13 +0100
+ -- Barak A. Pearlmutter <bap@debian.org>  Mon, 27 Apr 2026 11:36:39 +0100
 
 ivtools (2.1.1+git.2025.07.26.a1-1) unstable; urgency=medium
 
