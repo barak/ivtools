@@ -1747,6 +1747,11 @@ void DisplayRep::set_dpi(Coord& pixel_out) {
 }
 
 void DisplayRep::needs_repair(Window* w) {
+    /* If we are already executing an on_draw() callback for this window,
+       the repair will happen synchronously in that callback right after
+       dispatch_event() returns.  Queuing another draw here would create
+       a continuous 60-fps redraw loop, so we skip it. */
+    if (w->canvas()->rep()->widget_cr_) return;
     /* Trigger a GTK queue-draw on the window's drawing area */
     GtkWidget* da = w->rep()->widget_;
     if (da) gtk_widget_queue_draw(da);

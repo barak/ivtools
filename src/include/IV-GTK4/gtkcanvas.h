@@ -80,7 +80,11 @@ public:
     /* Drawing context onto the back-buffer */
     cairo_t*          cr_;
     GC                copygc_;
-    /* GTK4 draw-callback context (front buffer / screen) */
+    /* GTK4 draw-callback context (front buffer / screen).
+       Non-null ONLY while on_draw() is executing for this canvas.
+       DisplayRep::needs_repair() checks this to avoid scheduling a
+       redundant gtk_widget_queue_draw() during on_draw(), which would
+       otherwise create a continuous per-frame redraw loop. */
     cairo_t*          widget_cr_;
     /* Auxiliary surface for copybuffer (replaces XDrawable copybuffer_) */
     cairo_surface_t*  copysurface_;
