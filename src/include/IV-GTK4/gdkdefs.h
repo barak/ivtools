@@ -128,6 +128,7 @@ struct IVGdkEvent {
         unsigned int state;
     } xcrossing;
     struct {
+        int x, y;           /* pointer position at time of keypress */
         unsigned int keycode;
         unsigned int state;
         unsigned long keysym;
