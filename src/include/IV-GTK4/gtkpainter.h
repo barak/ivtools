@@ -10,6 +10,7 @@
 #include <IV-GTK4/gdkdefs.h>
 
 class Brush;
+class Canvas;
 class Pattern;
 class Transformer;
 
@@ -36,6 +37,10 @@ public:
 
     /* Clip rectangle (replaces XRectangle xclip[1]) */
     XRectangle xclip[1];
+
+    /* Canvas whose cr_ had cairo_save() called in Painter::Clip().
+       Used by NoClip() to call the matching cairo_restore(). */
+    Canvas*     clipped_canvas_;
 
     /* Cairo-specific: fill pattern (replaces X11 pattern stipple) */
     cairo_pattern_t* fill_pattern_;

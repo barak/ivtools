@@ -40,6 +40,7 @@ PainterRep::PainterRep() {
     overwrite     = false;
     x_or          = false;
     clipped       = false;
+    clipped_canvas_ = nullptr;
     fill_pattern_ = nullptr;
     dashes_       = nullptr;
     n_dashes_     = 0;
@@ -139,13 +140,44 @@ void Painter::SetFont(const Font* f) {
     Unref(font); Resource::ref(f); font = f;
 }
 
-void Painter::Clip(Canvas* /*c*/,
-                   IntCoord /*x0*/, IntCoord /*y0*/,
-                   IntCoord /*x1*/, IntCoord /*y1*/) {
-    /* Clip region support deferred */
+void Painter::Clip(Canvas* c,
+                   IntCoord x0, IntCoord y0,
+                   IntCoord x1, IntCoord y1) {
+    if (!c) return;
+    cairo_t* cr = c->rep()->cr_;
+    if (!cr) return;
+
+    /* If a prior clip is still active, remove it before setting a new one. */
+    if (rep->clipped && rep->clipped_canvas_) {
+        cairo_t* old_cr = rep->clipped_canvas_->rep()->cr_;
+        if (old_cr) cairo_restore(old_cr);
+    }
+
+    /* Map IV-2.6 pixel corners to Cairo pixel coords. */
+    IntCoord mx0, my0, mx1, my1;
+    Map(c, x0, y0, mx0, my0);
+    Map(c, x1, y1, mx1, my1);
+
+    double cx = (double)Math::min(mx0, mx1);
+    double cy = (double)Math::min(my0, my1);   /* smaller Cairo y = top */
+    double cw = (double)(Math::abs(mx1 - mx0) + 1);
+    double ch = (double)(Math::abs(my1 - my0) + 1);
+
+    /* Push a save level so that NoClip() can restore with cairo_restore(). */
+    cairo_save(cr);
+    cairo_rectangle(cr, cx, cy, cw, ch);
+    cairo_clip(cr);
+
+    rep->clipped         = true;
+    rep->clipped_canvas_ = c;
 }
 
 void Painter::NoClip() {
+    if (rep->clipped && rep->clipped_canvas_) {
+        cairo_t* cr = rep->clipped_canvas_->rep()->cr_;
+        if (cr) cairo_restore(cr);
+        rep->clipped_canvas_ = nullptr;
+    }
     rep->clipped = false;
 }
 
@@ -440,10 +472,86 @@ void Painter::FillPolygonNoMap(Canvas* c, IntCoord x[], IntCoord y[], int n) {
     FillPolygon(c, x, y, n);
 }
 
-void Painter::Copy(Canvas* /*src*/, IntCoord /*sx*/, IntCoord /*sy*/,
-                   IntCoord /*sw*/, IntCoord /*sh*/,
-                   Canvas* /*dst*/, IntCoord /*dx*/, IntCoord /*dy*/) {
-    /* XCopyArea equivalent – not implemented in this port */
+void Painter::Copy(Canvas* src, IntCoord x1, IntCoord y1,
+                   IntCoord x2, IntCoord y2,
+                   Canvas* dst, IntCoord x0, IntCoord y0)
+{
+    if (!src || !dst) return;
+    CanvasRep* src_rep = src->rep();
+    CanvasRep* dst_rep = dst->rep();
+    cairo_t* src_cr = src_rep ? src_rep->cr_ : nullptr;
+    cairo_t* dst_cr = dst_rep ? dst_rep->cr_ : nullptr;
+    if (!src_cr || !dst_cr) return;
+
+    /* Obtain the backing surface via the Cairo context: this works for both
+       top-level canvases (which have their own surface_) and sub-window
+       canvases (whose cr_ is a translated context on the parent surface). */
+    cairo_surface_t* src_surf = cairo_get_target(src_cr);
+    cairo_surface_t* dst_surf = cairo_get_target(dst_cr);
+    if (!src_surf || !dst_surf) return;
+
+    /* Map source corners to Cairo pixel coords (y from top, local). */
+    IntCoord smx1, smy1, smx2, smy2;
+    Map(src, x1, y1, smx1, smy1);
+    Map(src, x2, y2, smx2, smy2);
+
+    /* Source rect in the context's user-space (smaller y = top). */
+    int src_x = Math::min(smx1, smx2);
+    int src_y = Math::min(smy1, smy2);
+    int src_w = Math::abs(smx2 - smx1) + 1;
+    int src_h = Math::abs(smy2 - smy1) + 1;
+
+    /* Source rect in surface (device) space: account for any translation
+       on the source context (sub-window offset within the parent surface). */
+    cairo_matrix_t src_mat;
+    cairo_get_matrix(src_cr, &src_mat);
+    int surf_src_x = (int)(src_x + src_mat.x0);
+    int surf_src_y = (int)(src_y + src_mat.y0);
+
+    /* Map destination origin.  Map() gives the Cairo y of the IV-2.6
+       bottom edge; the destination top sits src_h pixels above it. */
+    IntCoord dmx0, dmy0;
+    Map(dst, x0, y0, dmx0, dmy0);
+    int dst_x = dmx0;
+    int dst_y = dmy0 - src_h + 1;   /* Cairo user-space y of destination top */
+
+    /* When copying within the same backing surface we must stage through a
+       temporary to avoid aliasing when source and destination overlap. */
+    cairo_surface_t* pattern_surf;
+    cairo_surface_t* tmp = nullptr;
+    double pat_ox, pat_oy;  /* user-space coords where surface (0,0) appears */
+
+    if (src_surf == dst_surf) {
+        /* Capture the source region into a temporary image. */
+        tmp = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, src_w, src_h);
+        cairo_t* tc = cairo_create(tmp);
+        cairo_set_source_surface(tc, src_surf,
+                                 -(double)surf_src_x, -(double)surf_src_y);
+        cairo_paint(tc);
+        cairo_destroy(tc);
+        pattern_surf = tmp;
+        /* tmp(0,0) == src_surf(surf_src_x, surf_src_y).  In the destination
+           context's user space the pattern origin (0,0) should appear at
+           (dst_x, dst_y), i.e. pat_ox = dst_x, pat_oy = dst_y. */
+        pat_ox = (double)dst_x;
+        pat_oy = (double)dst_y;
+    } else {
+        pattern_surf = src_surf;
+        /* src_surf(surf_src_x, surf_src_y) should appear at user (dst_x, dst_y):
+           pat_ox = dst_x - surf_src_x, pat_oy = dst_y - surf_src_y. */
+        pat_ox = (double)(dst_x - surf_src_x);
+        pat_oy = (double)(dst_y - surf_src_y);
+    }
+
+    cairo_save(dst_cr);
+    cairo_set_operator(dst_cr, CAIRO_OPERATOR_SOURCE);
+    cairo_set_source_surface(dst_cr, pattern_surf, pat_ox, pat_oy);
+    cairo_rectangle(dst_cr, (double)dst_x, (double)dst_y,
+                    (double)src_w, (double)src_h);
+    cairo_fill(dst_cr);
+    cairo_restore(dst_cr);
+
+    if (tmp) cairo_surface_destroy(tmp);
 }
 
 void Painter::Text(Canvas* c, const char* s, int len, IntCoord x, IntCoord y) {
@@ -451,9 +559,12 @@ void Painter::Text(Canvas* c, const char* s, int len, IntCoord x, IntCoord y) {
     IntCoord mx, my;
     Map(c, x, y, mx, my);
     CanvasRep* crep = c->rep();
-    /* Convert integer pixel coords to IV-3 float canvas coords */
-    ivCoord fx = crep->display_ ? crep->display_->to_coord(mx) : (ivCoord)mx;
-    ivCoord fy = crep->display_ ? crep->display_->to_coord(my) : (ivCoord)my;
+    /* Map() converts IV-2.6 pixel y (from bottom) to Cairo pixel y (from top).
+       Canvas::character() expects InterViews Coord y (from bottom), so undo
+       the flip before converting pixels to points. */
+    IntCoord iv_my = (IntCoord)crep->pheight_ - 1 - my;
+    ivCoord fx = crep->display_ ? crep->display_->to_coord(mx)    : (ivCoord)mx;
+    ivCoord fy = crep->display_ ? crep->display_->to_coord(iv_my) : (ivCoord)iv_my;
     for (int i = 0; i < len; i++) {
         ivCoord w = font->width(s[i]);
         c->character(font, s[i], w, foreground, fx, fy);
@@ -467,8 +578,10 @@ void Painter::Stencil(Canvas* c, IntCoord x, IntCoord y,
     IntCoord mx, my;
     Map(c, x, y, mx, my);
     CanvasRep* crep = c->rep();
-    ivCoord fx = crep->display_ ? crep->display_->to_coord(mx) : (ivCoord)mx;
-    ivCoord fy = crep->display_ ? crep->display_->to_coord(my) : (ivCoord)my;
+    /* Same Y-flip correction as in Painter::Text */
+    IntCoord iv_my = (IntCoord)crep->pheight_ - 1 - my;
+    ivCoord fx = crep->display_ ? crep->display_->to_coord(mx)    : (ivCoord)mx;
+    ivCoord fy = crep->display_ ? crep->display_->to_coord(iv_my) : (ivCoord)iv_my;
     c->stencil(image, foreground, fx, fy);
 }
 
@@ -477,8 +590,10 @@ void Painter::RasterRect(Canvas* c, IntCoord x, IntCoord y, Raster* r) {
     IntCoord mx, my;
     Map(c, x, y, mx, my);
     CanvasRep* crep = c->rep();
-    ivCoord fx = crep->display_ ? crep->display_->to_coord(mx) : (ivCoord)mx;
-    ivCoord fy = crep->display_ ? crep->display_->to_coord(my) : (ivCoord)my;
+    /* Same Y-flip correction as in Painter::Text */
+    IntCoord iv_my = (IntCoord)crep->pheight_ - 1 - my;
+    ivCoord fx = crep->display_ ? crep->display_->to_coord(mx)    : (ivCoord)mx;
+    ivCoord fy = crep->display_ ? crep->display_->to_coord(iv_my) : (ivCoord)iv_my;
     c->image(r, fx, fy);
 }
 
